@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "771245911367",
+    "firebase_url": "https://chronotes-tpamobile.firebaseio.com",
+    "project_id": "chronotes-tpamobile",
+    "storage_bucket": "chronotes-tpamobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771245911367:android:a3fb344b0440d0da54f062",
+        "android_client_info": {
+          "package_name": "rix.chronotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771245911367-anf6pamcsnbkvf56go21u76jiaef3ug5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rix.chronotes",
+            "certificate_hash": "bf6d50ba73bba93113e7d22650b9fa52caebd33b"
+          }
+        },
+        {
+          "client_id": "771245911367-cfnpi6mhmeedt4v105q9j2ig95o6i7ig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnBdoituvMpQPkViLap1_gTwTY0_53ckk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771245911367-cfnpi6mhmeedt4v105q9j2ig95o6i7ig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
