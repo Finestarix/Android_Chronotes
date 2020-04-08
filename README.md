@@ -8,4 +8,4 @@ Calendar and Notes Manager
 * **Renaldy** - *19-2* - [Finestarix](https://github.com/Finestarix)
 * **Karen Prisilia Iing** - *19-2* - [Perciva](https://github.com/Perciva)
 
-See also the list of [contributors](https://github.com/Finestarix/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Finestarix/Android_Chronotes/contributors) who participated in this project.
