@@ -34,8 +34,19 @@
     <string name="login_email_placeholder">Email</string>
     <string name="login_password_placeholder">Password</string>
     <string name="login_button">Login</string>
-    <string name="login_forgot_password">FORGOT PASSWORD</string>
-    <string name="login_or">or</string>
-    <string name="login_register">REGISTER HERE</string>
+    <string name="login_forgot_password">Forgot your password ?</string>
+    <string name="login_continue_with">Continue With</string>
+    <string name="login_register">Register Now</string>
+    <string name="login_remember_me">Remember Me</string>
+    <string name="login_dont_have_an_account">Don\'t Have an Account ?</string>
+
+    <!-- Register String -->
+    <string name="register_icon_placeholder">Icon</string>
+    <string name="register_name_placeholder">Name</string>
+    <string name="register_email_placeholder">Email</string>
+    <string name="register_password_placeholder">Password</string>
+    <string name="register_button">Register</string>
+    <string name="register_already_have_account">Already Have Account ?</string>
+    <string name="register_login">Back to Login</string>
 
 </resources>

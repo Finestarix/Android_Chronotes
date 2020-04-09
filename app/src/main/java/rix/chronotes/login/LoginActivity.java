@@ -13,7 +13,8 @@ import java.util.Objects;
 
 import rix.chronotes.R;
 import rix.chronotes.calendar.Calendar;
-import rix.chronotes.utils.GeneralHelper;
+import rix.chronotes.register.RegisterActivity;
+import rix.chronotes.utils.SystemUIHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Window window = getWindow();
-        GeneralHelper.hideSystemUI(window);
-        GeneralHelper.changeStatusBarColor(window);
+        SystemUIHelper.hideSystemUI(window);
+        SystemUIHelper.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         Button buttonLogin = findViewById(R.id.login_button);
@@ -40,9 +41,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
-    public void loginAction(View view) {
-
+    public void goToRegister(View view) {
+        Intent intentToRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+        intentToRegister.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentToRegister);
     }
 
 }

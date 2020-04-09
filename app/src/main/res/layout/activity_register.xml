@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LoginActivity">
+    tools:context=".register.RegisterActivity">
 
     <LinearLayout
         style="@style/DefaultWidthHeight"
@@ -16,7 +17,7 @@
 
             <ImageView
                 style="@style/LoginRegisterImageViewIcon"
-                android:contentDescription="@string/login_icon_placeholder"
+                android:contentDescription="@string/register_icon_placeholder"
                 android:src="@drawable/ic_chronotes_dark" />
 
         </FrameLayout>
@@ -26,14 +27,32 @@
             android:background="@drawable/bg_blue_border_round">
 
             <EditText
-                android:id="@+id/login_email"
+                android:id="@+id/register_name"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/login_email_icon"
-                android:hint="@string/login_email_placeholder"
+                android:layout_toEndOf="@+id/register_name_icon"
+                android:hint="@string/register_name_placeholder"
                 android:inputType="textEmailAddress" />
 
             <ImageView
-                android:id="@+id/login_email_icon"
+                android:id="@+id/register_name_icon"
+                style="@style/LoginRegisterImageView"
+                android:src="@drawable/ic_username" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_blue_border_round">
+
+            <EditText
+                android:id="@+id/register_email"
+                style="@style/LoginRegisterEditText"
+                android:layout_toEndOf="@+id/register_email_icon"
+                android:hint="@string/register_email_placeholder"
+                android:inputType="textEmailAddress" />
+
+            <ImageView
+                android:id="@+id/register_email_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_email" />
 
@@ -44,48 +63,33 @@
             android:background="@drawable/bg_blue_border_round">
 
             <EditText
-                android:id="@+id/login_password"
+                android:id="@+id/register_password"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/login_password_icon"
+                android:layout_toEndOf="@+id/register_password_icon"
                 android:hint="@string/login_password_placeholder"
                 android:inputType="textPassword" />
 
             <ImageView
-                android:id="@+id/login_password_icon"
+                android:id="@+id/register_password_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_password" />
 
         </RelativeLayout>
 
-        <LinearLayout
-            style="@style/DefaultWidthHeight"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp">
-
-            <CheckBox
-                style="@style/LoginRememberMe"
-                android:text="@string/login_remember_me" />
-
-            <TextView
-                style="@style/LoginForgetPassword"
-                android:text="@string/login_forgot_password" />
-
-        </LinearLayout>
-
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/register_button"
             style="@style/LoginRegisterButton"
-            android:text="@string/login_button" />
+            android:text="@string/register_button" />
 
         <TextView
             style="@style/LoginRegisterAfterButton"
-            android:text="@string/login_dont_have_an_account" />
+            android:text="@string/register_already_have_account" />
 
         <TextView
-            android:id="@+id/register_button"
+            android:id="@+id/login_button"
             style="@style/LoginRegister"
-            android:text="@string/login_register"
-            android:onClick="goToRegister"
+            android:text="@string/register_login"
+            android:onClick="goToLogin"
             android:clickable="true"
             android:focusable="true" />
 

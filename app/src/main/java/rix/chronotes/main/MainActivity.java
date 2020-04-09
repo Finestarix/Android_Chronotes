@@ -17,7 +17,7 @@ import java.util.Objects;
 import rix.chronotes.R;
 import rix.chronotes.login.LoginActivity;
 import rix.chronotes.main.slider.MainSliderPagerAdapter;
-import rix.chronotes.utils.GeneralHelper;
+import rix.chronotes.utils.SystemUIHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Window window = getWindow();
-        GeneralHelper.hideSystemUI(window);
-        GeneralHelper.changeStatusBarColor(window);
+        SystemUIHelper.hideSystemUI(window);
+        SystemUIHelper.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         mainSliderPageAdapter = new MainSliderPagerAdapter(

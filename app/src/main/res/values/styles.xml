@@ -70,28 +70,28 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <!-- Login Style -->
-    <style name="LoginImageViewIcon">
+    <!-- Login Register Style -->
+    <style name="LoginRegisterImageViewIcon">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">80dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:layout_marginTop">70dp</item>
     </style>
 
-    <style name="LoginEditTextContainer" parent="WrapContentWidthHeight">
+    <style name="LoginRegisterEditTextContainer" parent="WrapContentWidthHeight">
         <item name="android:layout_marginLeft">62dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginRight">62dp</item>
     </style>
 
-    <style name="LoginImageView">
+    <style name="LoginRegisterImageView">
         <item name="android:layout_width">15dp</item>
         <item name="android:layout_height">11dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginLeft">17dp</item>
     </style>
 
-    <style name="LoginEditText" parent="DefaultWidthHeight">
+    <style name="LoginRegisterEditText" parent="DefaultWidthHeight">
         <item name="android:background">@color/Transparent</item>
         <item name="android:paddingLeft">17dp</item>
         <item name="android:paddingTop">15dp</item>
@@ -101,10 +101,10 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="LoginButton" parent="DefaultWidthHeight">
+    <style name="LoginRegisterButton" parent="DefaultWidthHeight">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginLeft">62dp</item>
-        <item name="android:layout_marginTop">19dp</item>
+        <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginRight">62dp</item>
         <item name="android:background">@drawable/bg_blue_full</item>
         <item name="android:gravity">center</item>
@@ -112,22 +112,55 @@
         <item name="android:paddingBottom">14dp</item>
         <item name="android:textColor">@color/White</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="LoginForgetPassword" parent="WrapContentWidthHeight">
-        <item name="android:layout_gravity">center</item>
+    <style name="LoginForgetPassword" parent="DefaultWidthHeight">
+        <item name="android:gravity">right</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">62dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:textColor">@color/backgroundLightColor</item>
         <item name="android:textSize">11sp</item>
     </style>
 
-    <style name="LoginOr" parent="WrapContentWidthHeight">
+    <style name="LoginRememberMe" parent="DefaultWidthHeight">
+        <item name="android:layout_gravity">left</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">62dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/backgroundLightColor</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="LoginRegisterAfterButton" parent="WrapContentWidthHeight">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/Gray</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="LoginRegister" parent="DefaultWidthHeight">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/backgroundLightColor</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="LoginRegisterContinueWith" parent="WrapContentWidthHeight">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textColor">@color/Gray</item>
         <item name="android:textSize">11sp</item>
     </style>
 
->>>>>>> d99b228a0fbb2d2b40e52a18de227e4f07920ab7
+    <style name="LoginRegisterGoogle">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:src">@drawable/ic_google</item>
+    </style>
 
 </resources>
