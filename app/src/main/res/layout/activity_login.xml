@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.LoginActivity">
+
+    <LinearLayout
+        style="@style/DefaultWidthHeight"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="273dp"
+            android:background="@drawable/bg_blue_top">
+
+            <ImageView
+                style="@style/LoginImageViewIcon"
+                android:contentDescription="@string/login_icon_placeholder"
+                android:src="@drawable/ic_chronotes_dark" />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            style="@style/LoginEditTextContainer"
+            android:background="@drawable/bg_blue_border_round">
+
+            <EditText
+                android:id="@+id/login_email"
+                style="@style/LoginEditText"
+                android:layout_toEndOf="@+id/login_email_icon"
+                android:hint="@string/login_email_placeholder"
+                android:inputType="textEmailAddress" />
+
+            <ImageView
+                android:id="@+id/login_email_icon"
+                style="@style/LoginImageView"
+                android:src="@drawable/ic_email" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/LoginEditTextContainer"
+            android:background="@drawable/bg_blue_border_round">
+
+            <EditText
+                android:id="@+id/login_password"
+                style="@style/LoginEditText"
+                android:layout_toEndOf="@+id/login_password_icon"
+                android:hint="@string/login_password_placeholder"
+                android:inputType="textPassword" />
+
+            <ImageView
+                android:id="@+id/login_password_icon"
+                style="@style/LoginImageView"
+                android:src="@drawable/ic_password" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/LoginButton"
+            android:text="@string/login_button" />
+
+        <TextView
+            style="@style/LoginForgetPassword"
+            android:text="@string/login_register" />
+
+        <TextView
+            style="@style/LoginForgetPassword"
+            android:text="@string/login_forgot_password" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/DefaultWidthHeight"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/LoginOr"
+            android:text="@string/login_or" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            style="@style/WrapContentWidthHeight"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+</RelativeLayout>

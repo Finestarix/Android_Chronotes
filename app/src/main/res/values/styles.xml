@@ -1,11 +1,14 @@
 <resources>
 
+    <!-- General Style -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+<<<<<<< HEAD
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -14,5 +17,117 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+=======
+    <style name="ZeroWidthHeight">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
+    <style name="ZeroWidth">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="WrapContentWidthHeight">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="DefaultWidthHeight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Main Style -->
+    <style name="MainTabLayout" parent="ZeroWidth">
+        <item name="android:layout_weight">20</item>
+    </style>
+
+    <style name="MainButton" parent="WrapContentWidthHeight">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:background">#00000000</item>
+    </style>
+
+    <!-- Main Slider Fragment Style -->
+    <style name="MainSliderFragmentIcon">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">250dp</item>
+    </style>
+
+    <style name="MainSliderFragmentText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+    <style name="MainSliderFragmentTitleText" parent="MainSliderFragmentText">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainSliderFragmentDescriptionText" parent="MainSliderFragmentText">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Login Style -->
+    <style name="LoginImageViewIcon">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">70dp</item>
+    </style>
+
+    <style name="LoginEditTextContainer" parent="WrapContentWidthHeight">
+        <item name="android:layout_marginLeft">62dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginRight">62dp</item>
+    </style>
+
+    <style name="LoginImageView">
+        <item name="android:layout_width">15dp</item>
+        <item name="android:layout_height">11dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">17dp</item>
+    </style>
+
+    <style name="LoginEditText" parent="DefaultWidthHeight">
+        <item name="android:background">@color/Transparent</item>
+        <item name="android:paddingLeft">17dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="LoginButton" parent="DefaultWidthHeight">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">62dp</item>
+        <item name="android:layout_marginTop">19dp</item>
+        <item name="android:layout_marginRight">62dp</item>
+        <item name="android:background">@drawable/bg_blue_full</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="LoginForgetPassword" parent="WrapContentWidthHeight">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/backgroundLightColor</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="LoginOr" parent="WrapContentWidthHeight">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@color/Gray</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+>>>>>>> d99b228a0fbb2d2b40e52a18de227e4f07920ab7
 
 </resources>

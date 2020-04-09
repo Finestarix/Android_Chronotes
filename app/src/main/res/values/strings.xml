@@ -1,5 +1,8 @@
 <resources>
+
+    <!--  Public String -->
     <string name="app_name">Chronotes</string>
+<<<<<<< HEAD
     <string name="title_activity_calendar">calendar</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -9,4 +12,32 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+=======
+
+    <!--  Main Slider Fragment String -->
+    <string name="main_slider_fragment_title">Title Here</string>
+    <string name="main_slider_fragment_description">Description Here</string>
+    <string name="main_slider_fragment_next">Next</string>
+    <string name="main_slider_fragment_skip">Skip</string>
+    <string name="main_slider_fragment_continue">Continue</string>
+    <string name="main_slider_fragment_icon_description">Icon Description</string>
+    <string name="main_slider_fragment_title_welcome">Welcome to Chronotes</string>
+    <string name="main_slider_fragment_title_calendar">Calendar</string>
+    <string name="main_slider_fragment_title_notes">Notes</string>
+    <string name="main_slider_fragment_title_reminders">Reminders</string>
+    <string name="main_slider_fragment_description_welcome">Description Welcome</string>
+    <string name="main_slider_fragment_description_calendar">Description Calendar</string>
+    <string name="main_slider_fragment_description_notes">Description Notes</string>
+    <string name="main_slider_fragment_description_reminders">Description Reminders</string>
+
+    <!-- Login String -->
+    <string name="login_icon_placeholder">Icon</string>
+    <string name="login_email_placeholder">Email</string>
+    <string name="login_password_placeholder">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_forgot_password">FORGOT PASSWORD</string>
+    <string name="login_or">or</string>
+    <string name="login_register">REGISTER HERE</string>
+
+>>>>>>> d99b228a0fbb2d2b40e52a18de227e4f07920ab7
 </resources>
