@@ -14,23 +14,18 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".main.calendar.Calendar"
-            android:label="@string/title_activity_calendar"
-            android:theme="@style/AppTheme.NoActionBar">
-<!--            <action android:name="android.intent.action.MAIN" />-->
+            android:name=".calendar.Calendar"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-<!--            <category android:name="android.intent.category.LAUNCHER" />-->
-        </activity>
+        <activity android:name=".login.LoginActivity" />
 
-        <activity android:name=".login.LoginActivity"></activity>
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+
     </application>
 
 </manifest>

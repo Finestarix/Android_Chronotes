@@ -1,21 +1,18 @@
 package rix.chronotes.login;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
-
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
 import rix.chronotes.R;
+import rix.chronotes.calendar.Calendar;
 import rix.chronotes.utils.GeneralHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,7 +28,21 @@ public class LoginActivity extends AppCompatActivity {
         GeneralHelper.hideSystemUI(window);
         GeneralHelper.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        Button buttonLogin = findViewById(R.id.login_button);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToCalendar = new Intent(LoginActivity.this, Calendar.class);
+                intentToCalendar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToCalendar);
+            }
+        });
     }
 
+
+    public void loginAction(View view) {
+
+    }
 
 }

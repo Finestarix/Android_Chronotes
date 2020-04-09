@@ -57,9 +57,10 @@
 
         </RelativeLayout>
 
-        <TextView
+        <Button
+            android:id="@+id/login_button"
             style="@style/LoginButton"
-            android:text="@string/login_button" />
+            android:text="@string/login_button"/>
 
         <TextView
             style="@style/LoginForgetPassword"
@@ -84,8 +85,8 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             style="@style/WrapContentWidthHeight"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 
