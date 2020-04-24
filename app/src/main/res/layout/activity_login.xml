@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LoginActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".login_register.LoginActivity">
 
     <LinearLayout
         style="@style/DefaultWidthHeight"
@@ -101,9 +102,13 @@
             style="@style/LoginRegisterContinueWith"
             android:text="@string/login_continue_with" />
 
-        <ImageView
-            android:id="@+id/sign_in_button"
-            style="@style/LoginRegisterGoogle" />
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+        </com.google.android.gms.common.SignInButton>
 
     </LinearLayout>
 

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:771245911367:android:a3fb344b0440d0da54f062",
         "android_client_info": {
-          "package_name": "rix.chronotes"
+          "package_name": "edu.bluejack19_2.chronotes"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "771245911367-anf6pamcsnbkvf56go21u76jiaef3ug5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "rix.chronotes",
+            "package_name": "edu.bluejack19_2.chronotes",
             "certificate_hash": "bf6d50ba73bba93113e7d22650b9fa52caebd33b"
           }
         },

@@ -62,12 +62,16 @@
     </style>
 
     <style name="MainSliderFragmentTitleText" parent="MainSliderFragmentText">
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="MainSliderFragmentDescriptionText" parent="MainSliderFragmentText">
+        <item name="android:paddingLeft">50dp</item>
+        <item name="android:paddingRight">50dp</item>
         <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <!-- Login Register Style -->
@@ -153,14 +157,6 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:textColor">@color/Gray</item>
         <item name="android:textSize">11sp</item>
-    </style>
-
-    <style name="LoginRegisterGoogle">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">30dp</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:src">@drawable/ic_google</item>
     </style>
 
 </resources>

@@ -1,4 +1,4 @@
-package rix.chronotes.main.slider;
+package edu.bluejack19_2.chronotes.main.slider;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

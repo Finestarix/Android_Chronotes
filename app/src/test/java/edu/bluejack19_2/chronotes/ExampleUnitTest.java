@@ -1,4 +1,4 @@
-package rix.chronotes;
+package edu.bluejack19_2.chronotes;
 
 import org.junit.Test;
 

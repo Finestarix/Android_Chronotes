@@ -1,6 +1,15 @@
-package rix.chronotes.model;
+package edu.bluejack19_2.chronotes.model;
 
 public class User {
+
+    public static final String COLLECTION_NAME = "users";
+    public static final String DOCUMENT_NAME = "users_";
+    public static final String KEY_ID = "ID";
+    public static final String KEY_NAME = "Name";
+    public static final String KEY_EMAIL = "Email";
+    public static final String KEY_PASSWORD = "Password";
+    public static final String KEY_PICTURE = "Picture";
+    public static final String DEFAULT_PICTURE = "users.png";
 
     private String id;
     private String name;

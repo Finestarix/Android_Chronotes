@@ -1,4 +1,4 @@
-package rix.chronotes.utils;
+package edu.bluejack19_2.chronotes.utils;
 
 import android.graphics.Color;
 import android.os.Build;

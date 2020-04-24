@@ -1,4 +1,4 @@
-package rix.chronotes.calendar;
+package edu.bluejack19_2.chronotes.calendar;
 
 import android.os.Bundle;
 
@@ -11,8 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 
-import rix.chronotes.R;
-import rix.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
 public class Calendar extends AppCompatActivity {
 

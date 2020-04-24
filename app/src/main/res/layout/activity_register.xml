@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".register.RegisterActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".login_register.RegisterActivity">
 
     <LinearLayout
         style="@style/DefaultWidthHeight"
@@ -76,10 +76,13 @@
 
         </RelativeLayout>
 
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/register_button"
             style="@style/LoginRegisterButton"
-            android:text="@string/register_button" />
+            android:text="@string/register_button"
+            app:spinning_bar_color="@color/White"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="6dp" />
 
         <TextView
             style="@style/LoginRegisterAfterButton"
@@ -92,22 +95,6 @@
             android:onClick="goToLogin"
             android:clickable="true"
             android:focusable="true" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/DefaultWidthHeight"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/LoginRegisterContinueWith"
-            android:text="@string/login_continue_with" />
-
-        <ImageView
-            android:id="@+id/sign_in_button"
-            style="@style/LoginRegisterGoogle" />
 
     </LinearLayout>
 

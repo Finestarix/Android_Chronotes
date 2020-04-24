@@ -1,8 +1,8 @@
-package rix.chronotes.main.slider;
+package edu.bluejack19_2.chronotes.main.slider;
 
 import androidx.annotation.StringRes;
 
-import rix.chronotes.R;
+import edu.bluejack19_2.chronotes.R;
 
 public class MainResource {
 
@@ -27,9 +27,9 @@ public class MainResource {
     @StringRes
     public static final int[] ICON_LIST_ID = new int[]{
             R.drawable.ic_chronotes_dark,
-            R.drawable.ic_chronotes_dark,
-            R.drawable.ic_chronotes_dark,
-            R.drawable.ic_chronotes_dark
+            R.drawable.ic_calendar,
+            R.drawable.ic_notes,
+            R.drawable.ic_reminder
     };
 
 }

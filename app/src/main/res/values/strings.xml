@@ -24,8 +24,8 @@
     <string name="main_slider_fragment_title_calendar">Calendar</string>
     <string name="main_slider_fragment_title_notes">Notes</string>
     <string name="main_slider_fragment_title_reminders">Reminders</string>
-    <string name="main_slider_fragment_description_welcome">Description Welcome</string>
-    <string name="main_slider_fragment_description_calendar">Description Calendar</string>
+    <string name="main_slider_fragment_description_welcome">See how many Chronotes can help you stay organized and get more done on your job</string>
+    <string name="main_slider_fragment_description_calendar">Manage your time effectively and make sure nothing slips away</string>
     <string name="main_slider_fragment_description_notes">Description Notes</string>
     <string name="main_slider_fragment_description_reminders">Description Reminders</string>
 

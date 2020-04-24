@@ -1,4 +1,4 @@
-package rix.chronotes.main.slider;
+package edu.bluejack19_2.chronotes.main.slider;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import rix.chronotes.R;
+import edu.bluejack19_2.chronotes.R;
 
 public class MainSliderFragment extends Fragment {
 
