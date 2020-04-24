@@ -13,10 +13,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.GeneralHelper;
+import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
 import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
@@ -33,9 +33,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
 
-    public CircularProgressButton registerButton;
-
     private String registerStatus;
+    private CircularProgressButton registerButton;
+
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -62,36 +62,34 @@ public class RegisterActivity extends AppCompatActivity {
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            disableEditText(nameEditText);
-            disableEditText(emailEditText);
-            disableEditText(passwordEditText);
+            GeneralHelper.disableEditText(nameEditText);
+            GeneralHelper.disableEditText(emailEditText);
+            GeneralHelper.disableEditText(passwordEditText);
 
             String errorMessage = "";
             if (GeneralHelper.isEmpty(name)
                     || GeneralHelper.isEmpty(email)
                     || GeneralHelper.isEmpty(password))
-                errorMessage = "Fill All Field !";
+                errorMessage = "Please fill all field.";
 
             else if (!GeneralHelper.isEmail(email))
-                errorMessage = "Invalid Email Format !";
+                errorMessage = "Invalid Email Format.";
+
+            else if (!NetworkHandler.isConnectToInternet(this))
+                errorMessage = "You're offline. Please connect to the internet.";
 
             if (!GeneralHelper.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                enableEditText(nameEditText);
-                enableEditText(emailEditText);
-                enableEditText(passwordEditText);
+                GeneralHelper.enableEditText(nameEditText);
+                GeneralHelper.enableEditText(emailEditText);
+                GeneralHelper.enableEditText(passwordEditText);
                 return;
             }
 
             String userID = UUID.randomUUID().toString();
             String hashPassword = PasswordHandler.generateStrongPasswordHash(password);
 
-            Map<String, String> users = new HashMap<>();
-            users.put(User.KEY_ID, userID);
-            users.put(User.KEY_NAME, name);
-            users.put(User.KEY_EMAIL, email);
-            users.put(User.KEY_PASSWORD, hashPassword);
-            users.put(User.KEY_PICTURE, User.DEFAULT_PICTURE);
+            User user = new User(userID, name, email, hashPassword, User.DEFAULT_PICTURE);
 
             registerStatus = "progress";
 
@@ -100,8 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 protected String doInBackground(String... strings) {
                     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-
-                    firebaseFirestore.collection(User.COLLECTION_NAME).document(User.DOCUMENT_NAME + userID).set(users).
+                    DocumentReference documentReference = firebaseFirestore.collection(User.COLLECTION_NAME).
+                            document(User.DOCUMENT_NAME + userID);
+                    documentReference.set(user).
                             addOnSuccessListener(aVoid -> registerStatus = "success").
                             addOnFailureListener(e -> registerStatus = "failed");
 
@@ -122,18 +121,18 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 protected void onPostExecute(String status) {
                     if (registerStatus.equals("success")) {
-                        Toast.makeText(getApplicationContext(), "Register Success !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Register success.", Toast.LENGTH_SHORT).show();
                         resetData();
                         goToLogin();
                     } else if (registerStatus.equals("failed")) {
-                        Toast.makeText(getApplicationContext(), "Register Failed !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Register failed.", Toast.LENGTH_SHORT).show();
                         saveData(name, email, password);
                         refreshRegister();
                     }
 
-                    enableEditText(nameEditText);
-                    enableEditText(emailEditText);
-                    enableEditText(passwordEditText);
+                    GeneralHelper.enableEditText(nameEditText);
+                    GeneralHelper.enableEditText(emailEditText);
+                    GeneralHelper.enableEditText(passwordEditText);
                 }
             };
 
@@ -160,14 +159,6 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(intentToLogin);
     }
 
-    private void enableEditText(EditText editText) {
-        editText.setEnabled(true);
-    }
-
-    private void disableEditText(EditText editText) {
-        editText.setEnabled(false);
-    }
-
     private void saveData(String name, String email, String password) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("name", name);
@@ -192,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void refreshRegister() {
         Intent intentToRegister = getIntent();
-        intentToRegister.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intentToRegister.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
         startActivity(intentToRegister);
     }

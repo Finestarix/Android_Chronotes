@@ -1,14 +1,11 @@
 package edu.bluejack19_2.chronotes.model;
 
+import com.google.firebase.firestore.Exclude;
+
 public class User {
 
     public static final String COLLECTION_NAME = "users";
     public static final String DOCUMENT_NAME = "users_";
-    public static final String KEY_ID = "ID";
-    public static final String KEY_NAME = "Name";
-    public static final String KEY_EMAIL = "Email";
-    public static final String KEY_PASSWORD = "Password";
-    public static final String KEY_PICTURE = "Picture";
     public static final String DEFAULT_PICTURE = "users.png";
 
     private String id;
@@ -17,12 +14,19 @@ public class User {
     private String password;
     private String picture;
 
-    public User(String name, String email, String password) {
+    public User() {
+    }
+
+    public User(String id, String name, String email, String password, String picture) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.picture = picture;
     }
 
+
+    @Exclude
     public void setId(String id) {
         this.id = id;
     }
@@ -62,4 +66,5 @@ public class User {
     public String getPicture() {
         return picture;
     }
+
 }

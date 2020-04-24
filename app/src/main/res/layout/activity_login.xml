@@ -73,10 +73,13 @@
 
         </LinearLayout>
 
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/login_button"
             style="@style/LoginRegisterButton"
-            android:text="@string/login_button" />
+            android:text="@string/login_button"
+            app:spinning_bar_color="@color/White"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="6dp" />
 
         <TextView
             style="@style/LoginRegisterAfterButton"
