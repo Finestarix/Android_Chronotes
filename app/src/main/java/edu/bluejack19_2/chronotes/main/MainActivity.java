@@ -32,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        sharedPreferences = getSharedPreferences("registerData", Context.MODE_PRIVATE);
-        if(getData())
-            goToLogin();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -70,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         mainButtonSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveData();
                 goToLogin();
             }
         });
@@ -78,9 +75,10 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                saveData();
 
                 String buttonText = mainButton.getText().toString();
-                if(buttonText.equals(getString(R.string.main_slider_fragment_continue)))
+                if (buttonText.equals(getString(R.string.main_slider_fragment_continue)))
                     goToLogin();
                 else if (mainViewPager.getCurrentItem() < mainSliderPageAdapter.getCount()) {
                     int mainViewPagerCurrentItem = mainViewPager.getCurrentItem() + 1;
@@ -90,9 +88,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+
+        sharedPreferences = getSharedPreferences("registerData", Context.MODE_PRIVATE);
+        if (getData())
+            goToLogin();
+
+        super.onStart();
+    }
+
     private void goToLogin() {
-        saveData();
         Intent intentToLogin = new Intent(MainActivity.this, LoginActivity.class);
+        finish();
         intentToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToLogin);
     }

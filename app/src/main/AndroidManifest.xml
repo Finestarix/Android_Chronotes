@@ -13,12 +13,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="edu.bluejack19_2.chronotes.login_register.RegisterActivity" />
         <activity
-            android:name="edu.bluejack19_2.chronotes.calendar.Calendar"
+            android:name=".home.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".login_register.RegisterActivity" />
+        <activity
+            android:name=".calendar.Calendar"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="edu.bluejack19_2.chronotes.login_register.LoginActivity" />
-        <activity android:name="edu.bluejack19_2.chronotes.main.MainActivity">
+        <activity android:name=".login_register.LoginActivity" />
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

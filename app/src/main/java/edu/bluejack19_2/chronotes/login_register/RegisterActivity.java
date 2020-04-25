@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -98,11 +100,24 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 protected String doInBackground(String... strings) {
                     FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                    DocumentReference documentReference = firebaseFirestore.collection(User.COLLECTION_NAME).
-                            document(User.DOCUMENT_NAME + userID);
-                    documentReference.set(user).
-                            addOnSuccessListener(aVoid -> registerStatus = "success").
+                    CollectionReference collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
+                    collectionReference.
+                            whereEqualTo("email", email).
+                            get().
+                            addOnSuccessListener(queryDocumentSnapshots -> {
+
+                                if (!queryDocumentSnapshots.iterator().hasNext())
+                                    collectionReference.
+                                            document(User.DOCUMENT_NAME + userID).
+                                            set(user).
+                                            addOnSuccessListener(aVoid -> registerStatus = "success").
+                                            addOnFailureListener(e -> registerStatus = "failed");
+                                else
+                                    registerStatus = "registered";
+                            }).
                             addOnFailureListener(e -> registerStatus = "failed");
+
+
 
                     int counter = 0;
                     while (registerStatus.equals("progress")) {
@@ -124,8 +139,10 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Register success.", Toast.LENGTH_SHORT).show();
                         resetData();
                         goToLogin();
-                    } else if (registerStatus.equals("failed")) {
-                        Toast.makeText(getApplicationContext(), "Register failed.", Toast.LENGTH_SHORT).show();
+                    } else if (registerStatus.equals("failed") || registerStatus.equals("registered")) {
+                        Toast.makeText(getApplicationContext(),
+                                (registerStatus.equals("failed")) ? "Register failed." : "The Email Account Already Exists.",
+                                Toast.LENGTH_SHORT).show();
                         saveData(name, email, password);
                         refreshRegister();
                     }
@@ -175,9 +192,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void resetData() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("name");
-        editor.remove("email");
-        editor.remove("password");
+        editor.clear();
         editor.apply();
     }
 

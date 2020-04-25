@@ -49,4 +49,17 @@
     <string name="register_already_have_account">Already Have Account ?</string>
     <string name="register_login">Back to Login</string>
 
+    <!-- Home String -->
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="nav_header_title">Name</string>
+    <string name="nav_header_subtitle">email@android.com</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_notes">Notes</string>
+    <string name="menu_calendar">Calendar</string>
+
+    <string name="home_second">Home Second</string>
+
 </resources>

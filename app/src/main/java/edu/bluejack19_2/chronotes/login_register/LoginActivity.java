@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,10 +31,12 @@ import java.util.Objects;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.calendar.Calendar;
+import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.GeneralHelper;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
+import edu.bluejack19_2.chronotes.utils.SessionStorage;
 import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
+    private CheckBox rememberCheckBox;
 
     private String loginStatus;
     private CircularProgressButton loginButton;
@@ -61,9 +65,11 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.login_email);
         passwordEditText = findViewById(R.id.login_password);
+        rememberCheckBox = findViewById(R.id.remember_me);
 
         sharedPreferences = getSharedPreferences("loginData", Context.MODE_PRIVATE);
         getData();
+        getDataRememberMe();
 
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> {
@@ -115,6 +121,10 @@ public class LoginActivity extends AppCompatActivity {
 
                                 String hashPasswordOriginal = user.getPassword();
                                 loginStatus = (PasswordHandler.validatePassword(password, hashPasswordOriginal)) ? "success" : "no-data";
+
+                                if(loginStatus.equals("success")) {
+                                    SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
+                                }
                             }).
                             addOnFailureListener(e -> loginStatus = "failed");
 
@@ -136,6 +146,10 @@ public class LoginActivity extends AppCompatActivity {
                 protected void onPostExecute(String status) {
                     if (loginStatus.equals("success")) {
                         Toast.makeText(getApplicationContext(), "Login success.", Toast.LENGTH_SHORT).show();
+
+                        if (rememberCheckBox.isChecked())
+                            saveDataRememberMe(email, password);
+
                         resetData();
                         goToHome();
                     } else if (loginStatus.equals("failed") || loginStatus.equals("no-data")) {
@@ -170,6 +184,9 @@ public class LoginActivity extends AppCompatActivity {
 //        if (googleSignInAccount != null) {
 //            goToHome();
 //        }
+        if (!SessionStorage.getSessionStorage(this).equals("")) {
+            goToHome();
+        }
         super.onStart();
     }
 
@@ -181,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> googleSignInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleGoogleSignInResult(googleSignInAccountTask);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        resetData();
     }
 
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> googleSignInAccountTask) {
@@ -203,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToHome() {
-        Intent intentToCalendar = new Intent(LoginActivity.this, Calendar.class);
+        Intent intentToCalendar = new Intent(LoginActivity.this, HomeActivity.class);
         intentToCalendar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToCalendar);
     }
@@ -215,9 +238,21 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void saveDataRememberMe(String email, String password) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("email-remember", email);
+        editor.putString("password-remember", password);
+        editor.apply();
+    }
+
     private void getData() {
         emailEditText.setText(sharedPreferences.getString("email", ""));
         passwordEditText.setText(sharedPreferences.getString("password", ""));
+    }
+
+    private void getDataRememberMe() {
+        emailEditText.setText(sharedPreferences.getString("email-remember", ""));
+        passwordEditText.setText(sharedPreferences.getString("password-remember", ""));
     }
 
     private void resetData() {
