@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                 loginStatus = (PasswordHandler.validatePassword(password, hashPasswordOriginal)) ? "success" : "no-data";
 
                                 if(loginStatus.equals("success")) {
-                                    SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
+                                    SessionStorage.setSessionStorage(LoginActivity.this, user);
                                 }
                             }).
                             addOnFailureListener(e -> loginStatus = "failed");
