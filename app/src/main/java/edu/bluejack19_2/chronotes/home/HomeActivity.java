@@ -41,16 +41,13 @@ public class HomeActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private View view;
 
-    private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
-    private FirebaseFirestore firebaseFirestore;
     private CollectionReference collectionReference;
 
     private ShimmerFrameLayout mShimmerViewContainer;
     private TextView nameTextView;
     private TextView emailTextView;
     private ImageView iconImageView;
-    private Uri iconUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +69,11 @@ public class HomeActivity extends AppCompatActivity {
         nameTextView = view.findViewById(R.id.name_user_login);
         emailTextView = view.findViewById(R.id.email_user_login);
         iconImageView = view.findViewById(R.id.icon_user_login);
-        iconImageView.setOnClickListener(v -> goToProfile());
+        iconImageView.setOnClickListener(v -> {
+            // TODO: Add Validation Load Done
+
+            goToProfile();
+        });
 
         getCurrentUserData();
 
@@ -93,10 +94,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeFirebase() {
-        firebaseStorage = FirebaseStorage.getInstance();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
     }
 
@@ -136,8 +137,6 @@ public class HomeActivity extends AppCompatActivity {
                     nameTextView.setText(user.getName());
                     emailTextView.setText(user.getEmail());
 
-                    Toast.makeText(getApplicationContext(), user.getPicture(), Toast.LENGTH_SHORT).show();
-
                     storageReference.
                             child(User.PHOTO_NAME + "/" + user.getPicture()).
                             getBytes(Long.MAX_VALUE).
@@ -145,7 +144,7 @@ public class HomeActivity extends AppCompatActivity {
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                                 RequestOptions requestOptions = new RequestOptions().centerCrop().error(R.drawable.ic_failed);
-                                Glide.with(this).asBitmap().load(bitmap).apply(requestOptions).into(iconImageView);
+                                Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(iconImageView);
 
                                 iconImageView.setBackgroundColor(Color.TRANSPARENT);
 
@@ -158,7 +157,7 @@ public class HomeActivity extends AppCompatActivity {
                                 mShimmerViewContainer.stopShimmerAnimation();
                             }).
                             addOnFailureListener(e -> {
-                                Glide.with(this).load(R.drawable.ic_user).into(iconImageView);
+                                Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
                                 iconImageView.setBackgroundColor(Color.TRANSPARENT);
 
                                 emailTextView.setBackgroundColor(Color.TRANSPARENT);
@@ -174,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
                             });
                 }).
                 addOnFailureListener(e -> {
-                    Glide.with(this).load(R.drawable.ic_user).into(iconImageView);
+                    Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
 
                     nameTextView.setText("User Name");
                     nameTextView.setBackgroundColor(Color.TRANSPARENT);

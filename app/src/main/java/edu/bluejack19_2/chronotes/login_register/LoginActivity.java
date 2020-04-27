@@ -184,9 +184,7 @@ public class LoginActivity extends AppCompatActivity {
         SignInButton signInButton = findViewById(R.id.google_button);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        signInButton.setOnClickListener(v -> {
-            googleSignIn();
-        });
+        signInButton.setOnClickListener(v -> { googleSignIn(); });
 
     }
 

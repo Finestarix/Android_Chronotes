@@ -15,6 +15,14 @@
             android:layout_height="250dp"
             android:background="@drawable/bg_blue_top">
 
+            <ImageView
+                android:id="@+id/back_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_back" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/icon_user_login"
                 android:layout_width="100dp"
@@ -22,30 +30,11 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="70dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_chronotes_dark"
+                android:src="@drawable/ic_loading_placeholder"
                 app:civ_border_color="#fff"
                 app:civ_border_width="2dp" />
 
         </FrameLayout>
-
-        <RelativeLayout
-            style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
-
-            <EditText
-                android:id="@+id/profile_id"
-                style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/profile_id_icon"
-                android:hint="@string/profile_id_placeholder"
-                android:inputType="text" />
-
-            <ImageView
-                android:id="@+id/profile_id_icon"
-                style="@style/LoginRegisterImageView"
-                android:src="@drawable/ic_id" />
-
-        </RelativeLayout>
-
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
@@ -108,7 +97,6 @@
             app:spinning_bar_color="@color/White"
             app:spinning_bar_padding="6dp"
             app:spinning_bar_width="6dp" />
-
 
     </LinearLayout>
 

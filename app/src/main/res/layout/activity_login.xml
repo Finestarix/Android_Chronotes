@@ -68,10 +68,6 @@
                 style="@style/LoginRememberMe"
                 android:text="@string/login_remember_me" />
 
-            <TextView
-                style="@style/LoginForgetPassword"
-                android:text="@string/login_forgot_password" />
-
         </LinearLayout>
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
