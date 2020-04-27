@@ -16,15 +16,10 @@ import edu.bluejack19_2.chronotes.R;
 
 public class CalendarFragment extends Fragment {
 
-    private CalendarViewModel calendarViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        calendarViewModel =
-                ViewModelProviders.of(this).get(CalendarViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        calendarViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
+        final TextView textView = root.findViewById(R.id.text_calendar);
         return root;
     }
 }

@@ -184,9 +184,9 @@ public class LoginActivity extends AppCompatActivity {
 //        if (googleSignInAccount != null) {
 //            goToHome();
 //        }
-        if (!SessionStorage.getSessionStorage(this).equals("")) {
+        if (SessionStorage.getSessionStorage(this) != null)
             goToHome();
-        }
+
         super.onStart();
     }
 
