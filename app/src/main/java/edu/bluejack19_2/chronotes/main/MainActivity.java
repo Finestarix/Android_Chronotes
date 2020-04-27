@@ -23,16 +23,24 @@ import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager mainViewPager;
-    private Button mainButton;
-    private Button mainButtonSkip;
     private MainSliderPagerAdapter mainSliderPageAdapter;
+    private ViewPager mainViewPager;
+
+    private Button mainButton;
+
     private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("mainData", Context.MODE_PRIVATE);
+
+        if (getData()) {
+            goToLogin();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         Window window = getWindow();
@@ -62,45 +70,28 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.main_tab_layout);
         tabLayout.setupWithViewPager(mainViewPager);
 
-        mainButtonSkip = findViewById(R.id.main_button_skip);
-        mainButtonSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData();
-                goToLogin();
-            }
+        Button mainButtonSkip = findViewById(R.id.main_button_skip);
+        mainButtonSkip.setOnClickListener(v -> {
+            saveData();
+            goToLogin();
         });
 
         mainButton = findViewById(R.id.main_button);
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveData();
+        mainButton.setOnClickListener(view -> {
+            saveData();
 
-                String buttonText = mainButton.getText().toString();
-                if (buttonText.equals(getString(R.string.main_slider_fragment_continue)))
-                    goToLogin();
-                else if (mainViewPager.getCurrentItem() < mainSliderPageAdapter.getCount()) {
-                    int mainViewPagerCurrentItem = mainViewPager.getCurrentItem() + 1;
-                    mainViewPager.setCurrentItem(mainViewPagerCurrentItem);
-                }
+            String buttonText = mainButton.getText().toString();
+            if (buttonText.equals(getString(R.string.main_slider_fragment_continue)))
+                goToLogin();
+            else if (mainViewPager.getCurrentItem() < mainSliderPageAdapter.getCount()) {
+                int mainViewPagerCurrentItem = mainViewPager.getCurrentItem() + 1;
+                mainViewPager.setCurrentItem(mainViewPagerCurrentItem);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-
-        sharedPreferences = getSharedPreferences("registerData", Context.MODE_PRIVATE);
-        if (getData())
-            goToLogin();
-
-        super.onStart();
     }
 
     private void goToLogin() {
         Intent intentToLogin = new Intent(MainActivity.this, LoginActivity.class);
-        finish();
         intentToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToLogin);
     }

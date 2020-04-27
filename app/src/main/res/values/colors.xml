@@ -5,6 +5,7 @@
     <color name="colorAccent">#5F9EA0</color>
 
     <color name="backgroundLightColor">#1566e0</color>
+    <color name="backgroundLightColor2nd">#3F78CD</color>
     <color name="backgroundDarkColor">#22264c</color>
 
     <!--Color List Extended-->

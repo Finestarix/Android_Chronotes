@@ -102,7 +102,7 @@
         </RelativeLayout>
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/login_button"
+            android:id="@+id/update_button"
             style="@style/LoginRegisterButton"
             android:text="@string/profile_button"
             app:spinning_bar_color="@color/White"
