@@ -6,12 +6,12 @@ import android.net.NetworkInfo;
 
 public class NetworkHandler {
 
-    public static boolean isConnectToInternet(Context context) {
+    public static boolean isNotConnectToInternet(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = (connectivityManager != null) ?
                 connectivityManager.getActiveNetworkInfo() : null;
-        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+        return networkInfo == null || !networkInfo.isAvailable() || !networkInfo.isConnected();
     }
 
 }

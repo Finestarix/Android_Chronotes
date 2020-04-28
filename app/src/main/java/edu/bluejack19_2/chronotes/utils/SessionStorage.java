@@ -3,8 +3,6 @@ package edu.bluejack19_2.chronotes.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import edu.bluejack19_2.chronotes.model.User;
-
 public class SessionStorage {
 
     private static final String SESSION_STORAGE = "SESSION_STORAGE";

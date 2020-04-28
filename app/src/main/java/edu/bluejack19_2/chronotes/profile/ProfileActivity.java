@@ -2,9 +2,7 @@ package edu.bluejack19_2.chronotes.profile;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,17 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +35,14 @@ import java.util.UUID;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.login_register.LoginActivity;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.GeneralHelper;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
+import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.SessionStorage;
 import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
@@ -54,29 +50,21 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private SharedPreferences sharedPreferences;
-
     private StorageReference storageReference;
     private CollectionReference collectionReference;
 
-    private ImageView backImageView;
     private ImageView profileImageView;
     private Uri imageUri;
 
     private CircularProgressButton updateButton;
-    private Button logoutButton;
     private EditText nameEditText;
-    private EditText emailEditText;
     private EditText passwordEditText;
 
-    private String updateStatus;
-    private StorageTask storageTask;
+    private ProcessStatus updateStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sharedPreferences = getSharedPreferences("profileData", Context.MODE_PRIVATE);
 
         if (SessionStorage.getSessionStorage(this) == null) {
             goToLogin();
@@ -93,20 +81,15 @@ public class ProfileActivity extends AppCompatActivity {
         initializeFirebase();
 
         nameEditText = findViewById(R.id.profile_name);
-        emailEditText = findViewById(R.id.profile_email);
         passwordEditText = findViewById(R.id.profile_password);
-
-        getData();
 
         profileImageView = findViewById(R.id.icon_user_login);
         profileImageView.setOnClickListener(v -> openGallery());
 
-        backImageView = findViewById(R.id.back_icon);
-        backImageView.setOnClickListener(v -> {
-            goToHome();
-        });
+        ImageView backImageView = findViewById(R.id.back_icon);
+        backImageView.setOnClickListener(v -> goToHome());
 
-        logoutButton = findViewById(R.id.logout_button);
+        Button logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(v -> {
             SessionStorage.removeSessionStorage(ProfileActivity.this);
 
@@ -120,98 +103,84 @@ public class ProfileActivity extends AppCompatActivity {
         updateButton = findViewById(R.id.update_button);
         updateButton.setOnClickListener(v -> {
 
+            disableField();
             String name = nameEditText.getText().toString();
-            String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            String errorMessage = "";
-            if (GeneralHelper.isEmpty(email)
-                    || GeneralHelper.isEmpty(email)
-                    || GeneralHelper.isEmpty(password))
-                errorMessage = "Please fill all field.";
-
-            else if (!GeneralHelper.isEmail(email))
-                errorMessage = "Invalid Email Format.";
-
-            else if (!NetworkHandler.isConnectToInternet(this))
-                errorMessage = "You're offline. Please connect to the internet.";
-
+            String errorMessage = validateString(name, password);
             if (!GeneralHelper.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                GeneralHelper.enableEditText(nameEditText);
-                GeneralHelper.enableEditText(emailEditText);
-                GeneralHelper.enableEditText(passwordEditText);
+                enableField();
                 return;
             }
 
-            GeneralHelper.disableEditText(nameEditText);
-            GeneralHelper.disableEditText(emailEditText);
-            GeneralHelper.disableEditText(passwordEditText);
-
-            updateStatus = "progress";
+            updateStatus = ProcessStatus.INIT;
 
             @SuppressLint("StaticFieldLeak")
-            AsyncTask<String, String, String> asyncTask = new AsyncTask<String, String, String>() {
-                @Override
-                protected String doInBackground(String... strings) {
+            AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus> asyncTask =
+                    new AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus>() {
 
-                    collectionReference.
-                            whereEqualTo("id", SessionStorage.getSessionStorage(ProfileActivity.this)).
-                            get().
-                            addOnSuccessListener(queryDocumentSnapshots -> {
+                        @Override
+                        protected ProcessStatus doInBackground(ProcessStatus... processStatuses) {
 
-                                QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshots.iterator().next();
-                                User user = queryDocumentSnapshot.toObject(User.class);
+                            UserController userController = UserController.getInstance();
+                            userController.getUserByID((user, processStatus) -> {
 
-                                if (!PasswordHandler.validatePassword(password, user.getPassword()))
-                                    updateStatus = "no-data";
+                                if (processStatus == ProcessStatus.NOT_FOUND) {
+                                    goToLogin();
 
-                                else {
-                                    String pictureID = UUID.randomUUID().toString();
+                                } else if (processStatus == ProcessStatus.FAILED) {
+                                    updateStatus = processStatus;
 
-                                    storageReference.
-                                            child(pictureID + "." + getFileExtension(imageUri)).
-                                            putFile(imageUri).
-                                            addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                @Override
-                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                } else if (processStatus == ProcessStatus.FOUND) {
 
-                                                    collectionReference.
-                                                            document(User.DOCUMENT_NAME + user.getId()).
-                                                            update("name", name, "email", email, "picture", pictureID + "." + getFileExtension(imageUri)).
-                                                            addOnSuccessListener(aVoid -> updateStatus = "success").
-                                                            addOnFailureListener(e -> updateStatus = "failed");
-                                                }
-                                            }).
-                                            addOnFailureListener(e -> updateStatus = "failed");
+                                    if (!PasswordHandler.validatePassword(password, user.getPassword()))
+                                        updateStatus = ProcessStatus.INVALID;
+
+                                    else {
+
+                                        if (imageUri == null) {
+                                            String id = SessionStorage.getSessionStorage(ProfileActivity.this);
+                                            User userTemp = new User(id, name, user.getEmail(), password, user.getPicture());
+                                            userController.updateUserByID(processStatusUpdate -> updateStatus = processStatusUpdate, userTemp);
+
+                                        } else {
+                                            String picture = UUID.randomUUID().toString() + "." +
+                                                    GeneralHelper.getFileExtension(imageUri, getApplicationContext());
+
+                                            userController.uploadPhoto((userNew, processStatusImage) -> {
+
+                                                if (processStatusImage == ProcessStatus.SUCCESS) {
+                                                    String id = SessionStorage.getSessionStorage(ProfileActivity.this);
+                                                    User userTemp = new User(id, name, user.getEmail(), password, picture);
+                                                    userController.updateUserByID(processStatusUpdate -> updateStatus = processStatusUpdate, userTemp);
+                                                } else
+                                                    updateStatus = processStatusImage;
+                                            }, picture, imageUri);
+                                        }
+                                    }
                                 }
-                            }).
-                            addOnFailureListener(e -> updateStatus = "failed");
+                            }, SessionStorage.getSessionStorage(ProfileActivity.this));
 
-                    int counter = 0;
-                    while (updateStatus.equals("progress")) {
-                        counter++;
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ignored) {
+                            while (updateStatus == ProcessStatus.INIT) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ignored) {
+                                }
+                            }
+
+                            return updateStatus;
                         }
-                        if (counter > 8)
-                            updateStatus = "failed";
-                    }
 
-                    return updateStatus;
-                }
-
-                @Override
-                protected void onPostExecute(String status) {
-                    Toast.makeText(getApplicationContext(),
-                            (updateStatus.equals("no-data")) ? "Invalid user password." :
-                                    (updateStatus.equals("success")) ? "Update profile failed." : "Update profile success.",
-                            Toast.LENGTH_SHORT).show();
-                    saveData(name, email);
-                    goToLogin();
-                }
-            };
+                        @Override
+                        protected void onPostExecute(ProcessStatus processStatus) {
+                            Toast.makeText(getApplicationContext(),
+                                    (processStatus == ProcessStatus.INVALID) ? "Invalid user password." :
+                                            (processStatus == ProcessStatus.FAILED) ? "Update profile failed." : "Update profile success.",
+                                    Toast.LENGTH_SHORT).show();
+                            goToProfile();
+                        }
+                    };
 
             updateButton.startAnimation();
             asyncTask.execute();
@@ -263,6 +232,19 @@ public class ProfileActivity extends AppCompatActivity {
         collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
     }
 
+    private String validateString(String name, String password) {
+        String errorMessage = "";
+
+        if (GeneralHelper.isEmpty(name)
+                || GeneralHelper.isEmpty(password))
+            errorMessage = "Please fill all field.";
+
+        else if (NetworkHandler.isNotConnectToInternet(this))
+            errorMessage = "You're offline. Please connect to the internet.";
+
+        return errorMessage;
+    }
+
     private void getCurrentUserData() {
 
         collectionReference.
@@ -279,7 +261,6 @@ public class ProfileActivity extends AppCompatActivity {
                     User user = queryDocumentSnapshot.toObject(User.class);
 
                     nameEditText.setText(user.getName());
-                    emailEditText.setText(user.getEmail());
 
                     storageReference.
                             child(user.getPicture()).
@@ -305,6 +286,22 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
+    private void enableField() {
+        GeneralHelper.enableEditText(nameEditText);
+        GeneralHelper.enableEditText(passwordEditText);
+    }
+
+    private void disableField() {
+        GeneralHelper.disableEditText(nameEditText);
+        GeneralHelper.disableEditText(passwordEditText);
+    }
+
+    private void goToProfile() {
+        Intent intentToProfile = getIntent();
+        intentToProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentToProfile);
+    }
+
     private void goToLogin() {
         Intent intentToProfile = new Intent(ProfileActivity.this, LoginActivity.class);
         intentToProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -315,25 +312,6 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intentToHome = new Intent(ProfileActivity.this, HomeActivity.class);
         intentToHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToHome);
-    }
-
-    private void saveData(String name, String email) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("name", name);
-        editor.putString("email", email);
-        editor.apply();
-    }
-
-    private void getData() {
-        nameEditText.setText(sharedPreferences.getString("name", ""));
-        emailEditText.setText(sharedPreferences.getString("email", ""));
-    }
-
-    private void resetData() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("name");
-        editor.remove("email");
-        editor.apply();
     }
 
 }

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,25 +23,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.login_register.LoginActivity;
-import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.profile.ProfileActivity;
+import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.SessionStorage;
 
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private View view;
-
-    private StorageReference storageReference;
-    private CollectionReference collectionReference;
 
     private ShimmerFrameLayout mShimmerViewContainer;
     private TextView nameTextView;
@@ -60,7 +52,6 @@ public class HomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home);
 
-        initializeFirebase();
         initializeNavigationDrawer();
 
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
@@ -69,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         nameTextView = view.findViewById(R.id.name_user_login);
         emailTextView = view.findViewById(R.id.email_user_login);
         iconImageView = view.findViewById(R.id.icon_user_login);
-        iconImageView.setOnClickListener(v -> { goToProfile(); });
+        iconImageView.setOnClickListener(v -> goToProfile());
 
         getCurrentUserData();
     }
@@ -85,14 +76,6 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    private void initializeFirebase() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
     }
 
     private void initializeNavigationDrawer() {
@@ -115,75 +98,56 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getCurrentUserData() {
 
-        // TODO: Formating Code
+        UserController userController = UserController.getInstance();
+        userController.getUserByID((user, processStatus) -> {
 
-        collectionReference.
-                whereEqualTo("id", SessionStorage.getSessionStorage(this)).
-                get().
-                addOnSuccessListener(queryDocumentSnapshots -> {
+            if (processStatus == ProcessStatus.NOT_FOUND) {
+                goToLogin();
 
-                    if (!queryDocumentSnapshots.iterator().hasNext()) {
-                        goToLogin();
-                        return;
+            } else if (processStatus == ProcessStatus.FAILED) {
+                nameTextView.setText(R.string.nav_header_title);
+                emailTextView.setText(R.string.nav_header_subtitle);
+                Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
+                showUserProfile();
+
+                String errorMessage = "Failed to load data.";
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
+                mShimmerViewContainer.stopShimmerAnimation();
+
+            } else {
+                nameTextView.setText(user.getName());
+                emailTextView.setText(user.getEmail());
+
+                userController.getUserPicture((bytes, processStatusImage) -> {
+                    if (processStatusImage == ProcessStatus.SUCCESS) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        RequestOptions requestOptions = new RequestOptions().centerCrop().error(R.drawable.ic_failed);
+                        Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(iconImageView);
+                        showUserProfile();
+
+                    } else if (processStatusImage == ProcessStatus.FAILED) {
+                        Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
+                        showUserProfile();
+
+                        String errorMessage = "Failed to load profile picture.";
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
-                    QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshots.iterator().next();
-                    User user = queryDocumentSnapshot.toObject(User.class);
-
-                    nameTextView.setText(user.getName());
-                    emailTextView.setText(user.getEmail());
-
-                    storageReference.
-                            child(User.PHOTO_NAME + "/" + user.getPicture()).
-                            getBytes(Long.MAX_VALUE).
-                            addOnSuccessListener(bytes -> {
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                                RequestOptions requestOptions = new RequestOptions().centerCrop().error(R.drawable.ic_failed);
-                                Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(iconImageView);
-
-                                iconImageView.setBackgroundColor(Color.TRANSPARENT);
-
-                                emailTextView.setBackgroundColor(Color.TRANSPARENT);
-                                emailTextView.setTextColor(Color.WHITE);
-
-                                nameTextView.setBackgroundColor(Color.TRANSPARENT);
-                                nameTextView.setTextColor(Color.WHITE);
-
-                                mShimmerViewContainer.stopShimmerAnimation();
-                            }).
-                            addOnFailureListener(e -> {
-                                Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
-                                iconImageView.setBackgroundColor(Color.TRANSPARENT);
-
-                                emailTextView.setBackgroundColor(Color.TRANSPARENT);
-                                emailTextView.setTextColor(Color.WHITE);
-
-                                nameTextView.setBackgroundColor(Color.TRANSPARENT);
-                                nameTextView.setTextColor(Color.WHITE);
-
-                                String errorMessage = "Failed to load data. Please check your internet connection.";
-                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-
-                                mShimmerViewContainer.stopShimmerAnimation();
-                            });
-                }).
-                addOnFailureListener(e -> {
-                    Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
-
-                    nameTextView.setText("User Name");
-                    nameTextView.setBackgroundColor(Color.TRANSPARENT);
-                    nameTextView.setTextColor(Color.WHITE);
-
-                    emailTextView.setText("User Email");
-                    emailTextView.setBackgroundColor(Color.TRANSPARENT);
-                    emailTextView.setTextColor(Color.WHITE);
-
-                    String errorMessage = "Failed to load data. Please check your internet connection.";
-                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-
                     mShimmerViewContainer.stopShimmerAnimation();
-                });
+                }, user.getPicture());
+            }
+        }, SessionStorage.getSessionStorage(this));
+    }
+
+    private void showUserProfile() {
+        iconImageView.setBackgroundColor(Color.TRANSPARENT);
+
+        emailTextView.setBackgroundColor(Color.TRANSPARENT);
+        emailTextView.setTextColor(Color.WHITE);
+
+        nameTextView.setBackgroundColor(Color.TRANSPARENT);
+        nameTextView.setTextColor(Color.WHITE);
     }
 
     private void goToLogin() {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -24,8 +23,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -84,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> {
 
-            // TODO: Disable All Button and Checkbox
             disableField();
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
@@ -163,9 +159,7 @@ public class LoginActivity extends AppCompatActivity {
         SignInButton signInButton = findViewById(R.id.google_button);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        signInButton.setOnClickListener(v -> {
-            googleSignIn();
-        });
+        signInButton.setOnClickListener(v -> googleSignIn());
 
     }
 
@@ -201,9 +195,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         String ID = UUID.randomUUID().toString();
                         User user = new User(ID, name, email, "", User.DEFAULT_PICTURE);
-                        userController.insertNewUser(insertStatus -> {
-                            loginStatus = insertStatus;
-                        }, user);
+                        userController.insertNewUser(insertStatus -> loginStatus = insertStatus, user);
 
                         String message = (loginStatus == ProcessStatus.SUCCESS) ?
                                 "Login success." : "Login failed.";
@@ -211,7 +203,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     } else if (emailStatus == ProcessStatus.FOUND) {
 
+
                         userController.getUserByEmail((user, processStatus) -> {
+
                             if (processStatus == ProcessStatus.FOUND) {
                                 SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
                                 goToHome();
@@ -242,10 +236,10 @@ public class LoginActivity extends AppCompatActivity {
                 || GeneralHelper.isEmpty(password))
             errorMessage = "Please fill all field.";
 
-        else if (!GeneralHelper.isEmail(email))
+        else if (GeneralHelper.isNotEmail(email))
             errorMessage = "Invalid Email Format.";
 
-        else if (!NetworkHandler.isConnectToInternet(this))
+        else if (NetworkHandler.isNotConnectToInternet(this))
             errorMessage = "You're offline. Please connect to the internet.";
 
         return errorMessage;

@@ -1,27 +1,19 @@
 package edu.bluejack19_2.chronotes.controller;
 
-import android.content.Context;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import edu.bluejack19_2.chronotes.model.User;
+import edu.bluejack19_2.chronotes.utils.FirebaseCallbackBytes;
 import edu.bluejack19_2.chronotes.utils.FirebaseCallbackProcessStatus;
 import edu.bluejack19_2.chronotes.utils.FirebaseCallbackUser;
-import edu.bluejack19_2.chronotes.utils.GeneralHelper;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class UserController {
@@ -38,7 +30,7 @@ public class UserController {
         collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
 
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
+        storageReference = firebaseStorage.getReference().child("users");
     }
 
     public static UserController getInstance() {
@@ -84,40 +76,6 @@ public class UserController {
                 });
     }
 
-    public void insertNewUser(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, User user) {
-        currentStatus = ProcessStatus.INIT;
-
-        collectionReference.
-                document(User.DOCUMENT_NAME + user.getId()).
-                set(user).
-                addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        currentStatus = (task.isComplete()) ?
-                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
-                        firebaseCallbackProcessStatus.onCallback(currentStatus);
-                    }
-                });
-    }
-
-    public void uploadPhoto(FirebaseCallbackUser firebaseCallbackUser, Uri uri, Context context) {
-
-        String pictureID = UUID.randomUUID().toString();
-
-        storageReference.
-                child(pictureID + "." + GeneralHelper.getFileExtension(uri, context)).
-                putFile(uri).
-                addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            User user = new User("", "", "", "", pictureID + "." + GeneralHelper.getFileExtension(uri, context));
-                            firebaseCallbackUser.onCallback(user, ProcessStatus.SUCCESS);
-                        }
-                    }
-                });
-    }
-
     public void findEmail(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, String email) {
         currentStatus = ProcessStatus.INIT;
 
@@ -128,6 +86,49 @@ public class UserController {
                     currentStatus = (task.isSuccessful()) ?
                             (!Objects.requireNonNull(task.getResult()).iterator().hasNext()) ?
                                     ProcessStatus.NOT_FOUND : ProcessStatus.FOUND : ProcessStatus.FAILED;
+                    firebaseCallbackProcessStatus.onCallback(currentStatus);
+                });
+    }
+
+    public void getUserPicture(FirebaseCallbackBytes firebaseCallbackBytes, String picture) {
+        storageReference.
+                child(picture).
+                getBytes(Long.MAX_VALUE).
+                addOnCompleteListener(task -> firebaseCallbackBytes.onCallback(
+                        (task.isSuccessful()) ? task.getResult() : null,
+                        (task.isSuccessful()) ? ProcessStatus.SUCCESS : ProcessStatus.FAILED));
+    }
+
+    public void insertNewUser(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, User user) {
+        currentStatus = ProcessStatus.INIT;
+
+        collectionReference.
+                document(User.DOCUMENT_NAME + user.getId()).
+                set(user).
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                    firebaseCallbackProcessStatus.onCallback(currentStatus);
+                });
+    }
+
+    public void uploadPhoto(FirebaseCallbackUser firebaseCallbackUser, String pictureID, Uri uri) {
+        storageReference.
+                child(pictureID).
+                putFile(uri).
+                addOnSuccessListener(taskSnapshot -> firebaseCallbackUser.onCallback(null, ProcessStatus.SUCCESS)).
+                addOnFailureListener(e -> firebaseCallbackUser.onCallback(null, ProcessStatus.FAILED));
+    }
+
+    public void updateUserByID(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, User user) {
+
+        collectionReference.
+                document(User.DOCUMENT_NAME + user.getId()).
+                update("name", user.getName(),
+                        "picture", user.getPicture()).
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
                     firebaseCallbackProcessStatus.onCallback(currentStatus);
                 });
     }

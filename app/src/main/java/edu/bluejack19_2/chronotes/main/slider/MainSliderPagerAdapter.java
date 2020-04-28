@@ -22,5 +22,4 @@ public class MainSliderPagerAdapter extends FragmentPagerAdapter {
         return MainResource.TOTAL_PAGE;
     }
 
-
 }

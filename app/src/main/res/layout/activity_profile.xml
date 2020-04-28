@@ -59,24 +59,6 @@
             android:background="@drawable/bg_blue_border_round">
 
             <EditText
-                android:id="@+id/profile_email"
-                style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/profile_email_icon"
-                android:hint="@string/profile_email_placeholder"
-                android:inputType="textEmailAddress" />
-
-            <ImageView
-                android:id="@+id/profile_email_icon"
-                style="@style/LoginRegisterImageView"
-                android:src="@drawable/ic_email" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
-
-            <EditText
                 android:id="@+id/profile_password"
                 style="@style/LoginRegisterEditText"
                 android:layout_toEndOf="@+id/profile_password_icon"

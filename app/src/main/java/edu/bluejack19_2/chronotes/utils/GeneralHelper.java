@@ -13,9 +13,9 @@ public class GeneralHelper {
         return string.length() == 0;
     }
 
-    public static boolean isEmail(String email) {
-        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-        return email.matches(regex);
+    public static boolean isNotEmail(String email) {
+        String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
+        return !email.matches(regex);
     }
 
     public static void enableEditText(EditText editText) {

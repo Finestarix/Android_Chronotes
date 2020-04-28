@@ -85,9 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                             UserController userController = UserController.getInstance();
                             userController.findEmail(emailStatus -> {
                                 if (emailStatus == ProcessStatus.NOT_FOUND)
-                                    userController.insertNewUser(insertStatus -> {
-                                        registerStatus = insertStatus;
-                                    }, user);
+                                    userController.insertNewUser(insertStatus -> registerStatus = insertStatus, user);
                                 else
                                     registerStatus = emailStatus;
                             }, email);
@@ -153,10 +151,10 @@ public class RegisterActivity extends AppCompatActivity {
                 || GeneralHelper.isEmpty(password))
             errorMessage = "Please fill all field.";
 
-        else if (!GeneralHelper.isEmail(email))
+        else if (GeneralHelper.isNotEmail(email))
             errorMessage = "Invalid Email Format.";
 
-        else if (!NetworkHandler.isConnectToInternet(this))
+        else if (NetworkHandler.isNotConnectToInternet(this))
             errorMessage = "You're offline. Please connect to the internet.";
 
         return errorMessage;

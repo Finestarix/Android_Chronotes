@@ -11,21 +11,6 @@ public enum ProcessStatus {
         }
     },
 
-    PROCESS {
-        @NonNull
-        @Override
-        public String toString() {
-            return "Process";
-        }
-    },
-    SEARCHING {
-        @NonNull
-        @Override
-        public String toString() {
-            return "Searching";
-        }
-    },
-
     FOUND {
         @NonNull
         @Override
