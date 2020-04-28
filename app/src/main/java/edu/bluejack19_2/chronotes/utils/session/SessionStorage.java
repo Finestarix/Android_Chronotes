@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.utils;
+package edu.bluejack19_2.chronotes.utils.session;
 
 import android.content.Context;
 import android.content.SharedPreferences;

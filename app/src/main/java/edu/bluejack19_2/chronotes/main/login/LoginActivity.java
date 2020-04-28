@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.login_register;
+package edu.bluejack19_2.chronotes.main.login;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -30,13 +30,14 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
+import edu.bluejack19_2.chronotes.main.register.RegisterActivity;
 import edu.bluejack19_2.chronotes.model.User;
-import edu.bluejack19_2.chronotes.utils.GeneralHelper;
+import edu.bluejack19_2.chronotes.utils.GeneralHandler;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
-import edu.bluejack19_2.chronotes.utils.SessionStorage;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,8 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         emailEditText = findViewById(R.id.login_email);
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
 
             String errorMessage = validateString(email, password);
-            if (!GeneralHelper.isEmpty(errorMessage)) {
+            if (!GeneralHandler.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 enableField();
                 return;
@@ -232,11 +233,11 @@ public class LoginActivity extends AppCompatActivity {
     private String validateString(String email, String password) {
         String errorMessage = "";
 
-        if (GeneralHelper.isEmpty(email)
-                || GeneralHelper.isEmpty(password))
+        if (GeneralHandler.isEmpty(email)
+                || GeneralHandler.isEmpty(password))
             errorMessage = "Please fill all field.";
 
-        else if (GeneralHelper.isNotEmail(email))
+        else if (GeneralHandler.isNotEmail(email))
             errorMessage = "Invalid Email Format.";
 
         else if (NetworkHandler.isNotConnectToInternet(this))
@@ -246,15 +247,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void enableField() {
-        GeneralHelper.enableCheckBox(rememberCheckBox);
-        GeneralHelper.enableEditText(emailEditText);
-        GeneralHelper.enableEditText(passwordEditText);
+        GeneralHandler.enableCheckBox(rememberCheckBox);
+        GeneralHandler.enableEditText(emailEditText);
+        GeneralHandler.enableEditText(passwordEditText);
     }
 
     private void disableField() {
-        GeneralHelper.disableCheckBox(rememberCheckBox);
-        GeneralHelper.disableEditText(emailEditText);
-        GeneralHelper.disableEditText(passwordEditText);
+        GeneralHandler.disableCheckBox(rememberCheckBox);
+        GeneralHandler.disableEditText(emailEditText);
+        GeneralHandler.disableEditText(passwordEditText);
     }
 
     private void goToLogin() {

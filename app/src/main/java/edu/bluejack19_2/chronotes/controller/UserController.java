@@ -11,9 +11,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.model.User;
-import edu.bluejack19_2.chronotes.utils.FirebaseCallbackBytes;
-import edu.bluejack19_2.chronotes.utils.FirebaseCallbackProcessStatus;
-import edu.bluejack19_2.chronotes.utils.FirebaseCallbackUser;
+import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackBytes;
+import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackProcessStatus;
+import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackUser;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class UserController {

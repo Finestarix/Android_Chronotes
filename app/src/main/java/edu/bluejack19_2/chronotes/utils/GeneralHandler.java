@@ -7,7 +7,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-public class GeneralHelper {
+public class GeneralHandler {
 
     public static boolean isEmpty(String string) {
         return string.length() == 0;

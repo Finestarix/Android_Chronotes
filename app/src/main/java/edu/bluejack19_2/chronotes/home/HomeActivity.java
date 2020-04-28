@@ -26,10 +26,10 @@ import com.google.android.material.navigation.NavigationView;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
-import edu.bluejack19_2.chronotes.login_register.LoginActivity;
-import edu.bluejack19_2.chronotes.profile.ProfileActivity;
+import edu.bluejack19_2.chronotes.main.login.LoginActivity;
+import edu.bluejack19_2.chronotes.home.ui.profile.ProfileActivity;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
-import edu.bluejack19_2.chronotes.utils.SessionStorage;
+import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
 public class HomeActivity extends AppCompatActivity {
 

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.Window;
 
 import edu.bluejack19_2.chronotes.R;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class Calendar extends AppCompatActivity {
 
@@ -22,8 +22,8 @@ public class Calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

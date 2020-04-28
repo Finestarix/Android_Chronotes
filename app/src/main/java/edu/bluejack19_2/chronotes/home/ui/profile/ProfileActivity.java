@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.profile;
+package edu.bluejack19_2.chronotes.home.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -37,14 +37,14 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
-import edu.bluejack19_2.chronotes.login_register.LoginActivity;
+import edu.bluejack19_2.chronotes.main.login.LoginActivity;
 import edu.bluejack19_2.chronotes.model.User;
-import edu.bluejack19_2.chronotes.utils.GeneralHelper;
+import edu.bluejack19_2.chronotes.utils.GeneralHandler;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
-import edu.bluejack19_2.chronotes.utils.SessionStorage;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -74,8 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         initializeFirebase();
@@ -108,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
             String password = passwordEditText.getText().toString();
 
             String errorMessage = validateString(name, password);
-            if (!GeneralHelper.isEmpty(errorMessage)) {
+            if (!GeneralHandler.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 enableField();
                 return;
@@ -146,7 +146,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                                         } else {
                                             String picture = UUID.randomUUID().toString() + "." +
-                                                    GeneralHelper.getFileExtension(imageUri, getApplicationContext());
+                                                    GeneralHandler.getFileExtension(imageUri, getApplicationContext());
 
                                             userController.uploadPhoto((userNew, processStatusImage) -> {
 
@@ -235,8 +235,8 @@ public class ProfileActivity extends AppCompatActivity {
     private String validateString(String name, String password) {
         String errorMessage = "";
 
-        if (GeneralHelper.isEmpty(name)
-                || GeneralHelper.isEmpty(password))
+        if (GeneralHandler.isEmpty(name)
+                || GeneralHandler.isEmpty(password))
             errorMessage = "Please fill all field.";
 
         else if (NetworkHandler.isNotConnectToInternet(this))
@@ -287,13 +287,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void enableField() {
-        GeneralHelper.enableEditText(nameEditText);
-        GeneralHelper.enableEditText(passwordEditText);
+        GeneralHandler.enableEditText(nameEditText);
+        GeneralHandler.enableEditText(passwordEditText);
     }
 
     private void disableField() {
-        GeneralHelper.disableEditText(nameEditText);
-        GeneralHelper.disableEditText(passwordEditText);
+        GeneralHandler.disableEditText(nameEditText);
+        GeneralHandler.disableEditText(passwordEditText);
     }
 
     private void goToProfile() {

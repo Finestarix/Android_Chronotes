@@ -16,9 +16,9 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.R;
-import edu.bluejack19_2.chronotes.login_register.LoginActivity;
+import edu.bluejack19_2.chronotes.main.login.LoginActivity;
 import edu.bluejack19_2.chronotes.main.slider.MainSliderPagerAdapter;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         mainSliderPageAdapter = new MainSliderPagerAdapter(
