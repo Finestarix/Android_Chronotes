@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="checkbox_red" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/OrangeRed</item>
+        <item name="android:textColorSecondary">@color/AliceBlue</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
