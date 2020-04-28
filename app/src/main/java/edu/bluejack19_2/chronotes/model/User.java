@@ -8,6 +8,7 @@ public class User {
     public static final String DOCUMENT_NAME = "users_";
     public static final String PHOTO_NAME = "users";
     public static final String DEFAULT_PICTURE = "users.png";
+    public static final String DEFAULT_PASSWORD = "users";
 
     private String id;
     private String name;

@@ -1,5 +1,10 @@
 package edu.bluejack19_2.chronotes.utils;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class GeneralHelper {
@@ -19,5 +24,19 @@ public class GeneralHelper {
 
     public static void disableEditText(EditText editText) {
         editText.setEnabled(false);
+    }
+
+    public static void enableCheckBox(CheckBox checkBox) {
+        checkBox.setEnabled(true);
+    }
+
+    public static void disableCheckBox(CheckBox checkBox) {
+        checkBox.setEnabled(false);
+    }
+
+    public static String getFileExtension(Uri uri, Context context) {
+        ContentResolver contentResolver = context.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 }

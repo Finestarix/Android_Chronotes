@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -22,19 +23,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Objects;
+import java.util.UUID;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.GeneralHelper;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
+import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.SessionStorage;
 import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
@@ -47,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private CheckBox rememberCheckBox;
 
-    private String loginStatus;
+    private ProcessStatus loginStatus;
     private CircularProgressButton loginButton;
 
     private SharedPreferences sharedPreferences;
@@ -58,9 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("loginData", Context.MODE_PRIVATE);
 
-        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-        if (googleSignInAccount != null ||
-                !SessionStorage.getSessionStorage(this).equals("")) {
+        if (!SessionStorage.getSessionStorage(this).equals("")) {
             goToHome();
             return;
         }
@@ -83,99 +84,77 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(v -> {
 
+            // TODO: Disable All Button and Checkbox
+            disableField();
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            // TODO: Disable All Button and Checkbox
-            GeneralHelper.disableEditText(emailEditText);
-            GeneralHelper.disableEditText(passwordEditText);
-
-            String errorMessage = "";
-            if (GeneralHelper.isEmpty(email)
-                    || GeneralHelper.isEmpty(password))
-                errorMessage = "Please fill all field.";
-
-            else if (!GeneralHelper.isEmail(email))
-                errorMessage = "Invalid Email Format.";
-
-            else if (!NetworkHandler.isConnectToInternet(this))
-                errorMessage = "You're offline. Please connect to the internet.";
-
+            String errorMessage = validateString(email, password);
             if (!GeneralHelper.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                GeneralHelper.enableEditText(emailEditText);
-                GeneralHelper.enableEditText(passwordEditText);
+                enableField();
                 return;
             }
 
-            loginStatus = "progress";
+            loginStatus = ProcessStatus.INIT;
 
             @SuppressLint("StaticFieldLeak")
-            AsyncTask<String, String, String> asyncTask = new AsyncTask<String, String, String>() {
-                @Override
-                protected String doInBackground(String... strings) {
-                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                    CollectionReference collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
-                    collectionReference.
-                            whereEqualTo("email", email).
-                            get().
-                            addOnSuccessListener(queryDocumentSnapshots -> {
+            AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus> asyncTask =
+                    new AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus>() {
+                        @Override
+                        protected ProcessStatus doInBackground(ProcessStatus... processStatuses) {
 
-                                if (!queryDocumentSnapshots.iterator().hasNext()) {
-                                    loginStatus = "no-data";
-                                    return;
-                                }
+                            UserController userController = UserController.getInstance();
+                            userController.getUserByEmail((user, processStatus) -> {
+                                if (processStatus == ProcessStatus.FOUND) {
 
-                                QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshots.iterator().next();
-                                User user = queryDocumentSnapshot.toObject(User.class);
+                                    String hashPasswordOriginal = user.getPassword();
+                                    loginStatus = (PasswordHandler.validatePassword(password, hashPasswordOriginal)) ?
+                                            ProcessStatus.SUCCESS : ProcessStatus.INVALID;
 
-                                String hashPasswordOriginal = user.getPassword();
-                                loginStatus = (PasswordHandler.validatePassword(password, hashPasswordOriginal)) ? "success" : "no-data";
+                                    if (loginStatus == ProcessStatus.SUCCESS)
+                                        SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
 
-                                if (loginStatus.equals("success")) {
-                                    SessionStorage.setSessionStorage(LoginActivity.this, user);
-                                }
-                            }).
-                            addOnFailureListener(e -> loginStatus = "failed");
+                                } else
+                                    loginStatus = processStatus;
+                            }, email);
 
-                    int counter = 0;
-                    while (loginStatus.equals("progress")) {
-                        counter++;
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ignored) {
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException ignored) {
+                            }
+
+                            if (loginStatus == ProcessStatus.INIT)
+                                loginStatus = ProcessStatus.FAILED;
+
+                            return loginStatus;
                         }
-                        if (counter > 5)
-                            loginStatus = "failed";
-                    }
 
-                    return loginStatus;
-                }
+                        @Override
+                        protected void onPostExecute(ProcessStatus processStatus) {
 
-                @Override
-                protected void onPostExecute(String status) {
-                    if (loginStatus.equals("success")) {
-                        Toast.makeText(getApplicationContext(), "Login success.", Toast.LENGTH_SHORT).show();
+                            String message = (processStatus == ProcessStatus.SUCCESS) ?
+                                    "Login success." : (processStatus == ProcessStatus.FAILED) ?
+                                    "Login failed." : "Invalid email or password.";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                        if (rememberCheckBox.isChecked())
-                            saveDataRememberMe(email, password);
-                        else
-                            resetDataRememberMe();
+                            if (processStatus == ProcessStatus.SUCCESS &&
+                                    rememberCheckBox.isChecked())
+                                saveDataRememberMe(email, password);
+                            else
+                                resetDataRememberMe();
 
-                        resetData();
-                        goToHome();
-                    } else if (loginStatus.equals("failed") || loginStatus.equals("no-data")) {
-                        Toast.makeText(getApplicationContext(),
-                                (loginStatus.equals("no-data")) ? "Invalid email or password." : "Login failed.",
-                                Toast.LENGTH_SHORT).show();
-                        saveData(email, password);
-                        goToLogin();
-                    }
+                            if (processStatus == ProcessStatus.SUCCESS) {
+                                resetData();
+                                goToHome();
+                            } else {
+                                saveData(email, password);
+                                goToLogin();
+                            }
 
-                    GeneralHelper.enableEditText(emailEditText);
-                    GeneralHelper.enableEditText(passwordEditText);
-                }
-            };
+                            enableField();
+                        }
+                    };
 
             loginButton.startAnimation();
             asyncTask.execute();
@@ -184,7 +163,9 @@ public class LoginActivity extends AppCompatActivity {
         SignInButton signInButton = findViewById(R.id.google_button);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        signInButton.setOnClickListener(v -> { googleSignIn(); });
+        signInButton.setOnClickListener(v -> {
+            googleSignIn();
+        });
 
     }
 
@@ -207,14 +188,79 @@ public class LoginActivity extends AppCompatActivity {
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> googleSignInAccountTask) {
         try {
             GoogleSignInAccount account = googleSignInAccountTask.getResult(ApiException.class);
+
+            if (account != null) {
+
+                UserController userController = UserController.getInstance();
+
+                String name = Objects.requireNonNull(account.getDisplayName());
+                String email = Objects.requireNonNull(account.getEmail());
+
+                userController.findEmail(emailStatus -> {
+                    if (emailStatus == ProcessStatus.NOT_FOUND) {
+
+                        String ID = UUID.randomUUID().toString();
+                        User user = new User(ID, name, email, "", User.DEFAULT_PICTURE);
+                        userController.insertNewUser(insertStatus -> {
+                            loginStatus = insertStatus;
+                        }, user);
+
+                        String message = (loginStatus == ProcessStatus.SUCCESS) ?
+                                "Login success." : "Login failed.";
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                    } else if (emailStatus == ProcessStatus.FOUND) {
+
+                        userController.getUserByEmail((user, processStatus) -> {
+                            if (processStatus == ProcessStatus.FOUND) {
+                                SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
+                                goToHome();
+                            }
+
+                            String message = (processStatus == ProcessStatus.FOUND) ?
+                                    "Login success." : "Login failed.";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                        }, email);
+                    }
+                }, email);
+            }
         } catch (ApiException e) {
-            Toast.makeText(LoginActivity.this, "Failed Login Google.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Login failed.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void googleSignIn() {
         Intent signGoogleSignIn = googleSignInClient.getSignInIntent();
         startActivityForResult(signGoogleSignIn, RC_SIGN_IN);
+    }
+
+    private String validateString(String email, String password) {
+        String errorMessage = "";
+
+        if (GeneralHelper.isEmpty(email)
+                || GeneralHelper.isEmpty(password))
+            errorMessage = "Please fill all field.";
+
+        else if (!GeneralHelper.isEmail(email))
+            errorMessage = "Invalid Email Format.";
+
+        else if (!NetworkHandler.isConnectToInternet(this))
+            errorMessage = "You're offline. Please connect to the internet.";
+
+        return errorMessage;
+    }
+
+    private void enableField() {
+        GeneralHelper.enableCheckBox(rememberCheckBox);
+        GeneralHelper.enableEditText(emailEditText);
+        GeneralHelper.enableEditText(passwordEditText);
+    }
+
+    private void disableField() {
+        GeneralHelper.disableCheckBox(rememberCheckBox);
+        GeneralHelper.disableEditText(emailEditText);
+        GeneralHelper.disableEditText(passwordEditText);
     }
 
     private void goToLogin() {

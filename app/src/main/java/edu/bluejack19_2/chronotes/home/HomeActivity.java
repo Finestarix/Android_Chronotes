@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -69,15 +69,9 @@ public class HomeActivity extends AppCompatActivity {
         nameTextView = view.findViewById(R.id.name_user_login);
         emailTextView = view.findViewById(R.id.email_user_login);
         iconImageView = view.findViewById(R.id.icon_user_login);
-        iconImageView.setOnClickListener(v -> {
-            // TODO: Add Validation Load Done
-
-            goToProfile();
-        });
+        iconImageView.setOnClickListener(v -> { goToProfile(); });
 
         getCurrentUserData();
-
-        // TODO: Change Profile by Google Sign In
     }
 
     @Override
@@ -120,6 +114,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getCurrentUserData() {
+
+        // TODO: Formating Code
 
         collectionReference.
                 whereEqualTo("id", SessionStorage.getSessionStorage(this)).

@@ -15,10 +15,10 @@ public class SessionStorage {
         return sharedpreferences.getString(SESSION_ID, "");
     }
 
-    public static void setSessionStorage(Context context, User user) {
+    public static void setSessionStorage(Context context, String id) {
         SharedPreferences sharedpreferences = context.getSharedPreferences(SESSION_STORAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(SESSION_ID, user.getId());
+        editor.putString(SESSION_ID, id);
         editor.apply();
     }
 

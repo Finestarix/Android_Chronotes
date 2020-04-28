@@ -21,6 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -75,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("profileData", Context.MODE_PRIVATE);
 
         if (SessionStorage.getSessionStorage(this) == null) {
-            goToProfile();
+            goToLogin();
             return;
         }
 
@@ -105,7 +109,12 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(v -> {
             SessionStorage.removeSessionStorage(ProfileActivity.this);
-            goToProfile();
+
+            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+            googleSignInClient.signOut();
+
+            goToLogin();
         });
 
         updateButton = findViewById(R.id.update_button);
@@ -200,7 +209,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     (updateStatus.equals("success")) ? "Update profile failed." : "Update profile success.",
                             Toast.LENGTH_SHORT).show();
                     saveData(name, email);
-                    goToProfile();
+                    goToLogin();
                 }
             };
 
@@ -262,7 +271,7 @@ public class ProfileActivity extends AppCompatActivity {
                 addOnSuccessListener(queryDocumentSnapshots -> {
 
                     if (!queryDocumentSnapshots.iterator().hasNext()) {
-                        goToProfile();
+                        goToLogin();
                         return;
                     }
 
@@ -296,7 +305,7 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void goToProfile() {
+    private void goToLogin() {
         Intent intentToProfile = new Intent(ProfileActivity.this, LoginActivity.class);
         intentToProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToProfile);

@@ -13,20 +13,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.Objects;
 import java.util.UUID;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.GeneralHelper;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
+import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -35,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
 
-    private String registerStatus;
+    private ProcessStatus registerStatus;
     private CircularProgressButton registerButton;
 
     private SharedPreferences sharedPreferences;
@@ -60,98 +57,70 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register_button);
         registerButton.setOnClickListener(v -> {
 
+            disableField();
             String name = nameEditText.getText().toString();
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            GeneralHelper.disableEditText(nameEditText);
-            GeneralHelper.disableEditText(emailEditText);
-            GeneralHelper.disableEditText(passwordEditText);
-
-            String errorMessage = "";
-            if (GeneralHelper.isEmpty(name)
-                    || GeneralHelper.isEmpty(email)
-                    || GeneralHelper.isEmpty(password))
-                errorMessage = "Please fill all field.";
-
-            else if (!GeneralHelper.isEmail(email))
-                errorMessage = "Invalid Email Format.";
-
-            else if (!NetworkHandler.isConnectToInternet(this))
-                errorMessage = "You're offline. Please connect to the internet.";
-
+            String errorMessage = validateString(name, email, password);
             if (!GeneralHelper.isEmpty(errorMessage)) {
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                GeneralHelper.enableEditText(nameEditText);
-                GeneralHelper.enableEditText(emailEditText);
-                GeneralHelper.enableEditText(passwordEditText);
+                enableField();
                 return;
             }
 
             String userID = UUID.randomUUID().toString();
             String hashPassword = PasswordHandler.generateStrongPasswordHash(password);
-
             User user = new User(userID, name, email, hashPassword, User.DEFAULT_PICTURE);
 
-            registerStatus = "progress";
+            registerStatus = ProcessStatus.INIT;
 
             @SuppressLint("StaticFieldLeak")
-            AsyncTask<String, String, String> asyncTask = new AsyncTask<String, String, String>() {
-                @Override
-                protected String doInBackground(String... strings) {
-                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                    CollectionReference collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
-                    collectionReference.
-                            whereEqualTo("email", email).
-                            get().
-                            addOnSuccessListener(queryDocumentSnapshots -> {
+            AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus> asyncTask =
+                    new AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus>() {
 
-                                if (!queryDocumentSnapshots.iterator().hasNext())
-                                    collectionReference.
-                                            document(User.DOCUMENT_NAME + userID).
-                                            set(user).
-                                            addOnSuccessListener(aVoid -> registerStatus = "success").
-                                            addOnFailureListener(e -> registerStatus = "failed");
+                        @Override
+                        protected ProcessStatus doInBackground(ProcessStatus... processStatuses) {
+
+                            UserController userController = UserController.getInstance();
+                            userController.findEmail(emailStatus -> {
+                                if (emailStatus == ProcessStatus.NOT_FOUND)
+                                    userController.insertNewUser(insertStatus -> {
+                                        registerStatus = insertStatus;
+                                    }, user);
                                 else
-                                    registerStatus = "registered";
-                            }).
-                            addOnFailureListener(e -> registerStatus = "failed");
+                                    registerStatus = emailStatus;
+                            }, email);
 
+                            try {
+                                Thread.sleep(5000);
+                            } catch (InterruptedException ignored) {
+                            }
 
+                            if (registerStatus == ProcessStatus.INIT)
+                                registerStatus = ProcessStatus.FAILED;
 
-                    int counter = 0;
-                    while (registerStatus.equals("progress")) {
-                        counter++;
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ignored) {
+                            return registerStatus;
                         }
-                        if (counter > 5)
-                            registerStatus = "failed";
-                    }
 
-                    return registerStatus;
-                }
+                        @Override
+                        protected void onPostExecute(ProcessStatus result) {
 
-                @Override
-                protected void onPostExecute(String status) {
-                    if (registerStatus.equals("success")) {
-                        Toast.makeText(getApplicationContext(), "Register success.", Toast.LENGTH_SHORT).show();
-                        resetData();
-                        goToLogin();
-                    } else if (registerStatus.equals("failed") || registerStatus.equals("registered")) {
-                        Toast.makeText(getApplicationContext(),
-                                (registerStatus.equals("failed")) ? "Register failed." : "The Email Account Already Exists.",
-                                Toast.LENGTH_SHORT).show();
-                        saveData(name, email, password);
-                        refreshRegister();
-                    }
+                            String message = (result == ProcessStatus.SUCCESS) ?
+                                    "Register success." : (result == ProcessStatus.FAILED) ?
+                                    "Register failed." : "The email account already exists.";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                    GeneralHelper.enableEditText(nameEditText);
-                    GeneralHelper.enableEditText(emailEditText);
-                    GeneralHelper.enableEditText(passwordEditText);
-                }
-            };
+                            if (result == ProcessStatus.SUCCESS)
+                                goToLogin();
+                            else {
+                                saveData(name, email, password);
+                                goToRegister();
+                            }
+
+                            enableField();
+                        }
+                    };
 
             registerButton.startAnimation();
             asyncTask.execute();
@@ -176,6 +145,35 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(intentToLogin);
     }
 
+    private String validateString(String name, String email, String password) {
+        String errorMessage = "";
+
+        if (GeneralHelper.isEmpty(name)
+                || GeneralHelper.isEmpty(email)
+                || GeneralHelper.isEmpty(password))
+            errorMessage = "Please fill all field.";
+
+        else if (!GeneralHelper.isEmail(email))
+            errorMessage = "Invalid Email Format.";
+
+        else if (!NetworkHandler.isConnectToInternet(this))
+            errorMessage = "You're offline. Please connect to the internet.";
+
+        return errorMessage;
+    }
+
+    private void enableField() {
+        GeneralHelper.enableEditText(nameEditText);
+        GeneralHelper.enableEditText(emailEditText);
+        GeneralHelper.enableEditText(passwordEditText);
+    }
+
+    private void disableField() {
+        GeneralHelper.disableEditText(nameEditText);
+        GeneralHelper.disableEditText(emailEditText);
+        GeneralHelper.disableEditText(passwordEditText);
+    }
+
     private void saveData(String name, String email, String password) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("name", name);
@@ -196,12 +194,12 @@ public class RegisterActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void refreshRegister() {
+    private void goToRegister() {
         Intent intentToRegister = getIntent();
         intentToRegister.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        finish();
         startActivity(intentToRegister);
     }
+
 }
 
 
