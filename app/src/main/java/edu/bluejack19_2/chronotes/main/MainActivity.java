@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
@@ -17,27 +16,35 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.R;
-import edu.bluejack19_2.chronotes.login_register.LoginActivity;
+import edu.bluejack19_2.chronotes.main.login.LoginActivity;
 import edu.bluejack19_2.chronotes.main.slider.MainSliderPagerAdapter;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager mainViewPager;
-    private Button mainButton;
-    private Button mainButtonSkip;
     private MainSliderPagerAdapter mainSliderPageAdapter;
+    private ViewPager mainViewPager;
+
+    private Button mainButton;
+
     private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("mainData", Context.MODE_PRIVATE);
+
+        if (getData()) {
+            goToLogin();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         mainSliderPageAdapter = new MainSliderPagerAdapter(
@@ -62,45 +69,28 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.main_tab_layout);
         tabLayout.setupWithViewPager(mainViewPager);
 
-        mainButtonSkip = findViewById(R.id.main_button_skip);
-        mainButtonSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData();
-                goToLogin();
-            }
+        Button mainButtonSkip = findViewById(R.id.main_button_skip);
+        mainButtonSkip.setOnClickListener(v -> {
+            saveData();
+            goToLogin();
         });
 
         mainButton = findViewById(R.id.main_button);
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveData();
+        mainButton.setOnClickListener(view -> {
+            saveData();
 
-                String buttonText = mainButton.getText().toString();
-                if (buttonText.equals(getString(R.string.main_slider_fragment_continue)))
-                    goToLogin();
-                else if (mainViewPager.getCurrentItem() < mainSliderPageAdapter.getCount()) {
-                    int mainViewPagerCurrentItem = mainViewPager.getCurrentItem() + 1;
-                    mainViewPager.setCurrentItem(mainViewPagerCurrentItem);
-                }
+            String buttonText = mainButton.getText().toString();
+            if (buttonText.equals(getString(R.string.main_slider_fragment_continue)))
+                goToLogin();
+            else if (mainViewPager.getCurrentItem() < mainSliderPageAdapter.getCount()) {
+                int mainViewPagerCurrentItem = mainViewPager.getCurrentItem() + 1;
+                mainViewPager.setCurrentItem(mainViewPagerCurrentItem);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-
-        sharedPreferences = getSharedPreferences("registerData", Context.MODE_PRIVATE);
-        if (getData())
-            goToLogin();
-
-        super.onStart();
     }
 
     private void goToLogin() {
         Intent intentToLogin = new Intent(MainActivity.this, LoginActivity.class);
-        finish();
         intentToLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToLogin);
     }

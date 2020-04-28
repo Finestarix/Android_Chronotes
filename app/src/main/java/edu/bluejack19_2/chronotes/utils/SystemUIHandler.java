@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class SystemUIHelper {
+public class SystemUIHandler {
 
     public static void hideSystemUI(Window window) {
         View decorView = window.getDecorView();

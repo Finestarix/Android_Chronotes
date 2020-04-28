@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.ui.profile.ProfileActivity">
+
+    <LinearLayout
+        style="@style/WrapContentWidthHeight"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/bg_blue_top">
+
+            <ImageView
+                android:id="@+id/back_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_back" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/icon_user_login"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="70dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_loading_placeholder"
+                app:civ_border_color="#fff"
+                app:civ_border_width="2dp" />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_blue_border_round">
+
+            <EditText
+                android:id="@+id/profile_name"
+                style="@style/LoginRegisterEditText"
+                android:layout_toEndOf="@+id/profile_name_icon"
+                android:hint="@string/profile_name_placeholder"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/profile_name_icon"
+                style="@style/LoginRegisterImageView"
+                android:src="@drawable/ic_username" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_blue_border_round">
+
+            <EditText
+                android:id="@+id/profile_password"
+                style="@style/LoginRegisterEditText"
+                android:layout_toEndOf="@+id/profile_password_icon"
+                android:hint="@string/profile_password_placeholder"
+                android:inputType="textPassword" />
+
+            <ImageView
+                android:id="@+id/profile_password_icon"
+                style="@style/LoginRegisterImageView"
+                android:src="@drawable/ic_password" />
+
+        </RelativeLayout>
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/update_button"
+            style="@style/LoginRegisterButton"
+            android:text="@string/profile_button"
+            app:spinning_bar_color="@color/White"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="6dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/DefaultWidthHeight"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/logout_button"
+            style="@style/LogoutButton"
+            android:text="@string/profile_logout_button"
+            app:spinning_bar_color="@color/White"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="6dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

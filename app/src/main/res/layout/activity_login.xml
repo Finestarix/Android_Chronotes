@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".login_register.LoginActivity">
+    tools:context=".main.login.LoginActivity">
 
     <LinearLayout
         style="@style/DefaultWidthHeight"
@@ -67,10 +67,6 @@
                 android:id="@+id/remember_me"
                 style="@style/LoginRememberMe"
                 android:text="@string/login_remember_me" />
-
-            <TextView
-                style="@style/LoginForgetPassword"
-                android:text="@string/login_forgot_password" />
 
         </LinearLayout>
 

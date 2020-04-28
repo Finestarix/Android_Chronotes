@@ -14,14 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".calendar.AddTask"></activity>
+        <activity android:name=".home.ui.profile.ProfileActivity"></activity>
         <activity
             android:name=".home.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".login_register.RegisterActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".main.register.RegisterActivity" />
         <activity
-            android:name=".calendar.Calendar_Activity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".calendar.Calendar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".main.login.LoginActivity" />
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

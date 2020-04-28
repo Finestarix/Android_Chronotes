@@ -3,13 +3,12 @@
     <!--  Public String -->
     <string name="app_name">Chronotes</string>
 
+    <!-- Fragment -->
     <string name="title_activity_calendar">calendar</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
@@ -28,6 +27,15 @@
     <string name="main_slider_fragment_description_calendar">Manage your time effectively and make sure nothing slips away</string>
     <string name="main_slider_fragment_description_notes">Description Notes</string>
     <string name="main_slider_fragment_description_reminders">Description Reminders</string>
+
+    <!-- Profile String -->
+    <string name="profile_icon_placeholder">Icon</string>
+    <string name="profile_id_placeholder">ID</string>
+    <string name="profile_name_placeholder">Name</string>
+    <string name="profile_email_placeholder">Email</string>
+    <string name="profile_password_placeholder">Confirm Password</string>
+    <string name="profile_button">Update</string>
+    <string name="profile_logout_button">Log Out</string>
 
     <!-- Login String -->
     <string name="login_icon_placeholder">Icon</string>
@@ -60,7 +68,6 @@
     <string name="menu_notes">Notes</string>
     <string name="menu_calendar">Calendar</string>
     <string name="menu_setting">Setting</string>
-    <string name="menu_sign_out">Sign Out</string>
 
     <string name="home_second">Home Second</string>
 
