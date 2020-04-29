@@ -14,7 +14,7 @@ import android.view.Window;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.calendar.adapters.PagerAdapter;
-import edu.bluejack19_2.chronotes.utils.SystemUIHelper;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class Calendar_Activity extends AppCompatActivity implements Calendar_Fragment.OnFragmentInteractionListener, List_Calendar_Fragment.OnFragmentInteractionListener{
 
@@ -24,8 +24,8 @@ public class Calendar_Activity extends AppCompatActivity implements Calendar_Fra
         setContentView(R.layout.activity_calendar);
 
         Window window = getWindow();
-        SystemUIHelper.hideSystemUI(window);
-        SystemUIHelper.changeStatusBarColor(window);
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

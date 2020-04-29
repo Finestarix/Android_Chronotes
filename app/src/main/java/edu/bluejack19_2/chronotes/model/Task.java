@@ -18,9 +18,11 @@ public class Task {
     private String Group;
     private ArrayList<Integer> Reminders; //in minutes
     private Boolean Completed;
-    public Task(){
+
+    public Task() {
 
     }
+
     public Task(ArrayList<String> userId, String due, String title, String detail, String repeat, ArrayList<String> tags, Integer priority, String group, ArrayList<Integer> reminders) {
         TaskId = UUID.randomUUID().toString();
         UserId = userId;
@@ -42,10 +44,11 @@ public class Task {
     public void setCompleted(Boolean completed) {
         Completed = completed;
     }
+
     public static Comparator<Task> PriorityDescending = new Comparator<Task>() {
         @Override
         public int compare(Task a, Task b) {
-            Log.d("DEBUG","COMPARING");
+            Log.d("DEBUG", "COMPARING");
             int completedComp = Boolean.compare(a.getCompleted(), b.getCompleted());
 //            int priorityComp = a.getPriority().compareTo(b.getPriority());
 //

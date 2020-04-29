@@ -11,9 +11,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.model.User;
-import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackBytes;
-import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackProcessStatus;
-import edu.bluejack19_2.chronotes.utils.firebase_callback.FirebaseCallbackUser;
+import edu.bluejack19_2.chronotes.interfaces.BytesListener;
+import edu.bluejack19_2.chronotes.interfaces.ProcessStatusListener;
+import edu.bluejack19_2.chronotes.interfaces.UserListener;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class UserController {
@@ -40,43 +40,43 @@ public class UserController {
         return userController;
     }
 
-    public void getUserByID(FirebaseCallbackUser firebaseCallbackUser, String id) {
+    public void getUserByID(UserListener userListener, String id) {
         collectionReference.
                 whereEqualTo("id", id).
                 get().
                 addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (Objects.requireNonNull(task.getResult()).isEmpty())
-                            firebaseCallbackUser.onCallback(null, ProcessStatus.NOT_FOUND);
+                            userListener.onCallback(null, ProcessStatus.NOT_FOUND);
                         else {
                             QueryDocumentSnapshot queryDocumentSnapshot = Objects.requireNonNull(task.getResult()).iterator().next();
                             User user = queryDocumentSnapshot.toObject(User.class);
-                            firebaseCallbackUser.onCallback(user, ProcessStatus.FOUND);
+                            userListener.onCallback(user, ProcessStatus.FOUND);
                         }
                     } else
-                        firebaseCallbackUser.onCallback(null, ProcessStatus.FAILED);
+                        userListener.onCallback(null, ProcessStatus.FAILED);
                 });
     }
 
-    public void getUserByEmail(FirebaseCallbackUser firebaseCallbackUser, String email) {
+    public void getUserByEmail(UserListener userListener, String email) {
         collectionReference.
                 whereEqualTo("email", email).
                 get().
                 addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (Objects.requireNonNull(task.getResult()).isEmpty())
-                            firebaseCallbackUser.onCallback(null, ProcessStatus.NOT_FOUND);
+                            userListener.onCallback(null, ProcessStatus.NOT_FOUND);
                         else {
                             QueryDocumentSnapshot queryDocumentSnapshot = Objects.requireNonNull(task.getResult()).iterator().next();
                             User user = queryDocumentSnapshot.toObject(User.class);
-                            firebaseCallbackUser.onCallback(user, ProcessStatus.FOUND);
+                            userListener.onCallback(user, ProcessStatus.FOUND);
                         }
                     } else
-                        firebaseCallbackUser.onCallback(null, ProcessStatus.FAILED);
+                        userListener.onCallback(null, ProcessStatus.FAILED);
                 });
     }
 
-    public void findEmail(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, String email) {
+    public void findEmail(ProcessStatusListener processStatusListener, String email) {
         currentStatus = ProcessStatus.INIT;
 
         collectionReference.
@@ -86,20 +86,20 @@ public class UserController {
                     currentStatus = (task.isSuccessful()) ?
                             (!Objects.requireNonNull(task.getResult()).iterator().hasNext()) ?
                                     ProcessStatus.NOT_FOUND : ProcessStatus.FOUND : ProcessStatus.FAILED;
-                    firebaseCallbackProcessStatus.onCallback(currentStatus);
+                    processStatusListener.onCallback(currentStatus);
                 });
     }
 
-    public void getUserPicture(FirebaseCallbackBytes firebaseCallbackBytes, String picture) {
+    public void getUserPicture(BytesListener bytesListener, String picture) {
         storageReference.
                 child(picture).
                 getBytes(Long.MAX_VALUE).
-                addOnCompleteListener(task -> firebaseCallbackBytes.onCallback(
+                addOnCompleteListener(task -> bytesListener.onCallback(
                         (task.isSuccessful()) ? task.getResult() : null,
                         (task.isSuccessful()) ? ProcessStatus.SUCCESS : ProcessStatus.FAILED));
     }
 
-    public void insertNewUser(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, User user) {
+    public void insertNewUser(ProcessStatusListener processStatusListener, User user) {
         currentStatus = ProcessStatus.INIT;
 
         collectionReference.
@@ -108,19 +108,19 @@ public class UserController {
                 addOnCompleteListener(task -> {
                     currentStatus = (task.isComplete()) ?
                             ProcessStatus.SUCCESS : ProcessStatus.FAILED;
-                    firebaseCallbackProcessStatus.onCallback(currentStatus);
+                    processStatusListener.onCallback(currentStatus);
                 });
     }
 
-    public void uploadPhoto(FirebaseCallbackUser firebaseCallbackUser, String pictureID, Uri uri) {
+    public void uploadPhoto(UserListener userListener, String pictureID, Uri uri) {
         storageReference.
                 child(pictureID).
                 putFile(uri).
-                addOnSuccessListener(taskSnapshot -> firebaseCallbackUser.onCallback(null, ProcessStatus.SUCCESS)).
-                addOnFailureListener(e -> firebaseCallbackUser.onCallback(null, ProcessStatus.FAILED));
+                addOnSuccessListener(taskSnapshot -> userListener.onCallback(null, ProcessStatus.SUCCESS)).
+                addOnFailureListener(e -> userListener.onCallback(null, ProcessStatus.FAILED));
     }
 
-    public void updateUserByID(FirebaseCallbackProcessStatus firebaseCallbackProcessStatus, User user) {
+    public void updateUserByID(ProcessStatusListener processStatusListener, User user) {
 
         collectionReference.
                 document(User.DOCUMENT_NAME + user.getId()).
@@ -129,7 +129,7 @@ public class UserController {
                 addOnCompleteListener(task -> {
                     currentStatus = (task.isComplete()) ?
                             ProcessStatus.SUCCESS : ProcessStatus.FAILED;
-                    firebaseCallbackProcessStatus.onCallback(currentStatus);
+                    processStatusListener.onCallback(currentStatus);
                 });
     }
 
