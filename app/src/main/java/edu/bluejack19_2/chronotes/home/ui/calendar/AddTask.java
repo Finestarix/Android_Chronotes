@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.calendar;
+package edu.bluejack19_2.chronotes.home.ui.calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.calendar;
+package edu.bluejack19_2.chronotes.home.ui.calendar;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,13 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
@@ -23,14 +20,11 @@ import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import edu.bluejack19_2.chronotes.R;
-import edu.bluejack19_2.chronotes.calendar.adapters.ListCalendarAdapter;
-import edu.bluejack19_2.chronotes.interfaces.TaskListener;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.ListCalendarAdapter;
 import edu.bluejack19_2.chronotes.model.Task;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 

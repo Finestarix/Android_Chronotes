@@ -1,4 +1,4 @@
-package edu.bluejack19_2.chronotes.calendar;
+package edu.bluejack19_2.chronotes.home.ui.calendar;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.Window;
 
 import edu.bluejack19_2.chronotes.R;
-import edu.bluejack19_2.chronotes.calendar.adapters.PagerAdapter;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.PagerAdapter;
 import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 
 public class Calendar_Activity extends AppCompatActivity implements Calendar_Fragment.OnFragmentInteractionListener, List_Calendar_Fragment.OnFragmentInteractionListener{

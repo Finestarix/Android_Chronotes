@@ -1,13 +1,12 @@
-package edu.bluejack19_2.chronotes.calendar.adapters;
+package edu.bluejack19_2.chronotes.home.ui.calendar.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import edu.bluejack19_2.chronotes.calendar.Calendar_Fragment;
-import edu.bluejack19_2.chronotes.calendar.List_Calendar_Fragment;
-import edu.bluejack19_2.chronotes.home.ui.calendar.CalendarFragment;
+import edu.bluejack19_2.chronotes.home.ui.calendar.Calendar_Fragment;
+import edu.bluejack19_2.chronotes.home.ui.calendar.List_Calendar_Fragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter{
     int noOfTabs;

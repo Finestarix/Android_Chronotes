@@ -27,10 +27,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".home.ui.profile.ProfileActivity" />
 
-        <activity android:name=".calendar.AddTask" />
+        <activity android:name=".home.ui.calendar.AddTask" />
 
         <activity
-            android:name=".calendar.Calendar_Activity"
+            android:name=".home.ui.calendar.Calendar_Activity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

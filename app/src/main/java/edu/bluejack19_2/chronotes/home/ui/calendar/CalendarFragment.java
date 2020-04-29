@@ -14,6 +14,7 @@ public class CalendarFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // Default Fragment for Navigation Drawer
         return inflater.inflate(R.layout.fragment_calendar, container, false);
     }
 }

@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".calendar.Calendar_Fragment">
+    tools:context=".home.ui.calendar.Calendar_Fragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".calendar.Calendar_Activity">
+        tools:context=".home.ui.calendar.Calendar_Activity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
