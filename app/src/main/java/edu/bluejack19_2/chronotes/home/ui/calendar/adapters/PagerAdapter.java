@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import edu.bluejack19_2.chronotes.home.ui.calendar.Calendar_Fragment;
-import edu.bluejack19_2.chronotes.home.ui.calendar.List_Calendar_Fragment;
+import edu.bluejack19_2.chronotes.home.ui.calendar.CalendarFragment;
+import edu.bluejack19_2.chronotes.home.ui.calendar.ListCalendarFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter{
+
     int noOfTabs;
+
     public PagerAdapter(@NonNull FragmentManager fm, int tabs) {
         super(fm,tabs);
         noOfTabs = tabs;
@@ -20,10 +22,10 @@ public class PagerAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                Calendar_Fragment c = new Calendar_Fragment();
+                CalendarFragment c = new CalendarFragment();
                 return c;
             case 1:
-                List_Calendar_Fragment lc = new List_Calendar_Fragment();
+                ListCalendarFragment lc = new ListCalendarFragment();
                 return lc;
             default:
                 return null;

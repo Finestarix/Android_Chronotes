@@ -15,7 +15,11 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".main.login.LoginActivity" />
@@ -28,16 +32,6 @@
         <activity android:name=".home.ui.profile.ProfileActivity" />
 
         <activity android:name=".home.ui.calendar.AddTask" />
-
-        <activity
-            android:name=".home.ui.calendar.Calendar_Activity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
     </application>
 

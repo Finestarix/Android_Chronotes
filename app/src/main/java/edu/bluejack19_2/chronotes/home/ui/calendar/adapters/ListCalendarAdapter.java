@@ -22,10 +22,12 @@ import edu.bluejack19_2.chronotes.utils.CSLHelper;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 
 public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapter.MyViewHolder> {
+
    private static ArrayList<Task> tasks;
    private Context con;
    private ListCalendarAdapter lis;
    private boolean done = false;
+
    public ListCalendarAdapter(Context con, ArrayList<Task> tasks){
        this.tasks = tasks;
        this.con = con;
@@ -47,6 +49,7 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
         Task t = tasks.get(position);
         holder.complete.setTag(position);
         holder.title.setText(tasks.get(position).getTitle());
+
         if(t.getPriority() == 1){
             holder.complete.setButtonTintList(CSLHelper.CheckBoxRed(con));
         }
@@ -59,6 +62,7 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
         else if(t.getPriority() == 4){
             holder.complete.setButtonTintList(CSLHelper.CheckBoxDefault(con));
         }
+
         if(t.getCompleted()){
             Log.d("DEBUG",t.getTitle());
             holder.complete.setChecked(true);
@@ -85,9 +89,11 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
        public CheckBox complete;
        public TextView title;
        private ArrayList<Task> tas;
+
         public MyViewHolder(@NonNull View itemView, ArrayList<Task>tasks) {
             super(itemView);
 
@@ -95,11 +101,13 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
             title = itemView.findViewById(R.id.tv_title);
             this.tas = tasks;
             complete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean b) {
                     if(!done)return;
                     int position = (int) buttonView.getTag();
                     TaskHandler hand = TaskHandler.GetInstance();
+
                     if (buttonView.isChecked()) {
                         buttonView.setChecked(false);
 //                        title.setPaintFlags(title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
@@ -114,6 +122,7 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
                         title.setPaintFlags(title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                         ListCalendarAdapter.tasks.get(position).setCompleted(false);
                     }
+
                     notifyDataSetChanged();
                 }
             });
