@@ -1,6 +1,7 @@
 package edu.bluejack19_2.chronotes.controller;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -8,6 +9,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.model.User;
@@ -41,6 +44,7 @@ public class UserController {
     }
 
     public void getUserByID(UserListener userListener, String id) {
+
         collectionReference.
                 whereEqualTo("id", id).
                 get().
@@ -50,7 +54,17 @@ public class UserController {
                             userListener.onCallback(null, ProcessStatus.NOT_FOUND);
                         else {
                             QueryDocumentSnapshot queryDocumentSnapshot = Objects.requireNonNull(task.getResult()).iterator().next();
-                            User user = queryDocumentSnapshot.toObject(User.class);
+
+                            Map<String, Object> userData = queryDocumentSnapshot.getData();
+
+                            String idUserData = Objects.requireNonNull(userData.get("id")).toString();
+                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+
+                            User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
+
                             userListener.onCallback(user, ProcessStatus.FOUND);
                         }
                     } else
@@ -59,6 +73,7 @@ public class UserController {
     }
 
     public void getUserByEmail(UserListener userListener, String email) {
+
         collectionReference.
                 whereEqualTo("email", email).
                 get().
@@ -68,7 +83,17 @@ public class UserController {
                             userListener.onCallback(null, ProcessStatus.NOT_FOUND);
                         else {
                             QueryDocumentSnapshot queryDocumentSnapshot = Objects.requireNonNull(task.getResult()).iterator().next();
-                            User user = queryDocumentSnapshot.toObject(User.class);
+
+                            Map<String, Object> userData = queryDocumentSnapshot.getData();
+
+                            String idUserData = Objects.requireNonNull(userData.get("id")).toString();
+                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+
+                            User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
+
                             userListener.onCallback(user, ProcessStatus.FOUND);
                         }
                     } else
@@ -102,9 +127,16 @@ public class UserController {
     public void insertNewUser(ProcessStatusListener processStatusListener, User user) {
         currentStatus = ProcessStatus.INIT;
 
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("id", user.getId());
+        userData.put("name", user.getName());
+        userData.put("email", user.getEmail());
+        userData.put("password", user.getPassword());
+        userData.put("picture", user.getPicture());
+
         collectionReference.
                 document(User.DOCUMENT_NAME + user.getId()).
-                set(user).
+                set(userData).
                 addOnCompleteListener(task -> {
                     currentStatus = (task.isComplete()) ?
                             ProcessStatus.SUCCESS : ProcessStatus.FAILED;

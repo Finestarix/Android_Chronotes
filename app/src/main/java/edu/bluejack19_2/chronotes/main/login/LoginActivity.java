@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             UserController userController = UserController.getInstance();
                             userController.getUserByEmail((user, processStatus) -> {
+
                                 if (processStatus == ProcessStatus.FOUND) {
 
                                     String hashPasswordOriginal = user.getPassword();
@@ -196,14 +197,21 @@ public class LoginActivity extends AppCompatActivity {
 
                         String ID = UUID.randomUUID().toString();
                         User user = new User(ID, name, email, "", User.DEFAULT_PICTURE);
-                        userController.insertNewUser(insertStatus -> loginStatus = insertStatus, user);
 
-                        String message = (loginStatus == ProcessStatus.SUCCESS) ?
-                                "Login success." : "Login failed.";
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        userController.insertNewUser(insertStatus -> {
+
+                            if (insertStatus == ProcessStatus.SUCCESS) {
+                                SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
+                                goToHome();
+                            }
+
+                            String message = (insertStatus == ProcessStatus.SUCCESS) ?
+                                    "Login success." : "Login failed.";
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                        }, user);
 
                     } else if (emailStatus == ProcessStatus.FOUND) {
-
 
                         userController.getUserByEmail((user, processStatus) -> {
 

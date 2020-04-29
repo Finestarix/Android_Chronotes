@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +23,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import edu.bluejack19_2.chronotes.R;
@@ -99,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
     private void getCurrentUserData() {
 
         UserController userController = UserController.getInstance();
+
         userController.getUserByID((user, processStatus) -> {
 
             if (processStatus == ProcessStatus.NOT_FOUND) {
@@ -151,6 +156,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void goToLogin() {
+        SessionStorage.removeSessionStorage(HomeActivity.this);
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        googleSignInClient.signOut();
+
         Intent intentToLogin = new Intent(HomeActivity.this, LoginActivity.class);
         intentToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToLogin);
