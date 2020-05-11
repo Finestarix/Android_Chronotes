@@ -104,7 +104,7 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
 
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean b) {
-                    if(!done)return;
+//                    if(!done)return;
                     int position = (int) buttonView.getTag();
                     TaskHandler hand = TaskHandler.GetInstance();
 
