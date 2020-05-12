@@ -1,10 +1,10 @@
 package edu.bluejack19_2.chronotes.home.ui.notes;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,11 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.NoteController;
+import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.home.ui.notes.adapter.ListNotesAdapter;
+import edu.bluejack19_2.chronotes.home.ui.profile.ProfileActivity;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -25,6 +29,7 @@ public class NotesFragment extends Fragment {
     private ListNotesAdapter listNotesAdapter;
     private NoteController noteController;
     private RecyclerView noteRecyclerView;
+    private FloatingActionButton floatingActionButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +42,16 @@ public class NotesFragment extends Fragment {
         noteRecyclerView = view.findViewById(R.id.rv_notes);
         noteRecyclerView.setAdapter(listNotesAdapter);
         noteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        floatingActionButton = view.findViewById(R.id.fab_notes);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToDetail = new Intent(getActivity(), NoteDetailActivity.class);
+                intentToDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToDetail);
+            }
+        });
 
         return view;
     }

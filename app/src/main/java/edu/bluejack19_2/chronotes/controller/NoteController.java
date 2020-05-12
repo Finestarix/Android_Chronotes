@@ -1,18 +1,21 @@
 package edu.bluejack19_2.chronotes.controller;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.interfaces.NoteListener;
 import edu.bluejack19_2.chronotes.interfaces.ProcessStatusListener;
 import edu.bluejack19_2.chronotes.model.Note;
-import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class NoteController {
@@ -66,6 +69,19 @@ public class NoteController {
         collectionReference.
                 document(Note.DOCUMENT_NAME + note.getId()).
                 set(note).
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                    processStatusListener.onCallback(currentStatus);
+                });
+    }
+
+    public void deleteNewNote(ProcessStatusListener processStatusListener, Note note) {
+        currentStatus = ProcessStatus.INIT;
+
+        collectionReference.
+                document(Note.DOCUMENT_NAME + note.getId()).
+                delete().
                 addOnCompleteListener(task -> {
                     currentStatus = (task.isComplete()) ?
                             ProcessStatus.SUCCESS : ProcessStatus.FAILED;

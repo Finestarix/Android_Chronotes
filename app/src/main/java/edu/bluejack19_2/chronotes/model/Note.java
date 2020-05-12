@@ -1,5 +1,7 @@
 package edu.bluejack19_2.chronotes.model;
 
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 public class Note {

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/collaborator"
+        android:icon="@drawable/ic_collaborate"
+        android:title="Collaborate"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/add_collaborator"
+                android:title="Add Collaborator" />
+
+            <item
+                android:id="@+id/remove_collaborator"
+                android:title="Remove Collaborator" />
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/reminder"
+        android:icon="@drawable/ic_alarm"
+        android:title="Reminder"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/add_reminder"
+                android:title="Add Reminder" />
+
+            <item
+                android:id="@+id/remove_reminder"
+                android:title="Remove Reminder" />
+        </menu>
+
+    </item>
+
+    <item android:id="@+id/more"
+        android:icon="@drawable/ic_more"
+        android:title="More"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/ic_share"
+                android:title="Share"/>
+
+            <item
+                android:id="@+id/save"
+                android:icon="@drawable/ic_save"
+                android:title="Save"/>
+
+            <item
+                android:id="@+id/remove_note"
+                android:icon="@drawable/ic_trash"
+                android:title="Remove"/>
+
+        </menu>
+
+    </item>
+
+
+</menu>
