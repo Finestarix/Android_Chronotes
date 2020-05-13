@@ -1,7 +1,10 @@
 package edu.bluejack19_2.chronotes.home.ui.notes;
 
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -9,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,12 +21,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.gson.Gson;
 
+import java.util.UUID;
+
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.NoteController;
-import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.main.login.LoginActivity;
 import edu.bluejack19_2.chronotes.model.Note;
+import edu.bluejack19_2.chronotes.utils.GeneralHandler;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -34,6 +40,8 @@ public class NoteDetailActivity extends AppCompatActivity {
     private Note note;
 
     private NoteController noteController;
+
+    private Integer statusNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +62,26 @@ public class NoteDetailActivity extends AppCompatActivity {
         contentEditText = findViewById(R.id.notes_detail_content);
 
         if (noteJSON != null) {
+            statusNote = 0;
+
             Gson gson = new Gson();
             note = gson.fromJson(noteJSON, Note.class);
 
             titleEditText.setText(note.getName());
             contentEditText.setText(note.getDetail());
+        } else {
+            statusNote = 1;
+
+            String ID = UUID.randomUUID().toString();
+            String tag = "Personal";
+            String userID = SessionStorage.getSessionStorage(getApplicationContext());
+
+            note = new Note();
+            note.setId(ID);
+            note.setTag(tag);
+            note.addUsers(userID);
+            note.setMasterUser(userID);
+            Log.d("abcde", "sadasd");
         }
     }
 
@@ -69,25 +92,33 @@ public class NoteDetailActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.save:
-                goToHome();
+                setNote();
+                if (statusNote == 0) updateNote();
+                else insertNote();
                 return true;
 
             case R.id.share:
                 shareNote();
                 return true;
 
-            case R.id.collaborator:
+            case R.id.add_collaborator:
+                goToAddCollaborator();
+                return true;
+
+            case R.id.view_collaborator:
+                goToCollaborator();
                 return true;
 
             case R.id.add_reminder:
                 return true;
 
-            case R.id.remove_reminder:
+            case R.id.view_reminder:
                 return true;
 
             case R.id.remove_note:
@@ -117,6 +148,34 @@ public class NoteDetailActivity extends AppCompatActivity {
         startActivity(intentToLogin);
     }
 
+    private void goToAddCollaborator() {
+        Bundle bundle = new Bundle();
+        bundle.putString("note", note.getId());
+
+        NoteCollaboratorAdd noteCollaboratorAdd = new NoteCollaboratorAdd();
+        noteCollaboratorAdd.setArguments(bundle);
+        noteCollaboratorAdd.show(getSupportFragmentManager(), "Note Collaborator Add");
+    }
+
+    private void goToCollaborator() {
+        Bundle bundle = new Bundle();
+        bundle.putString("note", note.getId());
+
+        NoteCollaborator noteCollaborator = new NoteCollaborator();
+        noteCollaborator.setArguments(bundle);
+        noteCollaborator.show(getSupportFragmentManager(), "Note Collaborator");
+    }
+
+    private void setNote() {
+        String name = titleEditText.getText().toString();
+        note.setName(name);
+
+        String content = contentEditText.getText().toString();
+        note.setDetail(content);
+
+        note.setLastUpdate(GeneralHandler.getCurrentTime());
+    }
+
     private void shareNote() {
         String shareStr = "I want to share my notes with you!\nTitle: " +
                 titleEditText.getText().toString() + "\n" + contentEditText.getText().toString();
@@ -128,6 +187,28 @@ public class NoteDetailActivity extends AppCompatActivity {
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
+    }
+
+    private void updateNote() {
+        noteController.updateNewNote(processStatus -> {
+            if (processStatus == ProcessStatus.SUCCESS) {
+                Toast.makeText(getApplicationContext(), "Update Note Success", Toast.LENGTH_SHORT).show();
+                goToHome();
+            } else {
+                Toast.makeText(getApplicationContext(), "Update Note Failed", Toast.LENGTH_SHORT).show();
+            }
+        }, note);
+    }
+
+    private void insertNote() {
+        noteController.insertNewNote(processStatus -> {
+            if (processStatus == ProcessStatus.SUCCESS) {
+                Toast.makeText(getApplicationContext(), "Insert Note Success", Toast.LENGTH_SHORT).show();
+                goToHome();
+            } else {
+                Toast.makeText(getApplicationContext(), "Insert Note Failed", Toast.LENGTH_SHORT).show();
+            }
+        }, note);
     }
 
     private void removeNoteDialog() {
@@ -152,3 +233,4 @@ public class NoteDetailActivity extends AppCompatActivity {
         }, note);
     }
 }
+

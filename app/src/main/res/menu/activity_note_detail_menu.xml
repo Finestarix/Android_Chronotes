@@ -15,8 +15,8 @@
                 android:title="Add Collaborator" />
 
             <item
-                android:id="@+id/remove_collaborator"
-                android:title="Remove Collaborator" />
+                android:id="@+id/view_collaborator"
+                android:title="View Collaborator" />
 
         </menu>
 
@@ -35,8 +35,8 @@
                 android:title="Add Reminder" />
 
             <item
-                android:id="@+id/remove_reminder"
-                android:title="Remove Reminder" />
+                android:id="@+id/view_reminder"
+                android:title="View Reminder" />
         </menu>
 
     </item>

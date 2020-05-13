@@ -1,18 +1,14 @@
 package edu.bluejack19_2.chronotes.controller;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import edu.bluejack19_2.chronotes.interfaces.NoteArrayListListener;
 import edu.bluejack19_2.chronotes.interfaces.NoteListener;
 import edu.bluejack19_2.chronotes.interfaces.ProcessStatusListener;
 import edu.bluejack19_2.chronotes.model.Note;
@@ -39,11 +35,8 @@ public class NoteController {
     }
 
     public void getNotesByID(NoteListener noteListener, String id) {
-
-        ArrayList<Note> notes = new ArrayList<>();
-
         collectionReference.
-                whereArrayContains("users", id).
+                whereEqualTo("id", id).
                 get().
                 addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -51,15 +44,33 @@ public class NoteController {
                             noteListener.onCallback(null, ProcessStatus.NOT_FOUND);
                         else {
 
+                            QueryDocumentSnapshot queryDocumentSnapshot = Objects.requireNonNull(task.getResult()).iterator().next();
+                            Note note = queryDocumentSnapshot.toObject(Note.class);
+                            noteListener.onCallback(note, ProcessStatus.FOUND);
+                        }
+                    } else
+                        noteListener.onCallback(null, ProcessStatus.FAILED);
+                });
+    }
+
+    public void getNotesByUserID(NoteArrayListListener noteArrayListListener, String id) {
+        ArrayList<Note> notes = new ArrayList<>();
+        collectionReference.
+                whereArrayContains("users", id).
+                get().
+                addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (Objects.requireNonNull(task.getResult()).isEmpty())
+                            noteArrayListListener.onCallback(null, ProcessStatus.NOT_FOUND);
+                        else {
                             for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                                 Note note = queryDocumentSnapshot.toObject(Note.class);
                                 notes.add(note);
                             }
-
-                            noteListener.onCallback(notes, ProcessStatus.FOUND);
+                            noteArrayListListener.onCallback(notes, ProcessStatus.FOUND);
                         }
                     } else
-                        noteListener.onCallback(null, ProcessStatus.FAILED);
+                        noteArrayListListener.onCallback(null, ProcessStatus.FAILED);
                 });
     }
 
@@ -76,12 +87,53 @@ public class NoteController {
                 });
     }
 
+    public void addCollaborator(ProcessStatusListener processStatusListener, String noteID, String userID) {
+        currentStatus = ProcessStatus.INIT;
+
+        collectionReference.
+                document(Note.DOCUMENT_NAME + noteID).
+                update("users", FieldValue.arrayUnion(userID)).
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                    processStatusListener.onCallback(currentStatus);
+                });
+    }
+
+    public void updateNewNote(ProcessStatusListener processStatusListener, Note note) {
+        currentStatus = ProcessStatus.INIT;
+
+        collectionReference.
+                document(Note.DOCUMENT_NAME + note.getId()).
+                update("name", note.getName(),
+                        "detail", note.getDetail(),
+                        "lastUpdate", note.getLastUpdate()).
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                    processStatusListener.onCallback(currentStatus);
+                });
+    }
+
     public void deleteNewNote(ProcessStatusListener processStatusListener, Note note) {
         currentStatus = ProcessStatus.INIT;
 
         collectionReference.
                 document(Note.DOCUMENT_NAME + note.getId()).
                 delete().
+                addOnCompleteListener(task -> {
+                    currentStatus = (task.isComplete()) ?
+                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                    processStatusListener.onCallback(currentStatus);
+                });
+    }
+
+    public void removeCollaborator(ProcessStatusListener processStatusListener, String noteID, String userID) {
+        currentStatus = ProcessStatus.INIT;
+
+        collectionReference.
+                document(Note.DOCUMENT_NAME + noteID).
+                update("users", FieldValue.arrayRemove(userID)).
                 addOnCompleteListener(task -> {
                     currentStatus = (task.isComplete()) ?
                             ProcessStatus.SUCCESS : ProcessStatus.FAILED;

@@ -1,7 +1,6 @@
 package edu.bluejack19_2.chronotes.controller;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -13,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.interfaces.BytesListener;
 import edu.bluejack19_2.chronotes.interfaces.ProcessStatusListener;
 import edu.bluejack19_2.chronotes.interfaces.UserListener;
+import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class UserController {
@@ -58,10 +57,10 @@ public class UserController {
                             Map<String, Object> userData = queryDocumentSnapshot.getData();
 
                             String idUserData = Objects.requireNonNull(userData.get("id")).toString();
-                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
-                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
-                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
-                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+                            String nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
 
                             User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
 
@@ -87,10 +86,10 @@ public class UserController {
                             Map<String, Object> userData = queryDocumentSnapshot.getData();
 
                             String idUserData = Objects.requireNonNull(userData.get("id")).toString();
-                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
-                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
-                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
-                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+                            String nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
 
                             User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
 

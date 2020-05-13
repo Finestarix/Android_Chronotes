@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/note_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#95186AE4"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".home.ui.notes.NoteCollaboratorAdd">
+
+    <EditText
+        android:id="@+id/notes_email"
+        android:background="@drawable/bg_notes_edit_text"
+        android:padding="5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Input User Email" />
+
+    <Button
+        android:id="@+id/notes_add_collaborator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Collaborator" />
+
+</LinearLayout>

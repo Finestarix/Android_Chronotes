@@ -14,13 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Objects;
-
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.NoteController;
-import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.home.ui.notes.adapter.ListNotesAdapter;
-import edu.bluejack19_2.chronotes.home.ui.profile.ProfileActivity;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -38,19 +34,18 @@ public class NotesFragment extends Fragment {
 
         noteController = NoteController.getInstance();
         listNotesAdapter = new ListNotesAdapter(getContext());
+        listNotesAdapter.setNotes(null);
+        listNotesAdapter.notifyDataSetChanged();
 
         noteRecyclerView = view.findViewById(R.id.rv_notes);
         noteRecyclerView.setAdapter(listNotesAdapter);
         noteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         floatingActionButton = view.findViewById(R.id.fab_notes);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentToDetail = new Intent(getActivity(), NoteDetailActivity.class);
-                intentToDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intentToDetail);
-            }
+        floatingActionButton.setOnClickListener(v -> {
+            Intent intentToDetail = new Intent(getActivity(), NoteDetailActivity.class);
+            intentToDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intentToDetail);
         });
 
         return view;
@@ -60,9 +55,7 @@ public class NotesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View view = getView();
-
-        noteController.getNotesByID((notes, processStatus) -> {
+        noteController.getNotesByUserID((notes, processStatus) -> {
 
             if (processStatus == ProcessStatus.FOUND) {
                 listNotesAdapter.setNotes(notes);

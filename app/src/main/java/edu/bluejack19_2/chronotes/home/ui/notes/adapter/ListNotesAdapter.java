@@ -47,19 +47,21 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.Note
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.titleTextView.setText(notes.get(position).getName());
         holder.dateTextView.setText(notes.get(position).getLastUpdate());
-        holder.contentTextView.setText(notes.get(position).getDetail());
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Gson gson = new Gson();
-                Note note = notes.get(position);
-                String noteJSON = gson.toJson(note);
 
-                Intent intentToDetail = new Intent(context, NoteDetailActivity.class);
-                intentToDetail.putExtra("note", noteJSON);
-                intentToDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(intentToDetail);
-            }
+        String detail = notes.get(position).getDetail();
+        if (detail.contains("\n"))
+            detail = detail.split("\n")[0];
+        holder.contentTextView.setText((detail.length() <= 20) ? detail : detail.substring(0, 20));
+
+        holder.cardView.setOnClickListener(v -> {
+            Gson gson = new Gson();
+            Note note = notes.get(position);
+            String noteJSON = gson.toJson(note);
+
+            Intent intentToDetail = new Intent(context, NoteDetailActivity.class);
+            intentToDetail.putExtra("note", noteJSON);
+            intentToDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intentToDetail);
         });
     }
 
