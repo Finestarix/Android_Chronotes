@@ -66,6 +66,7 @@
     <color name="Plum">#DDA0DD</color>
     <color name="Gainsboro">#DCDCDC</color>
     <color name="Crimson">#DC143C</color>
+    <color name="lightCrimson">#eb2d53</color>
     <color name="PaleVioletRed">#DB7093</color>
     <color name="Goldenrod">#DAA520</color>
     <color name="Orchid">#DA70D6</color>

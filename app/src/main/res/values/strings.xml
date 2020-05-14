@@ -71,4 +71,27 @@
 
     <string name="home_second">Home Second</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="list_view_due">Due</string>
+
+
+    <string-array name="filter_array">
+        <item>Show All Task</item>
+        <item>Show Today</item>
+        <item>Show This Week</item>
+        <item>Show This Month</item>
+    </string-array>
+    <string-array name="sort_array">
+        <item>Priority Descending</item>
+        <item>Priority Ascending</item>
+        <item>Title Ascending</item>
+        <item>Title Descending</item>
+    </string-array>
+    <string-array name="repeat_array">
+        <item>None</item>
+        <item>On Due Date</item>
+        <item>Daily</item>
+    </string-array>
 </resources>

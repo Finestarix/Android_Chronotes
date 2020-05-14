@@ -1,8 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".home.ui.calendar.ListCalendarFragment">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="Filter By"
+            android:textSize="17dp"
+            android:gravity="center_vertical"
+            />
+        <Spinner
+            android:id="@+id/spinner_filter"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_width="280dp"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="Sort By"
+            android:textSize="17dp"
+            android:gravity="center_vertical"
+            />
+        <Spinner
+            android:id="@+id/spinner_sort"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_width="280dp"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="Filter Tags"
+            android:textSize="17dp"
+            android:gravity="center_vertical"
+            />
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_tag"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:singleSelection="false">
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

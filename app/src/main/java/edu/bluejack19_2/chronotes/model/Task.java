@@ -9,32 +9,30 @@ import java.util.UUID;
 public class Task {
     private String TaskId;
     private ArrayList<String> UserId;
-    private String Due;
+    private String Start;
+    private String End;
     private String Title;
     private String Detail;
     private String Repeat;
     private ArrayList<String> Tags;
     private Integer Priority;
-    private String Group;
-    private ArrayList<Integer> Reminders; //in minutes
     private Boolean Completed;
 
     public Task() {
 
     }
 
-    public Task(ArrayList<String> userId, String due, String title, String detail, String repeat, ArrayList<String> tags, Integer priority, String group, ArrayList<Integer> reminders) {
-        TaskId = UUID.randomUUID().toString();
+    public Task(String TaskId, ArrayList<String> userId, String start, String end, String title, String detail, String repeat, ArrayList<String> tags, Integer priority, Boolean completed) {
         UserId = userId;
-        Due = due;
+        this.TaskId = TaskId;
+        Start = start;
+        End = end;
         Title = title;
         Detail = detail;
         Repeat = repeat;
         Tags = tags;
         Priority = priority;
-        Group = group;
-        Reminders = reminders;
-        Completed = false;
+        Completed = completed;
     }
 
     public Boolean getCompleted() {
@@ -50,21 +48,42 @@ public class Task {
         public int compare(Task a, Task b) {
             Log.d("DEBUG", "COMPARING");
             int completedComp = Boolean.compare(a.getCompleted(), b.getCompleted());
-//            int priorityComp = a.getPriority().compareTo(b.getPriority());
+            int priorityComp = a.getPriority().compareTo(b.getPriority());
 //
-//            if(completedComp == 0){
-//                return((priorityComp == 0) ? completedComp:priorityComp);
-//            }
+            if(completedComp == 0){
+                return((priorityComp == 0) ? completedComp:priorityComp);
+            }
             return completedComp;
         }
     };
+    public static Comparator<Task> TitleDescending = new Comparator<Task>() {
+        @Override
+        public int compare(Task a, Task b) {
+            Log.d("DEBUG", "COMPARING");
+            int completedComp = Boolean.compare(a.getCompleted(), b.getCompleted());
+            int titleComp = a.getTitle().compareTo(b.getTitle());
+//
+            if(completedComp == 0){
+                return((titleComp == 0) ? completedComp:titleComp);
+            }
+            return completedComp;
+        }
+    };
+
+    public void setTaskId(String taskId) {
+        TaskId = taskId;
+    }
 
     public void setUserId(ArrayList<String> userId) {
         UserId = userId;
     }
 
-    public void setDue(String due) {
-        Due = due;
+    public void setStart(String start) {
+        Start = start;
+    }
+
+    public void setEnd(String end) {
+        End = end;
     }
 
     public void setTitle(String title) {
@@ -87,14 +106,6 @@ public class Task {
         Priority = priority;
     }
 
-    public void setGroup(String group) {
-        Group = group;
-    }
-
-    public void setReminders(ArrayList<Integer> reminders) {
-        Reminders = reminders;
-    }
-
     public String getTaskId() {
         return TaskId;
     }
@@ -103,8 +114,12 @@ public class Task {
         return UserId;
     }
 
-    public String getDue() {
-        return Due;
+    public String getStart() {
+        return Start;
+    }
+
+    public String getEnd() {
+        return End;
     }
 
     public String getTitle() {
@@ -125,13 +140,5 @@ public class Task {
 
     public Integer getPriority() {
         return Priority;
-    }
-
-    public String getGroup() {
-        return Group;
-    }
-
-    public ArrayList<Integer> getReminders() {
-        return Reminders;
     }
 }
