@@ -7,7 +7,7 @@
     android:background="@color/White"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    tools:context=".home.ui.notes.NoteCollaboratorAdd">
+    tools:context=".home.ui.notes.NoteReminder">
 
     <TextView
         android:layout_width="match_parent"
@@ -16,23 +16,40 @@
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="Add Collaborator"/>
+        android:text="Manage Reminder"/>
 
-    <EditText
-        android:id="@+id/notes_email"
-        android:backgroundTint="#5E5C5C"
-        android:layout_marginBottom="10dp"
-        android:textColor="#424141"
+    <Switch
+        android:id="@+id/notes_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Input User Email" />
+        android:layoutDirection="rtl"
+        android:switchPadding="12dp"
+        android:layout_marginBottom="10dp"
+        android:text="Reminder" />
+
+<LinearLayout
+    android:id="@+id/notes_layout_reminder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="18dp"
+        android:text="Current Reminder"/>
 
     <Button
-        android:id="@+id/notes_add_collaborator"
+        android:id="@+id/button_notes_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#424141"
         android:background="#70B5C1"
-        android:text="Add"/>
+        android:text="Change Reminder"/>
+
+</LinearLayout>
+
 
 </LinearLayout>

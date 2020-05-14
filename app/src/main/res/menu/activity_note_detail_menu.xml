@@ -5,7 +5,7 @@
     <item
         android:id="@+id/collaborator"
         android:icon="@drawable/ic_collaborate"
-        android:title="Collaborate"
+        android:title="Collaborator"
         app:showAsAction="always">
 
         <menu>
@@ -26,22 +26,10 @@
         android:id="@+id/reminder"
         android:icon="@drawable/ic_alarm"
         android:title="Reminder"
-        app:showAsAction="always">
+        app:showAsAction="always" />
 
-        <menu>
-
-            <item
-                android:id="@+id/add_reminder"
-                android:title="Add Reminder" />
-
-            <item
-                android:id="@+id/view_reminder"
-                android:title="View Reminder" />
-        </menu>
-
-    </item>
-
-    <item android:id="@+id/more"
+    <item
+        android:id="@+id/more"
         android:icon="@drawable/ic_more"
         android:title="More"
         app:showAsAction="ifRoom">
@@ -51,17 +39,17 @@
             <item
                 android:id="@+id/share"
                 android:icon="@drawable/ic_share"
-                android:title="Share"/>
+                android:title="Share" />
 
             <item
                 android:id="@+id/save"
                 android:icon="@drawable/ic_save"
-                android:title="Save"/>
+                android:title="Save" />
 
             <item
                 android:id="@+id/remove_note"
                 android:icon="@drawable/ic_trash"
-                android:title="Remove"/>
+                android:title="Remove" />
 
         </menu>
 

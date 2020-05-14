@@ -81,7 +81,6 @@ public class NoteDetailActivity extends AppCompatActivity {
             note.setTag(tag);
             note.addUsers(userID);
             note.setMasterUser(userID);
-            Log.d("abcde", "sadasd");
         }
     }
 
@@ -115,10 +114,8 @@ public class NoteDetailActivity extends AppCompatActivity {
                 goToCollaborator();
                 return true;
 
-            case R.id.add_reminder:
-                return true;
-
-            case R.id.view_reminder:
+            case R.id.reminder:
+                goToReminder();
                 return true;
 
             case R.id.remove_note:
@@ -164,6 +161,15 @@ public class NoteDetailActivity extends AppCompatActivity {
         NoteCollaborator noteCollaborator = new NoteCollaborator();
         noteCollaborator.setArguments(bundle);
         noteCollaborator.show(getSupportFragmentManager(), "Note Collaborator");
+    }
+
+    private void goToReminder() {
+        Bundle bundle = new Bundle();
+        bundle.putString("note", note.getId());
+
+        NoteReminder noteReminder = new NoteReminder();
+        noteReminder.setArguments(bundle);
+        noteReminder.show(getSupportFragmentManager(), "Note Reminder");
     }
 
     private void setNote() {

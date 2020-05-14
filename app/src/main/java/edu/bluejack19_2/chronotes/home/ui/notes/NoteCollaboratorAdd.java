@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
@@ -52,7 +53,7 @@ public class NoteCollaboratorAdd extends DialogFragment {
                     noteController.addCollaborator(processStatusNote -> {
                         if (processStatusNote == ProcessStatus.SUCCESS) {
                             Toast.makeText(view.getContext(), "Collaborator Added", Toast.LENGTH_SHORT).show();
-                            emailEditText.setText("");
+                            closeDialog();
                         } else {
                             Toast.makeText(view.getContext(), "Failed to Add Collaborator", Toast.LENGTH_SHORT).show();
                         }
@@ -73,5 +74,13 @@ public class NoteCollaboratorAdd extends DialogFragment {
         Dialog dialog = getDialog();
         if (dialog != null)
             Objects.requireNonNull(Objects.requireNonNull(dialog).getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void closeDialog() {
+        Fragment prev = requireFragmentManager().findFragmentByTag("Note Collaborator Add");
+        if (prev != null) {
+            DialogFragment df = (DialogFragment) prev;
+            df.dismiss();
+        }
     }
 }

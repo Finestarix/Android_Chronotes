@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +38,8 @@ public class NoteCollaborator extends DialogFragment {
     private UserController userController;
     private NoteController noteController;
 
+    private Button closeButton;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,6 +56,11 @@ public class NoteCollaborator extends DialogFragment {
         recyclerView = view.findViewById(R.id.rv_notes_reminders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         recyclerView.setAdapter(collaboratorNotesAdapter);
+
+        closeButton = view.findViewById(R.id.button_notes_close);
+        closeButton.setOnClickListener(v -> {
+            closeDialog();
+        });
 
         return view;
     }
@@ -88,5 +97,13 @@ public class NoteCollaborator extends DialogFragment {
         Dialog dialog = getDialog();
         if (dialog != null)
             Objects.requireNonNull(Objects.requireNonNull(dialog).getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void closeDialog() {
+        Fragment prev = requireFragmentManager().findFragmentByTag("Note Collaborator");
+        if (prev != null) {
+            DialogFragment df = (DialogFragment) prev;
+            df.dismiss();
+        }
     }
 }
