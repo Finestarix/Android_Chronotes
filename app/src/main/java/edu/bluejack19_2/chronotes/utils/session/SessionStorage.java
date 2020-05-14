@@ -9,6 +9,10 @@ public class SessionStorage {
     private static final String SESSION_STORAGE = "SESSION_STORAGE";
     private static final String SESSION_ID = "SESSION_ID";
 
+    public static boolean isLoggedIn(Context context) {
+        return !getSessionStorage(context).equals("");
+    }
+
     public static String getSessionStorage(Context context) {
         SharedPreferences sharedpreferences = context.getSharedPreferences(SESSION_STORAGE, Context.MODE_PRIVATE);
         return sharedpreferences.getString(SESSION_ID, "");

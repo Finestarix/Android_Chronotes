@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("registerData", Context.MODE_PRIVATE);
         getData();
 
-        registerButton = findViewById(R.id.register_button);
+        registerButton = findViewById(R.id.bt_login_to_register);
         registerButton.setOnClickListener(v -> {
 
             disableField();

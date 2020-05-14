@@ -10,6 +10,13 @@ public enum ProcessStatus {
             return "Init";
         }
     },
+    DONE {
+        @NonNull
+        @Override
+        public String toString() {
+            return "Done";
+        }
+    },
 
     FOUND {
         @NonNull

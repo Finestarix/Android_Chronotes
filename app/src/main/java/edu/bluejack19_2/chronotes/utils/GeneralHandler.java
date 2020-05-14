@@ -21,6 +21,11 @@ public class GeneralHandler {
         return string.length() == 0;
     }
 
+    public static boolean isNotAlphaNumeric(String string) {
+        String regex = "^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$";
+        return !string.matches(regex);
+    }
+
     public static boolean isNotEmail(String email) {
         String regex = "^[\\w-_.+]*[\\w-_.]@([\\w]+\\.)+[\\w]+[\\w]$";
         return !email.matches(regex);
@@ -54,4 +59,5 @@ public class GeneralHandler {
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }
+
 }

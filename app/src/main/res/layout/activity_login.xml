@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.login.LoginActivity">
 
     <LinearLayout
@@ -24,17 +24,17 @@
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
             <EditText
-                android:id="@+id/login_email"
+                android:id="@+id/et_login_email"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/login_email_icon"
+                android:layout_toEndOf="@+id/et_login_email_icon"
                 android:hint="@string/login_email_placeholder"
                 android:inputType="textEmailAddress" />
 
             <ImageView
-                android:id="@+id/login_email_icon"
+                android:id="@+id/et_login_email_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_email" />
 
@@ -42,17 +42,26 @@
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
-            <EditText
-                android:id="@+id/login_password"
-                style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/login_password_icon"
-                android:hint="@string/login_password_placeholder"
-                android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/et_login_password_icon"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_login_password"
+                    style="@style/LoginRegisterEditText"
+                    android:hint="@string/login_password_placeholder"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/login_password_icon"
+                android:id="@+id/et_login_password_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_password" />
 
@@ -64,31 +73,27 @@
             android:layout_marginTop="10dp">
 
             <CheckBox
-                android:id="@+id/remember_me"
+                android:id="@+id/cb_login_remember_me"
                 style="@style/LoginRememberMe"
                 android:text="@string/login_remember_me" />
 
         </LinearLayout>
 
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/login_button"
+        <Button
+            android:id="@+id/bt_login"
             style="@style/LoginRegisterButton"
-            android:text="@string/login_button"
-            app:spinning_bar_color="@color/White"
-            app:spinning_bar_padding="6dp"
-            app:spinning_bar_width="6dp" />
+            android:text="@string/login_button" />
 
         <TextView
             style="@style/LoginRegisterAfterButton"
             android:text="@string/login_dont_have_an_account" />
 
         <TextView
-            android:id="@+id/register_button"
+            android:id="@+id/bt_login_to_register"
             style="@style/LoginRegister"
-            android:text="@string/login_register"
-            android:onClick="goToRegister"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="@string/login_register" />
 
     </LinearLayout>
 

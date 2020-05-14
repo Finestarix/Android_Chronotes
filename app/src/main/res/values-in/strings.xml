@@ -1,7 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!--  Public String -->
     <string name="app_name">Chronotes</string>
+
+    <!-- Fragment -->
+    <string name="title_activity_calendar">calendar</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <!--  Main Slider Fragment String -->
     <string name="main_slider_fragment_title">Title Here</string>
@@ -40,13 +50,13 @@
     <string name="login_dont_have_an_account">Don\'t Have an Account ?</string>
 
     <!-- Login Message String -->
-    <string name="login_message_success">Login Success !</string>
-    <string name="login_message_failed">Login Failed !</string>
-    <string name="login_message_invalid">Invalid Email and Password Combination !</string>
-    <string name="login_message_empty_field">Please Fill All Field !</string>
-    <string name="login_message_wrong_email">Invalid Email Format !</string>
-    <string name="login_message_wrong_password">Invalid Password Format !</string>
-    <string name="login_message_offline">You are Offline. Please Connect to the Internet !</string>
+    <string name="login_message_success">Berhasil login !</string>
+    <string name="login_message_failed">Gagal login !</string>
+    <string name="login_message_invalid">Kombinasi email dan kata sandi salah !</string>
+    <string name="login_message_empty_field">Kolom tidak boleh kosong !</string>
+    <string name="login_message_wrong_email">Format email salah !</string>
+    <string name="login_message_wrong_password">Format kata sandi salah !</string>
+    <string name="login_message_offline">Anda sedang tidak terhubung dengan internet. Silahkan nyalakan data seluler !</string>
 
     <!-- Register String -->
     <string name="register_icon_placeholder">Icon</string>
@@ -70,6 +80,5 @@
     <string name="menu_setting">Setting</string>
 
     <string name="home_second">Home Second</string>
-    <string name="show_password">Show Password</string>
 
 </resources>

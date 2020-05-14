@@ -14,9 +14,6 @@ import edu.bluejack19_2.chronotes.R;
 
 public class NoteReceiver extends BroadcastReceiver {
 
-    public static String NOTIFICATION_ID = "notification-id";
-    public static String NOTIFICATION = "notification";
-
     @Override
     public void onReceive(Context context, Intent intent) {
 

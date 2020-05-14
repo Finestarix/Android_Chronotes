@@ -12,12 +12,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -66,6 +64,7 @@ public class NoteReminder extends DialogFragment {
         aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isChecked) {
                 linearLayout.setVisibility(View.GONE);
+                cancelNotification();
             } else {
                 linearLayout.setVisibility(View.VISIBLE);
             }
@@ -95,12 +94,12 @@ public class NoteReminder extends DialogFragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(Objects.requireNonNull(this.requireContext()),
                 (view, year, monthOfYear, dayOfMonth) -> {
 
-            Calendar newDate = Calendar.getInstance();
-            newDate.set(year, monthOfYear, dayOfMonth);
+                    Calendar newDate = Calendar.getInstance();
+                    newDate.set(year, monthOfYear, dayOfMonth);
 
-            textView.setText(dateFormatter.format(newDate.getTime()));
-            showTimeDialog();
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                    textView.setText(dateFormatter.format(newDate.getTime()));
+                    showTimeDialog();
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         datePickerDialog.show();
     }
@@ -129,18 +128,23 @@ public class NoteReminder extends DialogFragment {
     }
 
     private void setNotification(long time) {
-        Toast.makeText(this.getContext(), "Notification", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(this.getContext(), NoteReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getContext(), 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
 
         Objects.requireNonNull(alarmManager).set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
-
-//        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(this.getContext(), 0, intent, 0);
-//        alarmManager.cancel(pendingIntent2);
     }
+
+    private void cancelNotification() {
+        Intent intent = new Intent(this.getContext(), NoteReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getContext(), 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.cancel(pendingIntent);
+    }
+
 
     private void createNotificationChannel() {
 

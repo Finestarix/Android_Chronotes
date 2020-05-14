@@ -24,7 +24,7 @@
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
             <EditText
                 android:id="@+id/register_name"
@@ -42,7 +42,7 @@
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
             <EditText
                 android:id="@+id/register_email"
@@ -60,7 +60,7 @@
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
             <EditText
                 android:id="@+id/register_password"
@@ -77,7 +77,7 @@
         </RelativeLayout>
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/register_button"
+            android:id="@+id/bt_login_to_register"
             style="@style/LoginRegisterButton"
             android:text="@string/register_button"
             app:spinning_bar_color="@color/White"
@@ -89,7 +89,7 @@
             android:text="@string/register_already_have_account" />
 
         <TextView
-            android:id="@+id/login_button"
+            android:id="@+id/bt_login"
             style="@style/LoginRegister"
             android:text="@string/register_login"
             android:onClick="goToLogin"
