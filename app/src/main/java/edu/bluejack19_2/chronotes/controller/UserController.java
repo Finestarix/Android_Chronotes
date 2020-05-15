@@ -1,9 +1,9 @@
 package edu.bluejack19_2.chronotes.controller;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.interfaces.BytesListener;
 import edu.bluejack19_2.chronotes.interfaces.ProcessStatusListener;
 import edu.bluejack19_2.chronotes.interfaces.UserListener;
+import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class UserController {
@@ -58,10 +58,10 @@ public class UserController {
                             Map<String, Object> userData = queryDocumentSnapshot.getData();
 
                             String idUserData = Objects.requireNonNull(userData.get("id")).toString();
-                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
-                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
-                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
-                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+                            String nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
 
                             User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
 
@@ -87,10 +87,10 @@ public class UserController {
                             Map<String, Object> userData = queryDocumentSnapshot.getData();
 
                             String idUserData = Objects.requireNonNull(userData.get("id")).toString();
-                            String  nameUserData = Objects.requireNonNull(userData.get("name")).toString();
-                            String  emailUserData = Objects.requireNonNull(userData.get("email")).toString();
-                            String  passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
-                            String  pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
+                            String nameUserData = Objects.requireNonNull(userData.get("name")).toString();
+                            String emailUserData = Objects.requireNonNull(userData.get("email")).toString();
+                            String passwordUserData = Objects.requireNonNull(userData.get("password")).toString();
+                            String pictureUserData = Objects.requireNonNull(userData.get("picture")).toString();
 
                             User user = new User(idUserData, nameUserData, emailUserData, passwordUserData, pictureUserData);
 
@@ -152,17 +152,48 @@ public class UserController {
                 addOnFailureListener(e -> userListener.onCallback(null, ProcessStatus.FAILED));
     }
 
-    public void updateUserByID(ProcessStatusListener processStatusListener, User user) {
+    public void updateUserByID(ProcessStatusListener processStatusListener, User user, int index) {
 
-        collectionReference.
-                document(User.DOCUMENT_NAME + user.getId()).
-                update("name", user.getName(),
-                        "picture", user.getPicture()).
-                addOnCompleteListener(task -> {
-                    currentStatus = (task.isComplete()) ?
-                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
-                    processStatusListener.onCallback(currentStatus);
-                });
+        DocumentReference documentReference = collectionReference.document(User.DOCUMENT_NAME + user.getId());
+
+        if (index == 0)
+            documentReference.
+                    update("name", user.getName()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 1)
+            documentReference.
+                    update("name", user.getName(),
+                            "picture", user.getPicture()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 2)
+            documentReference.
+                    update("name", user.getName(),
+                            "password", user.getPassword()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 3)
+            documentReference.
+                    update("name", user.getName(),
+                            "password", user.getPassword(),
+                            "picture", user.getPicture()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
     }
-
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/note_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/White"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    tools:context=".home.ui.notes.NoteReminder">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:text="@string/notes_layout_collaborator_manage_reminder"
+        android:textSize="20sp" />
+
+    <Switch
+        android:id="@+id/notes_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layoutDirection="rtl"
+        android:switchPadding="12dp"
+        android:text="@string/notes_layout_collaborator_reminder" />
+
+    <LinearLayout
+        android:id="@+id/notes_layout_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textSize="18dp" />
+
+        <Button
+            android:id="@+id/button_notes_change"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundLightColor"
+            android:text="@string/notes_layout_collaborator_change_reminder"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/button_notes_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundLightColor"
+            android:text="@string/notes_layout_collaborator_remove_reminder"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

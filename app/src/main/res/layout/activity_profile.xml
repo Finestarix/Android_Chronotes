@@ -16,85 +16,128 @@
             android:background="@drawable/bg_blue_top">
 
             <ImageView
-                android:id="@+id/back_icon"
+                android:id="@+id/iv_profile_back"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:contentDescription="@string/profile_layout_icon_placeholder"
                 android:src="@drawable/ic_back" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/icon_user_login"
+                android:id="@+id/iv_profile_icon"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="70dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_loading_placeholder"
-                app:civ_border_color="#fff"
-                app:civ_border_width="2dp" />
+                android:src="@drawable/ic_loading_placeholder" />
 
         </FrameLayout>
 
         <RelativeLayout
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:background="@drawable/bg_round_white">
 
             <EditText
-                android:id="@+id/profile_name"
+                android:id="@+id/et_profile_name"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/profile_name_icon"
-                android:hint="@string/profile_name_placeholder"
+                android:layout_toEndOf="@+id/ic_profile_name_icon"
+                android:hint="@string/profile_layout_name_placeholder"
                 android:inputType="text" />
 
             <ImageView
-                android:id="@+id/profile_name_icon"
+                android:id="@+id/ic_profile_name_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_username" />
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <Switch
+            android:id="@+id/sw_profile_change_password"
             style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_blue_border_round">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|right"
+            android:switchPadding="12dp"
+            android:text="@string/profile_layout_change_password"
+            android:textColor="@color/backgroundLightColor"
+            android:textSize="11sp"
+            tools:ignore="RtlHardcoded,SmallSp" />
 
-            <EditText
-                android:id="@+id/profile_password"
-                style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/profile_password_icon"
-                android:hint="@string/profile_password_placeholder"
-                android:inputType="textPassword" />
+        <RelativeLayout
+            android:id="@+id/ly_profile_password"
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_round_white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ic_profile_password_icon"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_profile_password"
+                    style="@style/LoginRegisterEditText"
+                    android:hint="@string/profile_layout_password_placeholder"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/profile_password_icon"
+                android:id="@+id/ic_profile_password_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_password" />
 
         </RelativeLayout>
 
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/update_button"
+        <RelativeLayout
+            android:id="@+id/ly_profile_confirm_password"
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_round_white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ic_profile_confirm_password_icon"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_profile_confirm_password"
+                    style="@style/LoginRegisterEditText"
+                    android:hint="@string/profile_layout_confirm_password_placeholder"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/ic_profile_confirm_password_icon"
+                style="@style/LoginRegisterImageView"
+                android:src="@drawable/ic_password" />
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/bt_profile_update"
             style="@style/LoginRegisterButton"
-            android:text="@string/profile_button"
-            app:spinning_bar_color="@color/White"
-            app:spinning_bar_padding="6dp"
-            app:spinning_bar_width="6dp" />
+            android:text="@string/profile_layout_update_button" />
 
     </LinearLayout>
 
     <LinearLayout
         style="@style/DefaultWidthHeight"
-        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/logout_button"
+        <Button
+            android:id="@+id/bt_profile_logout"
             style="@style/LogoutButton"
-            android:text="@string/profile_logout_button"
-            app:spinning_bar_color="@color/White"
-            app:spinning_bar_padding="6dp"
-            app:spinning_bar_width="6dp" />
+            android:text="@string/profile_layout_logout_button" />
 
     </LinearLayout>
 
