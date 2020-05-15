@@ -72,7 +72,9 @@
     <!-- Profile String -->
     <string name="profile_layout_icon_placeholder">Icon</string>
     <string name="profile_layout_name_placeholder">Nama</string>
-    <string name="profile_layout_password_placeholder">Konfirmasi kata sandi</string>
+    <string name="profile_layout_change_password">Ubah kata sandi</string>
+    <string name="profile_layout_password_placeholder">Kata sandi</string>
+    <string name="profile_layout_confirm_password_placeholder">Konfirmasi kata sandi</string>
     <string name="profile_layout_update_button">Ubah</string>
     <string name="profile_layout_logout_button">Keluar</string>
 

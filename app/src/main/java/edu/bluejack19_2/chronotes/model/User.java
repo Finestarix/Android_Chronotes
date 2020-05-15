@@ -48,4 +48,7 @@ public class User {
         return picture;
     }
 
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 }

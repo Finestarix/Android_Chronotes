@@ -71,7 +71,9 @@
     <!-- Profile String -->
     <string name="profile_layout_icon_placeholder">Icon</string>
     <string name="profile_layout_name_placeholder">Name</string>
-    <string name="profile_layout_password_placeholder">Confirm Password</string>
+    <string name="profile_layout_change_password">Change Password</string>
+    <string name="profile_layout_password_placeholder">Password</string>
+    <string name="profile_layout_confirm_password_placeholder">Confirm Password</string>
     <string name="profile_layout_update_button">Update</string>
     <string name="profile_layout_logout_button">Log Out</string>
 

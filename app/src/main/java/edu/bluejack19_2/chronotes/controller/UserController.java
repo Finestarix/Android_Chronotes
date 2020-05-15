@@ -3,6 +3,7 @@ package edu.bluejack19_2.chronotes.controller;
 import android.net.Uri;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -151,17 +152,48 @@ public class UserController {
                 addOnFailureListener(e -> userListener.onCallback(null, ProcessStatus.FAILED));
     }
 
-    public void updateUserByID(ProcessStatusListener processStatusListener, User user) {
+    public void updateUserByID(ProcessStatusListener processStatusListener, User user, int index) {
 
-        collectionReference.
-                document(User.DOCUMENT_NAME + user.getId()).
-                update("name", user.getName(),
-                        "picture", user.getPicture()).
-                addOnCompleteListener(task -> {
-                    currentStatus = (task.isComplete()) ?
-                            ProcessStatus.SUCCESS : ProcessStatus.FAILED;
-                    processStatusListener.onCallback(currentStatus);
-                });
+        DocumentReference documentReference = collectionReference.document(User.DOCUMENT_NAME + user.getId());
+
+        if (index == 0)
+            documentReference.
+                    update("name", user.getName()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 1)
+            documentReference.
+                    update("name", user.getName(),
+                            "picture", user.getPicture()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 2)
+            documentReference.
+                    update("name", user.getName(),
+                            "password", user.getPassword()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
+
+        else if (index == 3)
+            documentReference.
+                    update("name", user.getName(),
+                            "password", user.getPassword(),
+                            "picture", user.getPicture()).
+                    addOnCompleteListener(task -> {
+                        currentStatus = (task.isComplete()) ?
+                                ProcessStatus.SUCCESS : ProcessStatus.FAILED;
+                        processStatusListener.onCallback(currentStatus);
+                    });
     }
-
 }
