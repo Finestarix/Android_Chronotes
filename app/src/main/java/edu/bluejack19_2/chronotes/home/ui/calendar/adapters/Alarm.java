@@ -27,9 +27,10 @@ public class Alarm extends BroadcastReceiver {
         String desc = i.getStringExtra("Title");
         String title = i.getStringExtra("Desc");
         Random rand = new Random();
-        int id = rand.nextInt(300);
+        int id = rand.nextInt();
+
         NotificationCompat.Builder build = new NotificationCompat.Builder(context, "taskalarm")
-                .setContentText(desc).setContentTitle(desc)
+                .setContentText(desc).setContentTitle(title)
                 .setSmallIcon(R.drawable.ic_chronotes_dark).setPriority(NotificationCompat.PRIORITY_HIGH);
 //        filter.
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);

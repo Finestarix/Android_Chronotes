@@ -172,6 +172,8 @@ public class AddTask extends AppCompatActivity {
             manager.setRepeating(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),AlarmManager.INTERVAL_DAY,pi);
         }
         else if(t.getRepeat().equals("On Due Date")){
+            Log.d("DEBUG","SINI");
+            Log.d("DEBUG", new Date(t.getEnd()).getTime()+"");
             manager.set(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),pi);
         }
     }
