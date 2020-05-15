@@ -147,7 +147,7 @@ public class AddTask extends AppCompatActivity {
             users.add(SessionStorage.getSessionStorage(this));
             Task t = new Task(UUID.randomUUID().toString(), users, SStart, SEnd, Stitle, Sdetail, SRepeat, tags, Sprio, false);
             hand.insertTask(t, this);
-            finish();
+
         }
 
         return true;

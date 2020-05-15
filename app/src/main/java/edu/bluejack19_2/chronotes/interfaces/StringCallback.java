@@ -4,5 +4,5 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public interface StringCallback {
-    void callBack(ArrayList<String> s);
+    void callBack(ArrayList<String> s, ArrayList<String> a);
 }

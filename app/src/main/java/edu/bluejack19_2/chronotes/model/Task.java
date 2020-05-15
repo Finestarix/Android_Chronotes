@@ -78,6 +78,12 @@ public class Task {
         UserId = userId;
     }
 
+    public void addUserId(String id){
+        UserId.add(id);
+    }
+    public void removeUserId(String id){
+        UserId.remove(id);
+    }
     public void setStart(String start) {
         Start = start;
     }

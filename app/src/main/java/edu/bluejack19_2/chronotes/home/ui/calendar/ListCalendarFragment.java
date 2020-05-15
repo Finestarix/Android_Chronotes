@@ -21,6 +21,8 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import edu.bluejack19_2.chronotes.R;
@@ -30,7 +32,7 @@ import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
 public class ListCalendarFragment extends Fragment {
-    private ListCalendarAdapter adapter;
+    private static ListCalendarAdapter adapter;
     private View v;
     private Spinner filter, sort;
     private ChipGroup cg;
@@ -54,6 +56,7 @@ public class ListCalendarFragment extends Fragment {
 //                title.setText("");
 //                Task t = val.get(val.size() - 1);
                 tasks = val;
+
                 RecyclerView rv_calendar = v.findViewById(R.id.rv_calendar);
                 adapter = new ListCalendarAdapter(getContext(), val);
                 rv_calendar.setAdapter(adapter);
@@ -96,6 +99,9 @@ public class ListCalendarFragment extends Fragment {
         });
 
 
+    }
+    public static void update(){
+        if(adapter != null)adapter.notifyDataSetChanged();
     }
     public void setVariables(){
         cg = v.findViewById(R.id.cg_tag);

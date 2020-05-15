@@ -1,5 +1,8 @@
 package edu.bluejack19_2.chronotes.home.ui.calendar;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,18 +28,26 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.Alarm;
 import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.ListCalendarAdapter;
 import edu.bluejack19_2.chronotes.home.ui.calendar.features.AddTask;
+import edu.bluejack19_2.chronotes.home.ui.calendar.features.UpdateTask;
+import edu.bluejack19_2.chronotes.interfaces.TaskListener;
 import edu.bluejack19_2.chronotes.model.Task;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class CalendarFragment extends Fragment {
 
     private ListCalendarAdapter adapter;
     private CalendarView cv;
     private ArrayList<Task> tasks;
+    ArrayList<EventDay> events;
     private TaskHandler hand;
+    AlarmManager manager;
+    View v;
     private SimpleDateFormat dateFormat;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,15 +58,68 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View v = getView();
+        v=getView();
+        events = new ArrayList<>();
         TextView title = v.findViewById(R.id.tv_calendar_message);
         hand = TaskHandler.GetInstance();
         tasks = hand.getAllTask(SessionStorage.getSessionStorage(getContext()), getContext(), val -> {
             if (val.size() == 0) {
-                title.setText("No Tasks!");
+//                title.setText("No Tasks!");
             } else {
                 title.setText("");
                 tasks = val;
+
+                ArrayList<Task> icons = new ArrayList<>();
+                Calendar c = Calendar.getInstance();
+                Calendar d = Calendar.getInstance();
+                Calendar min = Calendar.getInstance();
+                Calendar max = Calendar.getInstance();
+
+                for(Task ts:val){
+                    if(!ts.getCompleted()){
+                        c.setTime(new Date(ts.getStart()));
+                        int day1 = c.get(Calendar.DAY_OF_YEAR);
+                        int year1 = c.get(Calendar.YEAR);
+                        if((day1 < min.get(Calendar.DAY_OF_YEAR) && year1 == min.get(Calendar.YEAR))|| year1 < min.get(Calendar.YEAR)){
+                            min.setTime(c.getTime());
+                        }
+
+                        d.setTime(new Date(ts.getEnd()));
+                        int day2 = d.get(Calendar.DAY_OF_YEAR);
+                        int year2 = d.get(Calendar.YEAR);
+//                        Log.d("DEBUG", day2 + " " + year2 + " " + max.get(Calendar.YEAR) + max.get(Calendar.DAY_OF_YEAR));
+                        if((day2 > max.get(Calendar.DAY_OF_YEAR) && year2 == max.get(Calendar.YEAR)) || year2 > max.get(Calendar.YEAR)){
+//                            Log.d("DEBUG","???");
+                            max.setTime(d.getTime());
+                        }
+                    }
+//                    Log.d("DEBUG", "MINI "+new Date(min.getTime().toString())+" "+new Date(max.getTime().toString()));
+                }
+//                Log.d("DEBUG", min+" "+max);
+//                c.setTime(min);
+//                d.setTime(max);
+                Log.d("DEBUG", "MINI "+new Date(min.getTime().toString())+" "+new Date(max.getTime().toString()));
+                ArrayList<Task> today = new ArrayList<>();
+                while((min.get(Calendar.DAY_OF_YEAR) <= max.get(Calendar.DAY_OF_YEAR) && min.get(Calendar.YEAR) == max.get(Calendar.YEAR)) ||min.get(Calendar.YEAR) < max.get(Calendar.YEAR) ){
+//                    Log.d("DEBUG", "ADDING EVENTS "+min.getTime());
+//                    today = hand.GetTodayTasks(c.getTime(), SessionStorage.getSessionStorage(getContext()), getContext(), new TaskListener() {
+//                        @Override
+//                        public void callBack(ArrayList<Task> val) {
+                            Log.d("DEBUG", "ADDING fbase EVENTS "+min.getTime());
+//                            if(val!= null){
+                                Calendar v = Calendar.getInstance();
+                                v.setTime(min.getTime());
+                                events.add(new EventDay(v, R.drawable.ic_list_calendar));
+//                            }
+//                        }
+//                    }
+//                );
+
+                    min.add(Calendar.DATE,1);
+                }
+                cv.setEvents(events);
+
+
 
                 RecyclerView rv_calendar = v.findViewById(R.id.rv_calendar);
                 adapter = new ListCalendarAdapter(getContext(), val);
@@ -78,8 +142,8 @@ public class CalendarFragment extends Fragment {
                 startActivity(i);
 //                ArrayList<EventDay> events = new ArrayList<>();
 //
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.add(Calendar.DAY_OF_MONTH, 4);
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DAY_OF_MONTH, 4);
 //                events.add(new EventDay(calendar, R.drawable.ic_google));
 //                Calendar calendar3 = Calendar.getInstance();
 //                calendar3.add(Calendar.DAY_OF_MONTH, 7);
@@ -97,38 +161,37 @@ public class CalendarFragment extends Fragment {
                 Calendar curr = Calendar.getInstance();
                 int week = curr.get(Calendar.DAY_OF_YEAR);
                 int year = curr.get(Calendar.YEAR);
-                tasks = hand.GetTodayTasks(clicked.getTime(), SessionStorage.getSessionStorage(getContext()), getContext(), val -> {
-                    if (val.size() == 0) {
-                        title.setText("No Tasks!");
-                    } else {
-                        title.setText("");
-                        tasks = val;
 
-                        adapter.setTask(val);
-                        adapter.notifyDataSetChanged();
+                tasks = hand.GetTodayTasks(clicked.getTime(), SessionStorage.getSessionStorage(getContext()), getContext(), new TaskListener() {
+                    @Override
+                    public void callBack(ArrayList<Task> val) {
+                        if (val.size() == 0) {
+                            adapter.setTask(new ArrayList<Task>());
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            title.setText("");
+                            tasks = val;
+
+                            adapter.setTask(val);
+                            adapter.notifyDataSetChanged();
+
+                        }
                     }
                 });
-
-//                int year = curr.get(Calendar.YEAR);
-//                Calendar target = Calendar.getInstance();
-//                target.setTime(new Date(ts.getEnd()));
-                int targetWeek = clicked.get(Calendar.DAY_OF_YEAR);
-                int targetYear = clicked.get(Calendar.YEAR);
-//                int targetYear = target.get(Calendar.YEAR);
-//
-//                if(week == targetWeek && year == targetYear){
-//                    filtered.add(ts);
-//                }
-                try {
-                    cv.setDate(clicked);
-                    Log.d("DEBUG", clicked.getTime().toString());
-                } catch (OutOfDateRangeException e) {
-                    e.printStackTrace();
-                }
-
-
             }
         });
+    }
+    private void go(){
+        int Time = 10000;
+        manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(getContext(), Alarm.class);
+        PendingIntent pi = PendingIntent.getBroadcast(getContext(),0,i,0);
+
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE)
+//        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pi);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+1000,10000,pi);
+
+
     }
 
 

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -89,7 +90,28 @@ public class TaskHandler {
         return null;
     }
     public ArrayList<String> getAllCollaboratorEmail(Task t, Context con, StringCallback cb){
-        ArrayList<User> users = new ArrayList<User>();
+        CollectionReference useref = db.collection("users");
+        Log.d("DEBUG", "HERE1");
+        ArrayList<String> ids = t.getUserId();
+        ArrayList<String> emails = new ArrayList<>();
+
+        useref.whereIn("id", ids).get()
+                .addOnCompleteListener(task -> {
+//                    Log.d("DEBUG", "HERE");
+                    ids.clear();
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot qd : task.getResult()){
+                            String email = qd.getString("email");
+                            String id = qd.getString("id");
+
+                            ids.add(id);
+                            emails.add(email);
+                        }
+                        cb.callBack(ids,emails);
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(con, "Collaborators Failed To Load! Please Try Again!", Toast.LENGTH_LONG).show());;
+
 
         return null;
     }
@@ -129,6 +151,7 @@ public class TaskHandler {
 
         return t[0];
     }
+
     public void updateTask(Task t, Context con){
         ref.document(collectionName+"_"+ t.getTaskId()).set(t)
                 .addOnSuccessListener(aVoid -> Toast.makeText(con, "Task " + t.getTitle()+" Successfully Successfully Updated", Toast.LENGTH_SHORT).show()

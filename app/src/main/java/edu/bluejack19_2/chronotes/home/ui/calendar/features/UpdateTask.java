@@ -1,10 +1,16 @@
 package edu.bluejack19_2.chronotes.home.ui.calendar.features;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,8 +39,16 @@ import java.util.UUID;
 import java.util.Vector;
 
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.Alarm;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.ColaboratorAdapter;
+import edu.bluejack19_2.chronotes.interfaces.StringCallback;
+import edu.bluejack19_2.chronotes.interfaces.UserListener;
+import edu.bluejack19_2.chronotes.main.MainActivity;
 import edu.bluejack19_2.chronotes.model.Task;
+import edu.bluejack19_2.chronotes.model.User;
+import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -45,6 +59,7 @@ public class UpdateTask extends AppCompatActivity {
 
     private SwitchDateTimeDialogFragment dateTimeFragment;
     private SwitchDateTimeDialogFragment dateTimeFragment2;
+
     Spinner priority, repeat;
     TextView dp, et, err;
     TaskHandler hand;
@@ -55,6 +70,9 @@ public class UpdateTask extends AppCompatActivity {
     Boolean doneTag, doneSelect;
     Task t;
     UpdateTask me;
+    UserController usercontrol;
+    ArrayList<String>ids, emails;
+    ColaboratorAdapter adapt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +81,9 @@ public class UpdateTask extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String taskid = bundle.getString("taskid");
         SetVariables();
+        createNotifChannel();
+        usercontrol = UserController.getInstance();
+
 
         SetSpinners();
         SetDatePicker();
@@ -103,14 +124,47 @@ public class UpdateTask extends AppCompatActivity {
                 AlertDialog.Builder colab = new AlertDialog.Builder(UpdateTask.this);
                 View dialog = getLayoutInflater().inflate(R.layout.collab_dialog,null);
 
-                RecyclerView rvColav = dialog.findViewById(R.id.rv_collab);
+                RecyclerView rvColab = dialog.findViewById(R.id.rv_collab);
                 Button btnColab = dialog.findViewById(R.id.btn_add_collab);
                 TextView tvcolav =dialog.findViewById(R.id.tv_add_collab_error);
                 EditText addColab = dialog.findViewById(R.id.et_add_collab);
+                hand.getAllCollaboratorEmail(t, getApplicationContext(), (id, email1) -> {
+//                            Log.d("DEBUG", "ASDASD");
+                    ids = id;
+                    Log.d("DEBUG", ids.size()+" Start IDs");
+                    emails = email1;
 
+                    adapt = new ColaboratorAdapter(t, ids, emails,getApplicationContext());
+                    rvColab.setAdapter(adapt);
+                    rvColab.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                });
                 btnColab.setOnClickListener(colabo -> {
                     String email = addColab.getText().toString();
+                    if(emails.contains(email)){
+                        tvcolav.setText("Already a collaborator!");
+                        return;
+                    }
+                    usercontrol.getUserByEmail(new UserListener() {
+                        @Override
+                        public void onCallback(User user, ProcessStatus status) {
+                            if(status == ProcessStatus.NOT_FOUND){
+                                tvcolav.setText("User Not Found!");
+                            }
+                            else{
+                                addColab.setText("");
+                                emails.add(user.getEmail());
+//                                ids.add(user.getId());
+                                Log.d("DEBUG", ids.size()+"aaaaa");
 
+                                adapt.setEmails(emails);
+//                                adapt.setIds(ids);
+
+                                t.addUserId(user.getId());
+                                hand.updateTask(t,getApplicationContext());
+                                adapt.notifyDataSetChanged();
+                            }
+                        }
+                    }, email);
                 });
 
                 colab.setView(dialog);
@@ -176,6 +230,19 @@ public class UpdateTask extends AppCompatActivity {
             }
         });
         tag.start();
+    }
+
+    private void createNotifChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "task reminder";
+            String desc = "Test Notification";
+            int important = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel chan = new NotificationChannel("taskalarm",name,important);
+            chan.setDescription(desc);
+
+            NotificationManager manage = getSystemService(NotificationManager.class);
+            manage.createNotificationChannel(chan);
+        }
     }
 
     private boolean validate(){

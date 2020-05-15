@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.bluejack19_2.chronotes.R;
+import edu.bluejack19_2.chronotes.home.ui.calendar.ListCalendarFragment;
 import edu.bluejack19_2.chronotes.home.ui.calendar.features.AddTask;
 import edu.bluejack19_2.chronotes.home.ui.calendar.features.UpdateTask;
 import edu.bluejack19_2.chronotes.model.Task;
@@ -150,6 +151,9 @@ public class ListCalendarAdapter extends RecyclerView.Adapter<ListCalendarAdapte
                         title.setPaintFlags(title.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                         ListCalendarAdapter.tasks.get(position).setCompleted(false);
                     }
+                    Task up = ListCalendarAdapter.tasks.get(position);
+                    hand.updateTask(up, itemView.getContext());
+                    ListCalendarFragment.update();
                     notifyDataSetChanged();
                 }
             });
