@@ -2,6 +2,9 @@ package edu.bluejack19_2.chronotes.home.ui.calendar.features;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +34,7 @@ import java.util.Vector;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
+import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.Alarm;
 import edu.bluejack19_2.chronotes.model.Task;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
@@ -147,10 +151,29 @@ public class AddTask extends AppCompatActivity {
             users.add(SessionStorage.getSessionStorage(this));
             Task t = new Task(UUID.randomUUID().toString(), users, SStart, SEnd, Stitle, Sdetail, SRepeat, tags, Sprio, false);
             hand.insertTask(t, this);
+            go(t);
 
         }
 
         return true;
+    }
+    private void go(Task t){
+        int Time = 10000;
+        AlarmManager manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(AddTask.this, Alarm.class);
+        i.putExtra("Title", t.getTitle());
+        i.putExtra("Desc", t.getDetail());
+
+        PendingIntent pi = PendingIntent.getBroadcast(this,0,i,0);
+
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE)
+//        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pi);
+        if(t.getRepeat().equals("Daily")){
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),AlarmManager.INTERVAL_DAY,pi);
+        }
+        else if(t.getRepeat().equals("On Due Date")){
+            manager.set(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),pi);
+        }
     }
 
 

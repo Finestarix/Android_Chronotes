@@ -199,9 +199,6 @@ public class CalendarFragment extends Fragment {
         else if(t.getRepeat().equals("On Due Date")){
             manager.set(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),pi);
         }
-
-
-
     }
 
 

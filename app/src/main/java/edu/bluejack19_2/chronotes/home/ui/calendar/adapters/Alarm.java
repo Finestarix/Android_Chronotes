@@ -22,13 +22,14 @@ public class Alarm extends BroadcastReceiver {
 
     }
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent i) {
         Log.d("DEBUG", "ONRECEIVE");
-
+        String desc = i.getStringExtra("Title");
+        String title = i.getStringExtra("Desc");
         Random rand = new Random();
         int id = rand.nextInt(300);
         NotificationCompat.Builder build = new NotificationCompat.Builder(context, "taskalarm")
-                .setContentText("ALARM " + id + " " +(new Date(System.currentTimeMillis())).toString()).setContentTitle("Reminder")
+                .setContentText(desc).setContentTitle(desc)
                 .setSmallIcon(R.drawable.ic_chronotes_dark).setPriority(NotificationCompat.PRIORITY_HIGH);
 //        filter.
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
