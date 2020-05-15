@@ -77,6 +77,7 @@ public class CalendarFragment extends Fragment {
 
                 for(Task ts:val){
                     if(!ts.getCompleted()){
+                        go(ts);
                         c.setTime(new Date(ts.getStart()));
                         int day1 = c.get(Calendar.DAY_OF_YEAR);
                         int year1 = c.get(Calendar.YEAR);
@@ -181,15 +182,24 @@ public class CalendarFragment extends Fragment {
             }
         });
     }
-    private void go(){
+    private void go(Task t){
         int Time = 10000;
         manager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(getContext(), Alarm.class);
+        i.putExtra("Title", t.getTitle());
+        i.putExtra("Desc", t.getDetail());
+
         PendingIntent pi = PendingIntent.getBroadcast(getContext(),0,i,0);
 
 //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE)
 //        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pi);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+1000,10000,pi);
+        if(t.getRepeat().equals("Daily")){
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),AlarmManager.INTERVAL_DAY,pi);
+        }
+        else if(t.getRepeat().equals("On Due Date")){
+            manager.set(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),pi);
+        }
+
 
 
     }
