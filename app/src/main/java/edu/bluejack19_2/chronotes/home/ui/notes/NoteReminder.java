@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,8 +41,10 @@ import edu.bluejack19_2.chronotes.home.ui.notes.notification.NoteReceiver;
 public class NoteReminder extends DialogFragment {
 
     private NoteController noteController;
+
     private Switch aSwitch;
     private Button changeReminder;
+    private Button removeReminder;
     private TextView textView;
     private LinearLayout linearLayout;
 
@@ -52,31 +55,15 @@ public class NoteReminder extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_notes_reminder, container);
-
-        noteController = NoteController.getInstance();
-
-        aSwitch = view.findViewById(R.id.notes_switch);
-        linearLayout = view.findViewById(R.id.notes_layout_reminder);
-        linearLayout.setVisibility(View.GONE);
+        setUIComponent(view);
 
         createNotificationChannel();
 
-        aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isChecked) {
-                linearLayout.setVisibility(View.GONE);
-                cancelNotification();
-            } else {
-                linearLayout.setVisibility(View.VISIBLE);
-            }
-        });
+        noteController = NoteController.getInstance();
 
-        textView = view.findViewById(R.id.text_reminder);
-        changeReminder = view.findViewById(R.id.button_notes_change);
-        changeReminder.setOnClickListener(v -> {
-            showDateDialog();
-        });
-
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        changeReminder.setOnClickListener(v -> showDateDialog());
+        removeReminder.setOnClickListener(v -> cancelNotification());
+        aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> changeLayout(isChecked));
 
         return view;
     }
@@ -84,21 +71,44 @@ public class NoteReminder extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+
         Dialog dialog = getDialog();
         if (dialog != null)
             Objects.requireNonNull(Objects.requireNonNull(dialog).getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
+    private void setUIComponent(View view) {
+        aSwitch = view.findViewById(R.id.notes_switch);
+        linearLayout = view.findViewById(R.id.notes_layout_reminder);
+        textView = view.findViewById(R.id.text_reminder);
+        changeReminder = view.findViewById(R.id.button_notes_change);
+        removeReminder = view.findViewById(R.id.button_notes_remove);
+
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    private void changeLayout(boolean isChecked) {
+        if (!isChecked) {
+            linearLayout.setVisibility(View.GONE);
+            cancelNotification();
+        } else {
+            linearLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void showDateDialog() {
         Calendar newCalendar = Calendar.getInstance();
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(Objects.requireNonNull(this.requireContext()),
                 (view, year, monthOfYear, dayOfMonth) -> {
 
                     Calendar newDate = Calendar.getInstance();
                     newDate.set(year, monthOfYear, dayOfMonth);
 
+                    dateFormatter = new SimpleDateFormat("E, MMM dd yyyy", Locale.US);
                     textView.setText(dateFormatter.format(newDate.getTime()));
                     showTimeDialog();
+
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         datePickerDialog.show();
@@ -106,24 +116,25 @@ public class NoteReminder extends DialogFragment {
 
     private void showTimeDialog() {
         Calendar calendar = Calendar.getInstance();
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                // TODO: Fix if Minutes 00
-                textView.setText(textView.getText().toString() + " " + hourOfDay + ":" + minute);
 
-                dateFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US);
-                Date date = new Date();
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this.getContext(),
+                (view, hourOfDay, minute) -> {
 
-                try {
-                    date = dateFormatter.parse(textView.getText().toString());
-                } catch (ParseException e) {
-                }
+                    DecimalFormat formatter = new DecimalFormat("00");
+                    String dateStr = textView.getText().toString();
+                    String dateTime = dateStr + " " + formatter.format(hourOfDay) + ":" + formatter.format(minute) + ":00";
+                    textView.setText(dateTime);
 
-                setNotification(date.getTime());
+                    Date date = new Date();
+                    try {
+                        date = dateFormatter.parse(textView.getText().toString());
+                    } catch (ParseException ignored) {
+                    }
 
-            }
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this.getContext()));
+                    setNotification(Objects.requireNonNull(date).getTime());
+
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this.getContext()));
+
         timePickerDialog.show();
     }
 
@@ -134,6 +145,9 @@ public class NoteReminder extends DialogFragment {
         AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
 
         Objects.requireNonNull(alarmManager).set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+
+        String message = getResources().getString(R.string.notes_message_collaborator_set_reminder_success);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void cancelNotification() {
@@ -142,15 +156,19 @@ public class NoteReminder extends DialogFragment {
 
         AlarmManager alarmManager = (AlarmManager) requireActivity().getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.cancel(pendingIntent);
-    }
+        Objects.requireNonNull(alarmManager).cancel(pendingIntent);
 
+        textView.setText("");
+
+        String message = getResources().getString(R.string.notes_message_collaborator_set_reminder_cancel);
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
 
     private void createNotificationChannel() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "chronotes";
-            String description = "Test Notification";
+            CharSequence name = getResources().getString(R.string.notes_message_collaborator_reminder_title);
+            String description = getResources().getString(R.string.notes_message_collaborator_reminder_content);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
             NotificationChannel notificationChannel = new NotificationChannel("chronotes", name, importance);
@@ -161,6 +179,5 @@ public class NoteReminder extends DialogFragment {
         }
 
     }
-
 
 }

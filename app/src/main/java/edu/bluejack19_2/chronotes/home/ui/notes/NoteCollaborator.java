@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +31,11 @@ import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class NoteCollaborator extends DialogFragment {
 
+    private static final String FRAGMENT_TAG = "Note Collaborator";
+    private static final String INTENT_DATA = "note";
+
     private RecyclerView recyclerView;
     private CollaboratorNotesAdapter collaboratorNotesAdapter;
-
-    private Note note;
 
     private UserController userController;
     private NoteController noteController;
@@ -45,49 +47,22 @@ public class NoteCollaborator extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view =  inflater.inflate(R.layout.fragment_notes_collaborator, container);
+        setUIComponent(view);
+
+        closeButton.setOnClickListener(v -> closeDialog());
 
         collaboratorNotesAdapter = new CollaboratorNotesAdapter(this.getActivity());
         collaboratorNotesAdapter.setCollaborators(null);
         collaboratorNotesAdapter.notifyDataSetChanged();
 
+        recyclerView.setAdapter(collaboratorNotesAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
         noteController = NoteController.getInstance();
         userController = UserController.getInstance();
-
-        recyclerView = view.findViewById(R.id.rv_notes_reminders);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        recyclerView.setAdapter(collaboratorNotesAdapter);
-
-        closeButton = view.findViewById(R.id.button_notes_close);
-        closeButton.setOnClickListener(v -> {
-            closeDialog();
-        });
+        loadData();
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        String noteID = requireArguments().getString("note");
-
-        noteController.getNotesByID((notes, processStatusNote) -> {
-            if (processStatusNote == ProcessStatus.FOUND) {
-                CollaboratorNotesAdapter.setNote(notes);
-                ArrayList<String> collaborators = notes.getUsers();
-                ArrayList<User> usersCollaborators = new ArrayList<>();
-
-                for (String c : Objects.requireNonNull(collaborators)) {
-                    userController.getUserByID((user, processStatus) -> {
-                        if (processStatus == ProcessStatus.FOUND){
-                            usersCollaborators.add(user);
-                            collaboratorNotesAdapter.setCollaborators(usersCollaborators);
-                            collaboratorNotesAdapter.notifyDataSetChanged();
-                        }
-                    }, c);
-                }
-            }
-        }, noteID);
     }
 
     @Override
@@ -99,11 +74,49 @@ public class NoteCollaborator extends DialogFragment {
             Objects.requireNonNull(Objects.requireNonNull(dialog).getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
+    private void setUIComponent(View view) {
+        recyclerView = view.findViewById(R.id.rv_notes_reminders);
+        closeButton = view.findViewById(R.id.button_notes_close);
+    }
+
+    private void loadData() {
+        String noteID = requireArguments().getString(INTENT_DATA);
+
+        noteController.getNotesByID((notes, processStatusNote) -> {
+
+            if (processStatusNote == ProcessStatus.FOUND) {
+
+                CollaboratorNotesAdapter.setNote(notes);
+
+                ArrayList<String> collaborators = notes.getUsers();
+                ArrayList<User> usersCollaborators = new ArrayList<>();
+
+                for (String c : Objects.requireNonNull(collaborators)) {
+
+                    userController.getUserByID((user, processStatus) -> {
+
+                        if (processStatus == ProcessStatus.FOUND){
+                            usersCollaborators.add(user);
+                            collaboratorNotesAdapter.setCollaborators(usersCollaborators);
+                            collaboratorNotesAdapter.notifyDataSetChanged();
+
+                        } else {
+                            String message = getResources().getString(R.string.notes_message_collaborator_failed);
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }, c);
+                }
+            }
+        }, noteID);
+    }
+
     private void closeDialog() {
-        Fragment prev = requireFragmentManager().findFragmentByTag("Note Collaborator");
-        if (prev != null) {
-            DialogFragment df = (DialogFragment) prev;
+        Fragment fragment = requireFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        if (fragment != null) {
+            DialogFragment df = (DialogFragment) fragment;
             df.dismiss();
         }
     }
+
 }

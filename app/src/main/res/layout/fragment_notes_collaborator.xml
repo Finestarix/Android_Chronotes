@@ -16,7 +16,7 @@
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="View Collaborator"/>
+        android:text="@string/notes_layout_collaborator_view_collaborator"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_notes_reminders"
@@ -27,8 +27,8 @@
         android:id="@+id/button_notes_close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#424141"
-        android:background="#70B5C1"
-        android:text="Close"/>
+        android:textColor="@color/white"
+        android:background="@color/backgroundLightColor"
+        android:text="@string/notes_layout_collaborator_close"/>
 
 </LinearLayout>

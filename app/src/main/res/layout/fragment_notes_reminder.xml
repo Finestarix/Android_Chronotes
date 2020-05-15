@@ -12,44 +12,53 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:text="Manage Reminder"/>
+        android:gravity="center_horizontal"
+        android:text="@string/notes_layout_collaborator_manage_reminder"
+        android:textSize="20sp" />
 
     <Switch
         android:id="@+id/notes_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layoutDirection="rtl"
         android:switchPadding="12dp"
-        android:layout_marginBottom="10dp"
-        android:text="Reminder" />
+        android:text="@string/notes_layout_collaborator_reminder" />
 
-<LinearLayout
-    android:id="@+id/notes_layout_reminder"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/text_reminder"
+    <LinearLayout
+        android:id="@+id/notes_layout_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="18dp"
-        android:text="Current Reminder"/>
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_notes_change"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#424141"
-        android:background="#70B5C1"
-        android:text="Change Reminder"/>
+        <TextView
+            android:id="@+id/text_reminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textSize="18dp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/button_notes_change"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundLightColor"
+            android:text="@string/notes_layout_collaborator_change_reminder"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/button_notes_remove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundLightColor"
+            android:text="@string/notes_layout_collaborator_remove_reminder"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

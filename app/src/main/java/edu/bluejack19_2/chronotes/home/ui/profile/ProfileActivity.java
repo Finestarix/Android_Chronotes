@@ -79,13 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
             backImageView.setOnClickListener(v -> goToPage(HomeActivity.class));
             logoutButton.setOnClickListener(v -> goToPage(LoginActivity.class));
             updateButton.setOnClickListener(v -> updateUserData());
-            changePasswordSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    passwordEditText.setEnabled(true);
-                } else {
-                    passwordEditText.setEnabled(false);
-                }
-            });
+            changePasswordSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> passwordEditText.setEnabled(isChecked));
 
             getCurrentUserData();
         }

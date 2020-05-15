@@ -1,10 +1,8 @@
 package edu.bluejack19_2.chronotes.home.ui.notes;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,12 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import edu.bluejack19_2.chronotes.R;
@@ -34,6 +34,8 @@ import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
 public class NoteDetailActivity extends AppCompatActivity {
 
+    private static final String INTENT_DATA = "note";
+
     private EditText titleEditText;
     private EditText contentEditText;
 
@@ -41,46 +43,22 @@ public class NoteDetailActivity extends AppCompatActivity {
 
     private NoteController noteController;
 
-    private Integer statusNote;
+    private boolean isNewNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (SessionStorage.getSessionStorage(this) == null) {
-            goToLogin();
-            return;
-        }
+        if (!SessionStorage.isLoggedIn(this))
+            goToPage(LoginActivity.class);
 
-        setContentView(R.layout.activity_note_detail);
+        else {
+            setContentView(R.layout.activity_note_detail);
+            setUIComponent();
 
-        noteController = NoteController.getInstance();
+            noteController = NoteController.getInstance();
 
-        String noteJSON = getIntent().getStringExtra("note");
-
-        titleEditText = findViewById(R.id.notes_detail_title);
-        contentEditText = findViewById(R.id.notes_detail_content);
-
-        if (noteJSON != null) {
-            statusNote = 0;
-
-            Gson gson = new Gson();
-            note = gson.fromJson(noteJSON, Note.class);
-
-            titleEditText.setText(note.getName());
-            contentEditText.setText(note.getDetail());
-        } else {
-            statusNote = 1;
-
-            String ID = UUID.randomUUID().toString();
-            String tag = "Personal";
-            String userID = SessionStorage.getSessionStorage(getApplicationContext());
-
-            note = new Note();
-            note.setId(ID);
-            note.setTag(tag);
-            note.addUsers(userID);
-            note.setMasterUser(userID);
+            getIntentData();
         }
     }
 
@@ -94,96 +72,98 @@ public class NoteDetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
 
-            case R.id.save:
-                setNote();
-                if (statusNote == 0) updateNote();
-                else insertNote();
-                return true;
+        int itemId = item.getItemId();
 
-            case R.id.share:
-                shareNote();
-                return true;
+        if (itemId == R.id.save) {
+            setNote();
 
-            case R.id.add_collaborator:
-                goToAddCollaborator();
-                return true;
+            if (isNewNote) insertNote();
+            else updateNote();
 
-            case R.id.view_collaborator:
-                goToCollaborator();
-                return true;
+        } else if (itemId == R.id.share)
+            shareNote();
 
-            case R.id.reminder:
-                goToReminder();
-                return true;
+        else if (itemId == R.id.add_collaborator)
+            showFragment(new NoteCollaboratorAdd());
 
-            case R.id.remove_note:
-                removeNoteDialog();
-                return true;
+        else if (itemId == R.id.view_collaborator)
+            showFragment(new NoteCollaborator());
 
-            default:
-                return super.onOptionsItemSelected(item);
+        else if (itemId == R.id.reminder)
+            showFragment(new NoteReminder());
+
+        else if (itemId == R.id.remove_note)
+            removeNoteDialog();
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setUIComponent() {
+        titleEditText = findViewById(R.id.notes_detail_title);
+        contentEditText = findViewById(R.id.notes_detail_content);
+    }
+
+    private void getIntentData() {
+        String noteJSON = getIntent().getStringExtra(INTENT_DATA);
+
+        isNewNote = noteJSON == null;
+
+        if (noteJSON != null) {
+            Gson gson = new Gson();
+            note = gson.fromJson(noteJSON, Note.class);
+
+            titleEditText.setText(note.getName());
+            contentEditText.setText(note.getDetail());
+        } else {
+            String ID = UUID.randomUUID().toString();
+            String tag = "Personal";
+            String userID = SessionStorage.getSessionStorage(getApplicationContext());
+
+            note = new Note(ID, "", "", "", tag, userID, new ArrayList<>());
+            note.addUsers(userID);
         }
-    }
-
-    private void goToHome() {
-        Intent intentToHome = new Intent(NoteDetailActivity.this, HomeActivity.class);
-        intentToHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToHome);
-    }
-
-    private void goToLogin() {
-        SessionStorage.removeSessionStorage(NoteDetailActivity.this);
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        googleSignInClient.signOut();
-
-        Intent intentToLogin = new Intent(NoteDetailActivity.this, LoginActivity.class);
-        intentToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToLogin);
-    }
-
-    private void goToAddCollaborator() {
-        Bundle bundle = new Bundle();
-        bundle.putString("note", note.getId());
-
-        NoteCollaboratorAdd noteCollaboratorAdd = new NoteCollaboratorAdd();
-        noteCollaboratorAdd.setArguments(bundle);
-        noteCollaboratorAdd.show(getSupportFragmentManager(), "Note Collaborator Add");
-    }
-
-    private void goToCollaborator() {
-        Bundle bundle = new Bundle();
-        bundle.putString("note", note.getId());
-
-        NoteCollaborator noteCollaborator = new NoteCollaborator();
-        noteCollaborator.setArguments(bundle);
-        noteCollaborator.show(getSupportFragmentManager(), "Note Collaborator");
-    }
-
-    private void goToReminder() {
-        Bundle bundle = new Bundle();
-        bundle.putString("note", note.getId());
-
-        NoteReminder noteReminder = new NoteReminder();
-        noteReminder.setArguments(bundle);
-        noteReminder.show(getSupportFragmentManager(), "Note Reminder");
     }
 
     private void setNote() {
         String name = titleEditText.getText().toString();
-        note.setName(name);
-
         String content = contentEditText.getText().toString();
-        note.setDetail(content);
 
+        note.setName(name);
+        note.setDetail(content);
         note.setLastUpdate(GeneralHandler.getCurrentTime());
     }
 
+    private void insertNote() {
+        noteController.insertNewNote(processStatus -> {
+
+            String message = (processStatus == ProcessStatus.SUCCESS) ?
+                    getResources().getString(R.string.notes_message_insert_success) :
+                    getResources().getString(R.string.notes_message_insert_failed);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+            if (processStatus == ProcessStatus.SUCCESS)
+                goToPage(HomeActivity.class);
+
+        }, note);
+    }
+
+    private void updateNote() {
+        noteController.updateNewNote(processStatus -> {
+
+            String message = (processStatus == ProcessStatus.SUCCESS) ?
+                    getResources().getString(R.string.notes_message_update_success) :
+                    getResources().getString(R.string.notes_message_update_failed);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+            if (processStatus == ProcessStatus.SUCCESS)
+                goToPage(HomeActivity.class);
+
+        }, note);
+    }
+
     private void shareNote() {
-        String shareStr = "I want to share my notes with you!\nTitle: " +
+        String shareStr = getResources().getString(R.string.notes_message_share) +
                 titleEditText.getText().toString() + "\n" + contentEditText.getText().toString();
 
         Intent sendIntent = new Intent();
@@ -195,48 +175,57 @@ public class NoteDetailActivity extends AppCompatActivity {
         startActivity(shareIntent);
     }
 
-    private void updateNote() {
-        noteController.updateNewNote(processStatus -> {
-            if (processStatus == ProcessStatus.SUCCESS) {
-                Toast.makeText(getApplicationContext(), "Update Note Success", Toast.LENGTH_SHORT).show();
-                goToHome();
-            } else {
-                Toast.makeText(getApplicationContext(), "Update Note Failed", Toast.LENGTH_SHORT).show();
-            }
-        }, note);
-    }
-
-    private void insertNote() {
-        noteController.insertNewNote(processStatus -> {
-            if (processStatus == ProcessStatus.SUCCESS) {
-                Toast.makeText(getApplicationContext(), "Insert Note Success", Toast.LENGTH_SHORT).show();
-                goToHome();
-            } else {
-                Toast.makeText(getApplicationContext(), "Insert Note Failed", Toast.LENGTH_SHORT).show();
-            }
-        }, note);
-    }
-
     private void removeNoteDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Remove Notes")
-                .setMessage("Do you really want to remove this notes ?")
+                .setTitle(getResources().getString(R.string.notes_message_dialog_remove_title))
+                .setMessage(getResources().getString(R.string.notes_message_dialog_remove_content))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                    removeNote();
-                })
-                .setNegativeButton(android.R.string.no, null).show();
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> removeNote())
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     private void removeNote() {
         noteController.deleteNewNote(processStatus -> {
-            if (processStatus == ProcessStatus.SUCCESS) {
-                Toast.makeText(getApplicationContext(), "Remove Note Success", Toast.LENGTH_SHORT).show();
-                goToHome();
-            } else {
-                Toast.makeText(getApplicationContext(), "Remove Note Failed", Toast.LENGTH_SHORT).show();
-            }
+
+            String message = (processStatus == ProcessStatus.SUCCESS) ?
+                    getResources().getString(R.string.notes_message_remove_success) :
+                    getResources().getString(R.string.notes_message_remove_failed);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+            if (processStatus == ProcessStatus.SUCCESS)
+                goToPage(HomeActivity.class);
+
         }, note);
     }
+
+    private void goToPage(Class aClass) {
+
+        if (aClass == LoginActivity.class) {
+            SessionStorage.removeSessionStorage(NoteDetailActivity.this);
+
+            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+            googleSignInClient.signOut();
+        }
+
+        Intent intent = new Intent(NoteDetailActivity.this, aClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void showFragment(DialogFragment dialogFragment) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(INTENT_DATA, note.getId());
+
+        dialogFragment.setArguments(bundle);
+
+        String tag = (dialogFragment instanceof NoteReminder) ?
+                "Note Reminder" : (dialogFragment instanceof NoteCollaborator) ?
+                "Note Collaborator" : "Note Collaborator Add";
+        dialogFragment.show(getSupportFragmentManager(), tag);
+    }
+
 }
 

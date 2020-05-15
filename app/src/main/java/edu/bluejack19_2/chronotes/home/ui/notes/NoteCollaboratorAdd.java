@@ -27,6 +27,9 @@ import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class NoteCollaboratorAdd extends DialogFragment {
 
+    private static final String FRAGMENT_TAG = "Note Collaborator Add";
+    private static final String INTENT_DATA = "note";
+
     private EditText emailEditText;
     private Button addButton;
 
@@ -36,33 +39,15 @@ public class NoteCollaboratorAdd extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notes_collaborator_add, container);
 
-        String noteID = requireArguments().getString("note");
+        View view = inflater.inflate(R.layout.fragment_notes_collaborator_add, container);
+        setUIComponent(view);
+
 
         noteController = NoteController.getInstance();
         userController = UserController.getInstance();
 
-        emailEditText = view.findViewById(R.id.notes_email);
-        addButton = view.findViewById(R.id.notes_add_collaborator);
-
-        addButton.setOnClickListener(v -> {
-            String email = emailEditText.getText().toString();
-            userController.getUserByEmail((user, processStatus) -> {
-                if (processStatus == ProcessStatus.FOUND) {
-                    noteController.addCollaborator(processStatusNote -> {
-                        if (processStatusNote == ProcessStatus.SUCCESS) {
-                            Toast.makeText(view.getContext(), "Collaborator Added", Toast.LENGTH_SHORT).show();
-                            closeDialog();
-                        } else {
-                            Toast.makeText(view.getContext(), "Failed to Add Collaborator", Toast.LENGTH_SHORT).show();
-                        }
-                    }, noteID, user.getId());
-                } else {
-                    Toast.makeText(view.getContext(), "Email Not Found", Toast.LENGTH_SHORT).show();
-                }
-            },  email);
-        });
+        addButton.setOnClickListener(v -> insertNewCollaborator());
 
         return view;
     }
@@ -76,10 +61,44 @@ public class NoteCollaboratorAdd extends DialogFragment {
             Objects.requireNonNull(Objects.requireNonNull(dialog).getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
+    private void setUIComponent(View view) {
+        emailEditText = view.findViewById(R.id.notes_email);
+        addButton = view.findViewById(R.id.notes_add_collaborator);
+    }
+
+    private void insertNewCollaborator() {
+
+        String noteID = requireArguments().getString(INTENT_DATA);
+        String email = emailEditText.getText().toString();
+
+        userController.getUserByEmail((user, processStatus) -> {
+
+            if (processStatus == ProcessStatus.FOUND) {
+
+                noteController.addCollaborator(processStatusNote -> {
+
+                    String message = (processStatusNote == ProcessStatus.SUCCESS) ?
+                            getResources().getString(R.string.notes_message_collaborator_add_success) :
+                            getResources().getString(R.string.notes_message_collaborator_add_failed);
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+
+                    if (processStatusNote == ProcessStatus.SUCCESS)
+                        closeDialog();
+
+                }, noteID, user.getId());
+
+            } else {
+                String message = getResources().getString(R.string.notes_message_collaborator_add_not_found);
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        },  email);
+
+    }
+
     private void closeDialog() {
-        Fragment prev = requireFragmentManager().findFragmentByTag("Note Collaborator Add");
-        if (prev != null) {
-            DialogFragment df = (DialogFragment) prev;
+        Fragment fragment = requireFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        if (fragment != null) {
+            DialogFragment df = (DialogFragment) fragment;
             df.dismiss();
         }
     }

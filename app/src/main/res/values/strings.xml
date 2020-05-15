@@ -87,4 +87,36 @@
     <string name="profile_message_offline">You are offline. Please connect to the internet !</string>
     <string name="profile_message_invalid_extension">Invalid photo extension</string>
 
+    <!-- Note String -->
+    <string name="notes_layout_collaborator_view_collaborator">View Collaborator</string>
+    <string name="notes_layout_collaborator_close">Close</string>
+    <string name="notes_layout_collaborator_add">Add Collaborator</string>
+    <string name="notes_layout_collaborator_email">Input User Email</string>
+    <string name="notes_layout_collaborator_add_button">Add</string>
+    <string name="notes_layout_collaborator_manage_reminder">Manage Reminder</string>
+    <string name="notes_layout_collaborator_reminder">Reminder</string>
+    <string name="notes_layout_collaborator_change_reminder">Change Reminder</string>
+    <string name="notes_layout_collaborator_remove_reminder">Remove Reminder</string>
+
+    <!-- Notes Message String -->
+    <string name="notes_message_failed">Failed to load note data !</string>
+    <string name="notes_message_insert_failed">Failed insert new note !</string>
+    <string name="notes_message_insert_success">Success insert new note !</string>
+    <string name="notes_message_update_failed">Failed update note !</string>
+    <string name="notes_message_update_success">Success update note !</string>
+    <string name="notes_message_remove_failed">Failed remove note !</string>
+    <string name="notes_message_remove_success">Success remove note !</string>
+    <string name="notes_message_share">I want to share my notes with you!\nTitle:</string>
+    <string name="notes_message_dialog_remove_title">Remove Notes</string>
+    <string name="notes_message_dialog_remove_content">Do you really want to remove this notes ?</string>
+    <string name="notes_message_collaborator_failed">Failed to load collaborator</string>
+    <string name="notes_message_collaborator_add_success">Collaborator added</string>
+    <string name="notes_message_collaborator_add_failed">Failed to add collaborator</string>
+    <string name="notes_message_collaborator_add_not_found">Collaborator email not found</string>
+    <string name="notes_message_collaborator_set_reminder_success">Success add reminder</string>
+    <string name="notes_message_collaborator_set_reminder_cancel">Success remove reminder</string>
+    <string name="notes_message_collaborator_reminder_title">Chronotes</string>
+    <string name="notes_message_collaborator_reminder_content">You have note reminder.</string>
+
+
 </resources>

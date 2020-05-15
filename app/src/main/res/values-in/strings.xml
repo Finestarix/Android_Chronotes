@@ -88,4 +88,35 @@
     <string name="profile_message_offline">Anda sedang tidak terhubung dengan internet. Silahkan nyalakan data seluler !</string>
     <string name="profile_message_invalid_extension">Ekstensi for tidak sesuai !</string>
 
+    <!-- Note String -->
+    <string name="notes_layout_collaborator_view_collaborator">Lihat Kolaborator</string>
+    <string name="notes_layout_collaborator_close">Tutup</string>
+    <string name="notes_layout_collaborator_add">Tambah Kolaborator</string>
+    <string name="notes_layout_collaborator_email">Masukan Email Kolaborator</string>
+    <string name="notes_layout_collaborator_add_button">Tambahkan</string>
+    <string name="notes_layout_collaborator_manage_reminder">Pengaturan pengingat</string>
+    <string name="notes_layout_collaborator_reminder">Pengingat</string>
+    <string name="notes_layout_collaborator_change_reminder">Ganti Pengingat</string>
+    <string name="notes_layout_collaborator_remove_reminder">Hapus Pengingat</string>
+
+    <!-- Notes Message String -->
+    <string name="notes_message_failed">Gagal menampilkan catatan !</string>
+    <string name="notes_message_insert_failed">Gagal menambahkan catatan !</string>
+    <string name="notes_message_insert_success">Berhasil menambahkan catatan !</string>
+    <string name="notes_message_update_failed">Gagal mengubah catatan !</string>
+    <string name="notes_message_update_success">Berhasil mengubah catatan !</string>
+    <string name="notes_message_remove_failed">Gagal menghapus catatan !</string>
+    <string name="notes_message_remove_success">Berhasil menghapus catatan !</string>
+    <string name="notes_message_share">Saya ingin membagikan catatan ke kamu!\nJudul:</string>
+    <string name="notes_message_dialog_remove_title">Menghapus catatan</string>
+    <string name="notes_message_dialog_remove_content">Apakah anda yakin ingin menghapus catatan ini ?</string>
+    <string name="notes_message_collaborator_failed">Gagal mendapatkan kolaborator</string>
+    <string name="notes_message_collaborator_add_success">Berhasil menambahkan kolaborator</string>
+    <string name="notes_message_collaborator_add_failed">Gagal menambahkan kolaborator</string>
+    <string name="notes_message_collaborator_add_not_found">Email kolaboralor tidak ditemukan</string>
+    <string name="notes_message_collaborator_set_reminder_success">Berhasil menambahkan pengingat</string>
+    <string name="notes_message_collaborator_set_reminder_cancel">Berhasil menghapus pengingat</string>
+    <string name="notes_message_collaborator_reminder_title">Chronotes</string>
+    <string name="notes_message_collaborator_reminder_content">Anda memiliki pengingat catatan.</string>
+
 </resources>
