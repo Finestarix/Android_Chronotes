@@ -53,8 +53,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (SessionStorage.getSessionStorage(this) == null) {
-            goToLogin();
+        if (!SessionStorage.isLoggedIn(this)) {
+            goToPage(LoginActivity.class);
             return;
         }
 
@@ -176,4 +176,11 @@ public class HomeActivity extends AppCompatActivity {
         intentToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentToLogin);
     }
+
+    private void goToPage(Class aClass) {
+        Intent intent = new Intent(HomeActivity.this, aClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
 }

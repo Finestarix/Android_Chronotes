@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.register.RegisterActivity">
 
     <LinearLayout
@@ -17,7 +17,7 @@
 
             <ImageView
                 style="@style/LoginRegisterImageViewIcon"
-                android:contentDescription="@string/register_icon_placeholder"
+                android:contentDescription="@string/register_layout_icon_placeholder"
                 android:src="@drawable/ic_chronotes_dark" />
 
         </FrameLayout>
@@ -27,15 +27,16 @@
             android:background="@drawable/bg_round_white">
 
             <EditText
-                android:id="@+id/register_name"
+                android:id="@+id/et_register_name"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/register_name_icon"
-                android:hint="@string/register_name_placeholder"
+                android:layout_toEndOf="@+id/iv_register_name_icon"
+                android:hint="@string/register_layout_name_placeholder"
                 android:inputType="textEmailAddress" />
 
             <ImageView
-                android:id="@+id/register_name_icon"
+                android:id="@+id/iv_register_name_icon"
                 style="@style/LoginRegisterImageView"
+                android:contentDescription="@string/register_layout_icon_placeholder"
                 android:src="@drawable/ic_username" />
 
         </RelativeLayout>
@@ -45,15 +46,16 @@
             android:background="@drawable/bg_round_white">
 
             <EditText
-                android:id="@+id/register_email"
+                android:id="@+id/et_register_email"
                 style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/register_email_icon"
-                android:hint="@string/register_email_placeholder"
+                android:layout_toEndOf="@+id/iv_register_email_icon"
+                android:hint="@string/register_layout_email_placeholder"
                 android:inputType="textEmailAddress" />
 
             <ImageView
-                android:id="@+id/register_email_icon"
+                android:id="@+id/iv_register_email_icon"
                 style="@style/LoginRegisterImageView"
+                android:contentDescription="@string/register_layout_icon_placeholder"
                 android:src="@drawable/ic_email" />
 
         </RelativeLayout>
@@ -62,39 +64,45 @@
             style="@style/LoginRegisterEditTextContainer"
             android:background="@drawable/bg_round_white">
 
-            <EditText
-                android:id="@+id/register_password"
-                style="@style/LoginRegisterEditText"
-                android:layout_toEndOf="@+id/register_password_icon"
-                android:hint="@string/login_password_placeholder"
-                android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_register_password_icon"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_register_password"
+                    style="@style/LoginRegisterEditText"
+                    android:hint="@string/login_layout_password_placeholder"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
-                android:id="@+id/register_password_icon"
+                android:id="@+id/iv_register_password_icon"
                 style="@style/LoginRegisterImageView"
+                android:contentDescription="@string/register_layout_icon_placeholder"
                 android:src="@drawable/ic_password" />
 
         </RelativeLayout>
 
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/bt_login_to_register"
+        <Button
+            android:id="@+id/bt_register"
             style="@style/LoginRegisterButton"
-            android:text="@string/register_button"
-            app:spinning_bar_color="@color/White"
-            app:spinning_bar_padding="6dp"
-            app:spinning_bar_width="6dp" />
+            android:text="@string/register_layout_button" />
 
         <TextView
             style="@style/LoginRegisterAfterButton"
-            android:text="@string/register_already_have_account" />
+            android:text="@string/register_layout_already_have_account" />
 
         <TextView
-            android:id="@+id/bt_login"
+            android:id="@+id/bt_register_to_login"
             style="@style/LoginRegister"
-            android:text="@string/register_login"
-            android:onClick="goToLogin"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:text="@string/register_layout_login" />
 
     </LinearLayout>
 

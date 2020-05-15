@@ -67,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
             setContentView(R.layout.activity_login);
             setUIComponent();
 
+            getRememberMe();
+
             loginStatus = ProcessStatus.DONE;
             userController = UserController.getInstance();
             registerTextView.setOnClickListener(v -> goToPage(RegisterActivity.class));
@@ -100,6 +102,14 @@ public class LoginActivity extends AppCompatActivity {
         rememberCheckBox = findViewById(R.id.cb_login_remember_me);
         loginButton = findViewById(R.id.bt_login);
         googleButton = findViewById(R.id.google_button);
+    }
+
+    private void getRememberMe() {
+        String email = RememberMeStorage.getRememberMeEmail(this);
+        String password = RememberMeStorage.getRememberMePassword(this);
+
+        emailEditText.setText(email);
+        passwordEditText.setText(password);
     }
 
     private void basicSignIn() {
@@ -136,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginStatus = processStatus;
 
             String message = (loginStatus == ProcessStatus.SUCCESS) ?
-                    getResources().getString(R.string.login_message_success) : (processStatus == ProcessStatus.FAILED) ?
+                    getResources().getString(R.string.login_message_success) : (loginStatus == ProcessStatus.FAILED) ?
                     getResources().getString(R.string.login_message_failed) : getResources().getString(R.string.login_message_invalid);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
@@ -144,7 +154,6 @@ public class LoginActivity extends AppCompatActivity {
                 goToPage(HomeActivity.class);
 
             endLogin();
-
         }, email);
     }
 
@@ -196,12 +205,13 @@ public class LoginActivity extends AppCompatActivity {
                             String message = (insertStatus == ProcessStatus.SUCCESS) ?
                                     getResources().getString(R.string.login_message_success) : getResources().getString(R.string.login_message_failed);
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            endLogin();
 
                             if (insertStatus == ProcessStatus.SUCCESS) {
                                 SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
                                 goToPage(HomeActivity.class);
                             }
+
+                            endLogin();
 
                         }, user);
 
@@ -212,13 +222,13 @@ public class LoginActivity extends AppCompatActivity {
                             String message = (processStatus == ProcessStatus.FOUND) ?
                                     getResources().getString(R.string.login_message_success) : getResources().getString(R.string.login_message_failed);
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            endLogin();
 
                             if (processStatus == ProcessStatus.FOUND) {
                                 SessionStorage.setSessionStorage(LoginActivity.this, user.getId());
                                 goToPage(HomeActivity.class);
                             }
 
+                            endLogin();
                         }, email);
                     }
                 }, email);
@@ -228,20 +238,6 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             endLogin();
         }
-    }
-
-    private void endLogin() {
-        loginStatus = ProcessStatus.DONE;
-
-        rememberCheckBox.setEnabled(true);
-        emailEditText.setEnabled(true);
-        passwordEditText.setEnabled(true);
-        loginButton.setEnabled(true);
-        googleButton.setEnabled(true);
-        registerTextView.setEnabled(true);
-
-        loginButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_blue));
-        registerTextView.setTextColor(getResources().getColor(R.color.backgroundLightColor));
     }
 
     private void startLogin() {
@@ -256,6 +252,20 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_gray));
         registerTextView.setTextColor(getResources().getColor(R.color.Gray));
+    }
+
+    private void endLogin() {
+        loginStatus = ProcessStatus.DONE;
+
+        rememberCheckBox.setEnabled(true);
+        emailEditText.setEnabled(true);
+        passwordEditText.setEnabled(true);
+        loginButton.setEnabled(true);
+        googleButton.setEnabled(true);
+        registerTextView.setEnabled(true);
+
+        loginButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_blue));
+        registerTextView.setTextColor(getResources().getColor(R.color.backgroundLightColor));
     }
 
     private void goToPage(Class aClass) {

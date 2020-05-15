@@ -15,47 +15,46 @@
     <string name="main_slider_fragment_title_notes">Notes</string>
     <string name="main_slider_fragment_title_reminders">Reminders</string>
     <string name="main_slider_fragment_description_welcome">See how many Chronotes can help you stay organized and get more done on your job</string>
-    <string name="main_slider_fragment_description_calendar">Manage your time effectively and make sure nothing slips away</string>
-    <string name="main_slider_fragment_description_notes">Description Notes</string>
-    <string name="main_slider_fragment_description_reminders">Description Reminders</string>
-
-    <!-- Profile String -->
-    <string name="profile_icon_placeholder">Icon</string>
-    <string name="profile_id_placeholder">ID</string>
-    <string name="profile_name_placeholder">Name</string>
-    <string name="profile_email_placeholder">Email</string>
-    <string name="profile_password_placeholder">Confirm Password</string>
-    <string name="profile_button">Update</string>
-    <string name="profile_logout_button">Log Out</string>
+    <string name="main_slider_fragment_description_calendar">Manage your time more effectively so you do not waste your time</string>
+    <string name="main_slider_fragment_description_notes">Write down everything important that is not forgotten</string>
+    <string name="main_slider_fragment_description_reminders">Do your routines without fear of missing out</string>
 
     <!-- Login String -->
-    <string name="login_icon_placeholder">Icon</string>
-    <string name="login_email_placeholder">Email</string>
-    <string name="login_password_placeholder">Password</string>
-    <string name="login_button">Login</string>
-    <string name="login_forgot_password">Forgot your password ?</string>
-    <string name="login_continue_with">Continue With</string>
-    <string name="login_register">Register Now</string>
-    <string name="login_remember_me">Remember Me</string>
-    <string name="login_dont_have_an_account">Don\'t Have an Account ?</string>
+    <string name="login_layout_icon_placeholder">Icon</string>
+    <string name="login_layout_email_placeholder">Email</string>
+    <string name="login_layout_password_placeholder">Password</string>
+    <string name="login_layout_remember_me">Remember me</string>
+    <string name="login_layout_button">Login</string>
+    <string name="login_layout_dont_have_an_account">Don\'t have an account ?</string>
+    <string name="login_layout_register">REGISTER NOW</string>
+    <string name="login_layout_continue_with">Continue with</string>
 
     <!-- Login Message String -->
-    <string name="login_message_success">Login Success !</string>
-    <string name="login_message_failed">Login Failed !</string>
-    <string name="login_message_invalid">Invalid Email and Password Combination !</string>
-    <string name="login_message_empty_field">Please Fill All Field !</string>
-    <string name="login_message_wrong_email">Invalid Email Format !</string>
-    <string name="login_message_wrong_password">Invalid Password Format !</string>
-    <string name="login_message_offline">You are Offline. Please Connect to the Internet !</string>
+    <string name="login_message_success">Login success !</string>
+    <string name="login_message_failed">Login failed !</string>
+    <string name="login_message_invalid">Invalid email and password combination !</string>
+    <string name="login_message_empty_field">Please fill all field !</string>
+    <string name="login_message_wrong_email">Invalid email format !</string>
+    <string name="login_message_wrong_password">Invalid password format !</string>
+    <string name="login_message_offline">You are offline. Please connect to the internet !</string>
 
     <!-- Register String -->
-    <string name="register_icon_placeholder">Icon</string>
-    <string name="register_name_placeholder">Name</string>
-    <string name="register_email_placeholder">Email</string>
-    <string name="register_password_placeholder">Password</string>
-    <string name="register_button">Register</string>
-    <string name="register_already_have_account">Already Have Account ?</string>
-    <string name="register_login">Back to Login</string>
+    <string name="register_layout_icon_placeholder">Icon</string>
+    <string name="register_layout_name_placeholder">Name</string>
+    <string name="register_layout_email_placeholder">Email</string>
+    <string name="register_layout_password_placeholder">Password</string>
+    <string name="register_layout_button">Register</string>
+    <string name="register_layout_already_have_account">Already have account ?</string>
+    <string name="register_layout_login">Back to Login</string>
+
+    <!-- Register Message String -->
+    <string name="register_message_success">Register success !</string>
+    <string name="register_message_failed">Register failed !</string>
+    <string name="register_message_empty_field">Please fill all field !</string>
+    <string name="register_message_exist_email">The email account already exists !</string>
+    <string name="register_message_wrong_email">Invalid email format !</string>
+    <string name="register_message_wrong_password">Invalid password format !</string>
+    <string name="register_message_offline">You are offline. Please connect to the internet !</string>
 
     <!-- Home String -->
     <string name="title_activity_home">HomeActivity</string>
@@ -70,6 +69,14 @@
     <string name="menu_setting">Setting</string>
 
     <string name="home_second">Home Second</string>
-    <string name="show_password">Show Password</string>
+
+    <!-- Profile String -->
+    <string name="profile_icon_placeholder">Icon</string>
+    <string name="profile_id_placeholder">ID</string>
+    <string name="profile_name_placeholder">Name</string>
+    <string name="profile_email_placeholder">Email</string>
+    <string name="profile_password_placeholder">Confirm Password</string>
+    <string name="profile_button">Update</string>
+    <string name="profile_logout_button">Log Out</string>
 
 </resources>
