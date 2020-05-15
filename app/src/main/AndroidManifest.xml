@@ -30,6 +30,7 @@
             android:name=".home.ui.calendar.features.AddTask"
             android:theme="@style/AppTheme" />
 
+        <activity android:name=".home.ui.notes.NoteDetailActivity" />
         <receiver android:name=".home.ui.calendar.adapters.Alarm" android:enabled="true">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.DATE_CHANGED" />-->
