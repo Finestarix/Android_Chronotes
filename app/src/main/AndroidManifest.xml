@@ -26,7 +26,6 @@
 
         <activity
             android:name=".home.HomeActivity"
-            android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".home.ui.profile.ProfileActivity" />
         <activity android:name=".home.ui.notes.NoteDetailActivity" />

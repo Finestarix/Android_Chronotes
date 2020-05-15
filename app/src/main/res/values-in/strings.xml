@@ -57,4 +57,33 @@
     <string name="register_message_wrong_password">Format kata sandi salah !</string>
     <string name="register_message_offline">Anda sedang tidak terhubung dengan internet. Silahkan nyalakan data seluler !</string>
 
+    <!-- Home String -->
+    <string name="nav_header_title">Nama</string>
+    <string name="nav_header_subtitle">email@android.com</string>
+    <string name="menu_home">Menu Utama</string>
+    <string name="menu_notes">Catatan</string>
+    <string name="menu_calendar">Kalendar</string>
+    <string name="menu_setting">Pengaturan</string>
+
+    <!-- Home Message String -->
+    <string name="home_message_error_load_data">Gagal mengambil data. Periksalah koneksi internet anda.</string>
+    <string name="home_message_error_load_image">Gagal mengambil foto. Periksalah koneksi internet anda.</string>
+
+    <!-- Profile String -->
+    <string name="profile_layout_icon_placeholder">Icon</string>
+    <string name="profile_layout_name_placeholder">Nama</string>
+    <string name="profile_layout_password_placeholder">Konfirmasi kata sandi</string>
+    <string name="profile_layout_update_button">Ubah</string>
+    <string name="profile_layout_logout_button">Keluar</string>
+
+    <!-- Profile Message String -->
+    <string name="profile_message_success">Berhasil ubah !</string>
+    <string name="profile_message_failed">Gagal ubah !</string>
+    <string name="profile_message_error_load_data">Gagal mengambil data. Periksalah koneksi internet anda.</string>
+    <string name="profile_message_invalid">Kombinasi kata sandi salah !</string>
+    <string name="profile_message_empty_field">Kolom tidak boleh kosong !</string>
+    <string name="profile_message_wrong_password">Format kata sandi salah !</string>
+    <string name="profile_message_offline">Anda sedang tidak terhubung dengan internet. Silahkan nyalakan data seluler !</string>
+    <string name="profile_message_invalid_extension">Ekstensi for tidak sesuai !</string>
+
 </resources>

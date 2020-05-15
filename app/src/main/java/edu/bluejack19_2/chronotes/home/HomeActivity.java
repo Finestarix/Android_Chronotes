@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +14,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,8 +26,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Objects;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
@@ -45,32 +40,32 @@ public class HomeActivity extends AppCompatActivity {
     private View view;
 
     private ShimmerFrameLayout mShimmerViewContainer;
+
     private TextView nameTextView;
     private TextView emailTextView;
     private ImageView iconImageView;
+
+    private UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!SessionStorage.isLoggedIn(this)) {
+        if (!SessionStorage.isLoggedIn(this))
             goToPage(LoginActivity.class);
-            return;
+
+        else {
+            setContentView(R.layout.activity_home);
+            initializeNavigationDrawer();
+            setUIComponent();
+
+            userController = UserController.getInstance();
+
+            iconImageView.setOnClickListener(v -> goToPage(ProfileActivity.class));
+
+            mShimmerViewContainer.startShimmerAnimation();
+            getCurrentUserData();
         }
-
-        setContentView(R.layout.activity_home);
-
-        initializeNavigationDrawer();
-
-        mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.startShimmerAnimation();
-
-        nameTextView = view.findViewById(R.id.name_user_login);
-        emailTextView = view.findViewById(R.id.email_user_login);
-        iconImageView = view.findViewById(R.id.icon_user_login);
-        iconImageView.setOnClickListener(v -> goToProfile());
-
-        getCurrentUserData();
     }
 
     @Override
@@ -104,80 +99,78 @@ public class HomeActivity extends AppCompatActivity {
         view = navigationView.getHeaderView(0);
     }
 
-    private void getCurrentUserData() {
+    private void setUIComponent() {
+        mShimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
+        nameTextView = view.findViewById(R.id.name_user_login);
+        emailTextView = view.findViewById(R.id.email_user_login);
+        iconImageView = view.findViewById(R.id.iv_profile_icon);
+    }
 
-        UserController userController = UserController.getInstance();
+    private void getCurrentUserData() {
 
         userController.getUserByID((user, processStatus) -> {
 
             if (processStatus == ProcessStatus.NOT_FOUND) {
-                goToLogin();
+                goToPage(LoginActivity.class);
 
             } else if (processStatus == ProcessStatus.FAILED) {
+
                 nameTextView.setText(R.string.nav_header_title);
                 emailTextView.setText(R.string.nav_header_subtitle);
                 Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
-                showUserProfile();
 
-                String errorMessage = "Failed to load data.";
+                endGetCurrentUser();
+                String errorMessage = getResources().getString(R.string.home_message_error_load_data);
                 Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
 
-                mShimmerViewContainer.stopShimmerAnimation();
-
             } else {
+
                 nameTextView.setText(user.getName());
                 emailTextView.setText(user.getEmail());
 
                 userController.getUserPicture((bytes, processStatusImage) -> {
+
                     if (processStatusImage == ProcessStatus.SUCCESS) {
+
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         RequestOptions requestOptions = new RequestOptions().centerCrop().error(R.drawable.ic_failed);
                         Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(iconImageView);
-                        showUserProfile();
 
                     } else if (processStatusImage == ProcessStatus.FAILED) {
                         Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(iconImageView);
-                        showUserProfile();
 
-                        String errorMessage = "Failed to load profile picture.";
+                        String errorMessage = getResources().getString(R.string.home_message_error_load_image);
                         Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
 
-                    mShimmerViewContainer.stopShimmerAnimation();
+                    endGetCurrentUser();
+
                 }, user.getPicture());
             }
         }, SessionStorage.getSessionStorage(this));
     }
 
-    private void showUserProfile() {
+    private void endGetCurrentUser() {
         iconImageView.setBackgroundColor(Color.TRANSPARENT);
-
-        emailTextView.setBackgroundColor(Color.TRANSPARENT);
-        emailTextView.setTextColor(Color.WHITE);
-
         nameTextView.setBackgroundColor(Color.TRANSPARENT);
+        emailTextView.setBackgroundColor(Color.TRANSPARENT);
+
+        emailTextView.setTextColor(Color.WHITE);
         nameTextView.setTextColor(Color.WHITE);
-    }
 
-    private void goToLogin() {
-        SessionStorage.removeSessionStorage(HomeActivity.this);
-
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-        googleSignInClient.signOut();
-
-        Intent intentToLogin = new Intent(HomeActivity.this, LoginActivity.class);
-        intentToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToLogin);
-    }
-
-    private void goToProfile() {
-        Intent intentToLogin = new Intent(HomeActivity.this, ProfileActivity.class);
-        intentToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToLogin);
+        mShimmerViewContainer.stopShimmerAnimation();
     }
 
     private void goToPage(Class aClass) {
+
+        if (aClass == LoginActivity.class) {
+            SessionStorage.removeSessionStorage(HomeActivity.this);
+
+            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+            googleSignInClient.signOut();
+        }
+
         Intent intent = new Intent(HomeActivity.this, aClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

@@ -1,39 +1,32 @@
 package edu.bluejack19_2.chronotes.home.ui.profile;
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Window;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton;
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
@@ -43,150 +36,46 @@ import edu.bluejack19_2.chronotes.utils.GeneralHandler;
 import edu.bluejack19_2.chronotes.utils.NetworkHandler;
 import edu.bluejack19_2.chronotes.utils.PasswordHandler;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
-import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
+import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private StorageReference storageReference;
-    private CollectionReference collectionReference;
-
-    private ImageView profileImageView;
     private Uri imageUri;
 
-    private CircularProgressButton updateButton;
+    private CircleImageView profileImageView;
+    private ImageView backImageView;
     private EditText nameEditText;
     private EditText passwordEditText;
+    private Button updateButton;
+    private Button logoutButton;
 
     private ProcessStatus updateStatus;
+    private UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (SessionStorage.getSessionStorage(this) == null) {
-            goToLogin();
-            return;
+        if (!SessionStorage.isLoggedIn(this))
+            goToPage(LoginActivity.class);
+
+        else {
+            disableActionBar();
+            setContentView(R.layout.activity_profile);
+            setUIComponent();
+
+            userController = UserController.getInstance();
+            profileImageView.setOnClickListener(v -> openGallery());
+            backImageView.setOnClickListener(v -> goToPage(HomeActivity.class));
+            logoutButton.setOnClickListener(v -> goToPage(LoginActivity.class));
+            updateButton.setOnClickListener(v -> updateUserData());
+
+            getCurrentUserData();
         }
 
-        setContentView(R.layout.activity_profile);
-
-        Window window = getWindow();
-        SystemUIHandler.hideSystemUI(window);
-        SystemUIHandler.changeStatusBarColor(window);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
-        initializeFirebase();
-
-        nameEditText = findViewById(R.id.profile_name);
-        passwordEditText = findViewById(R.id.profile_password);
-
-        profileImageView = findViewById(R.id.icon_user_login);
-        profileImageView.setOnClickListener(v -> openGallery());
-
-        ImageView backImageView = findViewById(R.id.back_icon);
-        backImageView.setOnClickListener(v -> goToHome());
-
-        Button logoutButton = findViewById(R.id.logout_button);
-        logoutButton.setOnClickListener(v -> {
-            SessionStorage.removeSessionStorage(ProfileActivity.this);
-
-            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-            googleSignInClient.signOut();
-
-            goToLogin();
-        });
-
-        updateButton = findViewById(R.id.update_button);
-        updateButton.setOnClickListener(v -> {
-
-            disableField();
-            String name = nameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-
-            String errorMessage = validateString(name, password);
-            if (!GeneralHandler.isEmpty(errorMessage)) {
-                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                enableField();
-                return;
-            }
-
-            updateStatus = ProcessStatus.INIT;
-
-            @SuppressLint("StaticFieldLeak")
-            AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus> asyncTask =
-                    new AsyncTask<ProcessStatus, ProcessStatus, ProcessStatus>() {
-
-                        @Override
-                        protected ProcessStatus doInBackground(ProcessStatus... processStatuses) {
-
-                            UserController userController = UserController.getInstance();
-                            userController.getUserByID((user, processStatus) -> {
-
-                                if (processStatus == ProcessStatus.NOT_FOUND) {
-                                    goToLogin();
-
-                                } else if (processStatus == ProcessStatus.FAILED) {
-                                    updateStatus = processStatus;
-
-                                } else if (processStatus == ProcessStatus.FOUND) {
-
-                                    if (!PasswordHandler.validatePassword(password, user.getPassword()))
-                                        updateStatus = ProcessStatus.INVALID;
-
-                                    else {
-
-                                        if (imageUri == null) {
-                                            String id = SessionStorage.getSessionStorage(ProfileActivity.this);
-                                            User userTemp = new User(id, name, user.getEmail(), password, user.getPicture());
-                                            userController.updateUserByID(processStatusUpdate -> updateStatus = processStatusUpdate, userTemp);
-
-                                        } else {
-                                            String picture = UUID.randomUUID().toString() + "." +
-                                                    GeneralHandler.getFileExtension(imageUri, getApplicationContext());
-
-                                            userController.uploadPhoto((userNew, processStatusImage) -> {
-
-                                                if (processStatusImage == ProcessStatus.SUCCESS) {
-                                                    String id = SessionStorage.getSessionStorage(ProfileActivity.this);
-                                                    User userTemp = new User(id, name, user.getEmail(), password, picture);
-                                                    userController.updateUserByID(processStatusUpdate -> updateStatus = processStatusUpdate, userTemp);
-                                                } else
-                                                    updateStatus = processStatusImage;
-                                            }, picture, imageUri);
-                                        }
-                                    }
-                                }
-                            }, SessionStorage.getSessionStorage(ProfileActivity.this));
-
-                            while (updateStatus == ProcessStatus.INIT) {
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException ignored) {
-                                }
-                            }
-
-                            return updateStatus;
-                        }
-
-                        @Override
-                        protected void onPostExecute(ProcessStatus processStatus) {
-                            Toast.makeText(getApplicationContext(),
-                                    (processStatus == ProcessStatus.INVALID) ? "Invalid user password." :
-                                            (processStatus == ProcessStatus.FAILED) ? "Update profile failed." : "Update profile success.",
-                                    Toast.LENGTH_SHORT).show();
-                            goToProfile();
-                        }
-                    };
-
-            updateButton.startAnimation();
-            asyncTask.execute();
-        });
-
-        getCurrentUserData();
     }
 
     @Override
@@ -197,24 +86,177 @@ public class ProfileActivity extends AppCompatActivity {
                 resultCode == RESULT_OK &&
                 data != null &&
                 data.getData() != null) {
+
             imageUri = data.getData();
 
             List<String> fileExtension = Arrays.asList("jpg", "jpeg", "png", "svg");
-            String fileUploadExtension = getFileExtension(imageUri);
+            String fileUploadExtension = GeneralHandler.getFileExtension(imageUri, getApplicationContext());
 
             if (fileExtension.contains(fileUploadExtension)) {
                 RequestOptions requestOptions = new RequestOptions().centerCrop().placeholder(R.drawable.ic_loading_placeholder).error(R.drawable.ic_failed);
                 Glide.with(getApplicationContext()).load(imageUri).apply(requestOptions).into(profileImageView);
             } else {
-                Toast.makeText(getApplicationContext(), "Invalid photo extension.", Toast.LENGTH_SHORT).show();
+                String message = getResources().getString(R.string.profile_message_invalid_extension);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private String getFileExtension(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+    private void disableActionBar() {
+        Window window = getWindow();
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+    }
+
+    private void setUIComponent() {
+        backImageView = findViewById(R.id.iv_profile_back);
+        profileImageView = findViewById(R.id.iv_profile_icon);
+        nameEditText = findViewById(R.id.et_profile_name);
+        passwordEditText = findViewById(R.id.et_profile_password);
+        updateButton = findViewById(R.id.bt_profile_update);
+        logoutButton = findViewById(R.id.bt_profile_logout);
+    }
+
+    private void getCurrentUserData() {
+
+        startUpdate();
+
+        userController.getUserByID((user, processStatus) -> {
+
+            if (processStatus == ProcessStatus.NOT_FOUND)
+                goToPage(LoginActivity.class);
+
+            else if (processStatus == ProcessStatus.FAILED) {
+
+                Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(profileImageView);
+
+                endUpdate();
+                String errorMessage = getResources().getString(R.string.profile_message_error_load_data);
+                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                nameEditText.setText(user.getName());
+
+                userController.getUserPicture((bytes, processStatusImage) -> {
+
+                    if (processStatusImage == ProcessStatus.FAILED) {
+
+                        Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(profileImageView);
+
+                        String errorMessage = getResources().getString(R.string.profile_message_error_load_data);
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                        RequestOptions requestOptions = new RequestOptions().centerCrop().
+                                placeholder(R.drawable.ic_loading_placeholder).error(R.drawable.ic_failed);
+                        Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(profileImageView);
+                    }
+
+                    endUpdate();
+
+                }, user.getPicture());
+            }
+        }, SessionStorage.getSessionStorage(this));
+    }
+
+    private void updateUserData() {
+
+        startUpdate();
+
+        String name = nameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        String errorMessage = validateString(name, password);
+        if (!GeneralHandler.isEmpty(errorMessage)) {
+            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            endUpdate();
+            return;
+        }
+
+        updateStatus = ProcessStatus.INIT;
+        userController.getUserByID((user, processStatus) -> {
+
+            if (processStatus == ProcessStatus.NOT_FOUND)
+                goToPage(LoginActivity.class);
+
+            else if (processStatus == ProcessStatus.FAILED) {
+                String message = getResources().getString(R.string.profile_message_failed);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                endUpdate();
+
+            } else if (processStatus == ProcessStatus.FOUND) {
+
+                if (!PasswordHandler.validatePassword(password, user.getPassword())) {
+                    String message = getResources().getString(R.string.profile_message_invalid);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    endUpdate();
+
+                } else if (imageUri == null) {
+                    String id = SessionStorage.getSessionStorage(ProfileActivity.this);
+                    User userTemp = new User(id, name, user.getEmail(), password, user.getPicture());
+
+                    userController.updateUserByID(processStatusUpdate -> {
+                        String message = (processStatusUpdate == ProcessStatus.SUCCESS) ?
+                                getResources().getString(R.string.profile_message_success) :
+                                getResources().getString(R.string.profile_message_failed);
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        endUpdate();
+                    }, userTemp);
+
+                } else {
+                    String picture = UUID.randomUUID().toString() + "." +
+                            GeneralHandler.getFileExtension(imageUri, getApplicationContext());
+
+                    userController.uploadPhoto((userNew, processStatusImage) -> {
+
+                        if (processStatusImage == ProcessStatus.SUCCESS) {
+                            String id = SessionStorage.getSessionStorage(ProfileActivity.this);
+                            User userTemp = new User(id, name, user.getEmail(), password, picture);
+
+                            userController.updateUserByID(processStatusUpdate -> {
+                                String message = (processStatusUpdate == ProcessStatus.SUCCESS) ?
+                                        getResources().getString(R.string.profile_message_success) :
+                                        getResources().getString(R.string.profile_message_failed);
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                endUpdate();
+                            }, userTemp);
+
+                        } else {
+                            String message = getResources().getString(R.string.profile_message_failed);
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            endUpdate();
+                        }
+                    }, picture, imageUri);
+                }
+            }
+        }, SessionStorage.getSessionStorage(ProfileActivity.this));
+
+    }
+
+    private void startUpdate() {
+        backImageView.setEnabled(false);
+        nameEditText.setEnabled(false);
+        passwordEditText.setEnabled(false);
+        updateButton.setEnabled(false);
+        logoutButton.setEnabled(false);
+
+        updateButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_gray));
+        logoutButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_gray));
+    }
+
+    private void endUpdate() {
+        backImageView.setEnabled(true);
+        nameEditText.setEnabled(true);
+        passwordEditText.setEnabled(true);
+        updateButton.setEnabled(true);
+        logoutButton.setEnabled(true);
+
+        updateButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_blue));
+        logoutButton.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bg_round_red));
     }
 
     private void openGallery() {
@@ -224,94 +266,35 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    private void initializeFirebase() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference(User.PHOTO_NAME);
-
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection(User.COLLECTION_NAME);
-    }
-
     private String validateString(String name, String password) {
         String errorMessage = "";
 
         if (GeneralHandler.isEmpty(name)
                 || GeneralHandler.isEmpty(password))
-            errorMessage = "Please fill all field.";
+            errorMessage = getResources().getString(R.string.profile_message_empty_field);
+
+        else if (GeneralHandler.isNotAlphaNumeric(password))
+            errorMessage = getResources().getString(R.string.profile_message_wrong_password);
 
         else if (NetworkHandler.isNotConnectToInternet(this))
-            errorMessage = "You're offline. Please connect to the internet.";
+            errorMessage = getResources().getString(R.string.profile_message_offline);
 
         return errorMessage;
     }
 
-    private void getCurrentUserData() {
+    private void goToPage(Class aClass) {
 
-        collectionReference.
-                whereEqualTo("id", SessionStorage.getSessionStorage(this)).
-                get().
-                addOnSuccessListener(queryDocumentSnapshots -> {
+        if (aClass == LoginActivity.class) {
+            SessionStorage.removeSessionStorage(ProfileActivity.this);
 
-                    if (!queryDocumentSnapshots.iterator().hasNext()) {
-                        goToLogin();
-                        return;
-                    }
+            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+            googleSignInClient.signOut();
+        }
 
-                    QueryDocumentSnapshot queryDocumentSnapshot = queryDocumentSnapshots.iterator().next();
-                    User user = queryDocumentSnapshot.toObject(User.class);
-
-                    nameEditText.setText(user.getName());
-
-                    storageReference.
-                            child(user.getPicture()).
-                            getBytes(Long.MAX_VALUE).
-                            addOnSuccessListener(bytes -> {
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                                RequestOptions requestOptions = new RequestOptions().centerCrop().placeholder(R.drawable.ic_loading_placeholder).error(R.drawable.ic_failed);
-                                Glide.with(getApplicationContext()).asBitmap().load(bitmap).apply(requestOptions).into(profileImageView);
-                            }).
-                            addOnFailureListener(e -> {
-                                Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(profileImageView);
-
-                                String errorMessage = "Failed to load data. Please check your internet connection.";
-                                Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                            });
-                }).
-                addOnFailureListener(e -> {
-                    Glide.with(getApplicationContext()).load(R.drawable.ic_user).into(profileImageView);
-
-                    String errorMessage = "Failed to load data. Please check your internet connection.";
-                    Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private void enableField() {
-        GeneralHandler.enableEditText(nameEditText);
-        GeneralHandler.enableEditText(passwordEditText);
-    }
-
-    private void disableField() {
-        GeneralHandler.disableEditText(nameEditText);
-        GeneralHandler.disableEditText(passwordEditText);
-    }
-
-    private void goToProfile() {
-        Intent intentToProfile = getIntent();
-        intentToProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToProfile);
-    }
-
-    private void goToLogin() {
-        Intent intentToProfile = new Intent(ProfileActivity.this, LoginActivity.class);
-        intentToProfile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToProfile);
-    }
-
-    private void goToHome() {
-        Intent intentToHome = new Intent(ProfileActivity.this, HomeActivity.class);
-        intentToHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentToHome);
+        Intent intent = new Intent(ProfileActivity.this, aClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 }

@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (SessionStorage.isLoggedIn(this))
             goToPage(HomeActivity.class);
+
         else {
             GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
