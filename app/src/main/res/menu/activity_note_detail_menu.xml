@@ -23,12 +23,6 @@
     </item>
 
     <item
-        android:id="@+id/reminder"
-        android:icon="@drawable/ic_alarm"
-        android:title="Reminder"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/more"
         android:icon="@drawable/ic_more"
         android:title="More"

@@ -8,6 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="OverlayRed" parent="AppTheme">
+        <item name="colorPrimary">@color/Crimson</item>
+        <item name="colorPrimaryDark">@color/Black</item>
+        <item name="colorAccent">@color/WhiteSmoke</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="checkbox_red" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/OrangeRed</item>
         <item name="android:textColorSecondary">@color/AliceBlue</item>

@@ -1,7 +1,7 @@
 package edu.bluejack19_2.chronotes.home.ui.notes.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,27 +54,38 @@ public class CollaboratorNotesAdapter extends RecyclerView.Adapter<CollaboratorN
 
         holder.nameTextView.setText(
                 (!SessionStorage.getSessionStorage(context).equals(collaborators.get(position).getId())) ?
-                        collaborators.get(position).getName() : "You"
+                        collaborators.get(position).getName() :
+                        context.getResources().getString(R.string.notes_message_collaborator_adapter_you)
         );
         holder.emailTextView.setText(collaborators.get(position).getEmail());
-        holder.removeImageView.setOnClickListener(v -> {
+        holder.removeImageView.setOnClickListener(v -> removeCollaborator(position));
+    }
 
-            if (SessionStorage.getSessionStorage(context).equals(collaborators.get(position).getId())) {
-                Toast.makeText(context, "Can't Remove Yourself", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (!SessionStorage.getSessionStorage(context).equals(note.getMasterUser())) {
-                Toast.makeText(context, "Only Creator Can Remove", Toast.LENGTH_SHORT).show();
-                return;
-            }
+    private void removeCollaborator(int position) {
+        if (SessionStorage.getSessionStorage(context).equals(collaborators.get(position).getId())) {
+            Toast.makeText(context, context.getResources().getString(R.string.notes_message_collaborator_adapter_error_self), Toast.LENGTH_SHORT).show();
+            return;
+        } else if (!SessionStorage.getSessionStorage(context).equals(note.getMasterUser())) {
+            Toast.makeText(context, context.getResources().getString(R.string.notes_message_collaborator_adapter_error_creator), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            noteController.removeCollaborator(processStatus -> {
-                if (processStatus == ProcessStatus.SUCCESS) {
-                    Toast.makeText(context, "Delete Collaborator Success", Toast.LENGTH_SHORT).show();
-                    collaborators.remove(collaborators.get(position));
-                    notifyDataSetChanged();
-                }
-            }, note.getId(), collaborators.get(position).getId());
-        });
+        new AlertDialog.Builder(context)
+                .setTitle(R.string.notes_message_collaborator_dialog_remove_title)
+                .setMessage(context.getResources().getString(R.string.notes_message_collaborator_dialog_remove_content) + "\n" + collaborators.get(position).getEmail())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) ->
+                        noteController.removeCollaborator(processStatus -> {
+                            if (processStatus == ProcessStatus.SUCCESS) {
+                                Toast.makeText(
+                                        context,
+                                        context.getResources().getString(R.string.notes_message_collaborator_adapter_remove_success),
+                                        Toast.LENGTH_SHORT).show();
+                                collaborators.remove(collaborators.get(position));
+                                notifyDataSetChanged();
+                            }
+                        }, note.getId(), collaborators.get(position).getId()))
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     @Override

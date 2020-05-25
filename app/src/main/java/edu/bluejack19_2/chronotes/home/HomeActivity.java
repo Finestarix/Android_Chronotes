@@ -50,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.OverlayRed, true);
 
         if (!SessionStorage.isLoggedIn(this))
             goToPage(LoginActivity.class);

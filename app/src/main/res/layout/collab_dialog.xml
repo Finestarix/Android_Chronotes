@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <ScrollView
         android:layout_width="300dp"
-        android:layout_gravity="center"
-        android:layout_height="170dp">
+        android:layout_height="170dp"
+        android:layout_gravity="center">
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/rv_collab"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </ScrollView>
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="300dp"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
         android:layout_marginHorizontal="5dp"
-        app:hintTextColor="@color/DarkBlue"
-        android:hint="Email">
+        android:layout_marginTop="5dp"
+        android:hint="@string/calendar_layout_collaboration_email"
+        android:padding="5dp"
+        app:hintTextColor="@color/DarkBlue">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_add_collab"
@@ -31,25 +32,24 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:textColor="@color/MediumPurple"
-            android:theme="@style/AppTheme.EditText"
-            />
+            android:theme="@style/AppTheme.EditText" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/tv_add_collab_error"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/Red"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        />
+        android:layout_marginTop="15dp"
+        android:textColor="@color/Red" />
+
     <Button
         android:id="@+id/btn_add_collab"
-        android:layout_gravity="center_horizontal"
         android:layout_width="200dp"
-        android:text="Add Collaborator"
         android:layout_height="50dp"
-        android:textColor="@color/WhiteSmoke"
-        android:backgroundTint="@color/CornflowerBlue"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
-        />
+        android:backgroundTint="@color/CornflowerBlue"
+        android:text="@string/calendar_layout_collaboration_add_collaborator"
+        android:textColor="@color/WhiteSmoke" />
 </LinearLayout>
