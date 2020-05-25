@@ -91,9 +91,10 @@ public class TaskHandler {
     }
     public ArrayList<String> getAllCollaboratorEmail(Task t, Context con, StringCallback cb){
         CollectionReference useref = db.collection("users");
-        Log.d("DEBUG", "HERE1");
         ArrayList<String> ids = t.getUserId();
         ArrayList<String> emails = new ArrayList<>();
+        ArrayList<String> create = new ArrayList<>();
+        String createdBy = "";
 
         useref.whereIn("id", ids).get()
                 .addOnCompleteListener(task -> {
@@ -103,6 +104,7 @@ public class TaskHandler {
                         for(QueryDocumentSnapshot qd : task.getResult()){
                             String email = qd.getString("email");
                             String id = qd.getString("id");
+
 
                             ids.add(id);
                             emails.add(email);

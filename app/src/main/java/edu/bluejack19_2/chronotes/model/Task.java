@@ -17,6 +17,7 @@ public class Task {
     private ArrayList<String> Tags;
     private Integer Priority;
     private Boolean Completed;
+    private String CreatedBy;
 
     public Task() {
 
@@ -33,6 +34,15 @@ public class Task {
         Tags = tags;
         Priority = priority;
         Completed = completed;
+        CreatedBy = userId.get(0);
+    }
+
+    public void setCreatedBy(String createdBy) {
+        CreatedBy = createdBy;
+    }
+
+    public String getCreatedBy() {
+        return CreatedBy;
     }
 
     public Boolean getCompleted() {

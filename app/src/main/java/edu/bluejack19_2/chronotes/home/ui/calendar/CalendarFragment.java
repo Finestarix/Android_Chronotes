@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -44,6 +45,7 @@ public class CalendarFragment extends Fragment {
     private ListCalendarAdapter adapter;
     private CalendarView cv;
     private ArrayList<Task> tasks;
+    ProgressBar bar;
     ArrayList<EventDay> events;
     private TaskHandler hand;
     AlarmManager manager;
@@ -60,67 +62,33 @@ public class CalendarFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         v=getView();
         events = new ArrayList<>();
-        TextView title = v.findViewById(R.id.tv_calendar_message);
+        ProgressBar bar = v.findViewById(R.id.loading_spinner);
         hand = TaskHandler.GetInstance();
         tasks = hand.getAllTask(SessionStorage.getSessionStorage(getContext()), getContext(), val -> {
-            if (val.size() == 0) {
-//                title.setText("No Tasks!");
-            } else {
-                title.setText("");
+//            try {
+//                ((ViewGroup)bar.getParent()).removeView(bar);
+//            }catch(Exception e){
+                bar.setVisibility(View.GONE);
+//            }
+
+            if (val.size() > 0) {
+
                 tasks = val;
 
-                ArrayList<Task> icons = new ArrayList<>();
-                Calendar c = Calendar.getInstance();
-                Calendar d = Calendar.getInstance();
-                Calendar min = Calendar.getInstance();
-                Calendar max = Calendar.getInstance();
+                Calendar c;
 
                 for(Task ts:val){
                     if(!ts.getCompleted()){
                         go(ts);
-                        c.setTime(new Date(ts.getStart()));
-                        int day1 = c.get(Calendar.DAY_OF_YEAR);
-                        int year1 = c.get(Calendar.YEAR);
-                        if((day1 < min.get(Calendar.DAY_OF_YEAR) && year1 == min.get(Calendar.YEAR))|| year1 < min.get(Calendar.YEAR)){
-                            min.setTime(c.getTime());
-                        }
-
-                        d.setTime(new Date(ts.getEnd()));
-                        int day2 = d.get(Calendar.DAY_OF_YEAR);
-                        int year2 = d.get(Calendar.YEAR);
-//                        Log.d("DEBUG", day2 + " " + year2 + " " + max.get(Calendar.YEAR) + max.get(Calendar.DAY_OF_YEAR));
-                        if((day2 > max.get(Calendar.DAY_OF_YEAR) && year2 == max.get(Calendar.YEAR)) || year2 > max.get(Calendar.YEAR)){
-//                            Log.d("DEBUG","???");
-                            max.setTime(d.getTime());
-                        }
+                        c= Calendar.getInstance();
+                        c.setTime(new Date(ts.getEnd()));
+                        events.add(new EventDay(c, R.drawable.ic_list_calendar));
+//
                     }
-//                    Log.d("DEBUG", "MINI "+new Date(min.getTime().toString())+" "+new Date(max.getTime().toString()));
                 }
-//                Log.d("DEBUG", min+" "+max);
-//                c.setTime(min);
-//                d.setTime(max);
-                Log.d("DEBUG", "MINI "+new Date(min.getTime().toString())+" "+new Date(max.getTime().toString()));
-                ArrayList<Task> today = new ArrayList<>();
-                while((min.get(Calendar.DAY_OF_YEAR) <= max.get(Calendar.DAY_OF_YEAR) && min.get(Calendar.YEAR) == max.get(Calendar.YEAR)) ||min.get(Calendar.YEAR) < max.get(Calendar.YEAR) ){
-//                    Log.d("DEBUG", "ADDING EVENTS "+min.getTime());
-//                    today = hand.GetTodayTasks(c.getTime(), SessionStorage.getSessionStorage(getContext()), getContext(), new TaskListener() {
-//                        @Override
-//                        public void callBack(ArrayList<Task> val) {
-                            Log.d("DEBUG", "ADDING fbase EVENTS "+min.getTime());
-//                            if(val!= null){
-                                Calendar v = Calendar.getInstance();
-                                v.setTime(min.getTime());
-                                events.add(new EventDay(v, R.drawable.ic_list_calendar));
-//                            }
-//                        }
-//                    }
-//                );
-
-                    min.add(Calendar.DATE,1);
-                }
+//
                 cv.setEvents(events);
-
-
+//                Log.d("DEBUG", events.size()+"");
 
                 RecyclerView rv_calendar = v.findViewById(R.id.rv_calendar);
                 adapter = new ListCalendarAdapter(getContext(), val);
@@ -157,20 +125,20 @@ public class CalendarFragment extends Fragment {
         cv.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
+                bar.setVisibility(View.VISIBLE);
                 Calendar clicked = eventDay.getCalendar();
-                Log.d("DEBUG", "RUNNING ON DAY");
-                Calendar curr = Calendar.getInstance();
-                int week = curr.get(Calendar.DAY_OF_YEAR);
-                int year = curr.get(Calendar.YEAR);
 
+                if(adapter == null){
+                    bar.setVisibility(View.GONE);
+                    return;
+                }
+                adapter.setTask(new ArrayList<Task>());
+                adapter.notifyDataSetChanged();
                 tasks = hand.GetTodayTasks(clicked.getTime(), SessionStorage.getSessionStorage(getContext()), getContext(), new TaskListener() {
                     @Override
                     public void callBack(ArrayList<Task> val) {
-                        if (val.size() == 0) {
-                            adapter.setTask(new ArrayList<Task>());
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            title.setText("");
+                        bar.setVisibility(View.GONE);
+                        if (val.size() != 0) {
                             tasks = val;
 
                             adapter.setTask(val);

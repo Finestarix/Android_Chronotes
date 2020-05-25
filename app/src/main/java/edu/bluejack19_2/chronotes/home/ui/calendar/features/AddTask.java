@@ -122,9 +122,6 @@ public class AddTask extends AppCompatActivity {
         ArrayList<String> tags = new ArrayList<>();
         int Sprio = Integer.parseInt(priority.getSelectedItem().toString());
         List<Integer> chips =  cg.getCheckedChipIds();
-//        Chip c= findViewById(chips.get(0));
-//        c.getText();
-        Log.d("DEBUG", getDateDiff(new Date(SStart), new Date(SEnd))+"");
 
         if(Stitle.isEmpty()){
             err.setText("Title Cannot Be Empty!");
@@ -166,14 +163,12 @@ public class AddTask extends AppCompatActivity {
 
         PendingIntent pi = PendingIntent.getBroadcast(this,0,i,0);
 
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE)
-//        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pi);
         if(t.getRepeat().equals("Daily")){
             manager.setRepeating(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),AlarmManager.INTERVAL_DAY,pi);
         }
         else if(t.getRepeat().equals("On Due Date")){
-            Log.d("DEBUG","SINI");
-            Log.d("DEBUG", new Date(t.getEnd()).getTime()+"");
+//            Log.d("DEBUG","SINI");
+//            Log.d("DEBUG", new Date(t.getEnd()).getTime()+"");
             manager.set(AlarmManager.RTC_WAKEUP, new Date(t.getEnd()).getTime(),pi);
         }
     }

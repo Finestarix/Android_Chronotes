@@ -23,13 +23,15 @@ import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 public class ColaboratorAdapter extends RecyclerView.Adapter<ColaboratorAdapter.MyViewHolder>{
     private Task t;
     private ArrayList<String> ids, emails;
+    String createdBy;
     private Context con;
 
-    public ColaboratorAdapter(Task t, ArrayList<String> ids, ArrayList<String> emails, Context con) {
+    public ColaboratorAdapter(Task t, ArrayList<String> ids, ArrayList<String> emails, Context con, String created) {
         this.t = t;
         this.ids = ids;
         this.emails = emails;
         this.con = con;
+        createdBy = created;
     }
 
     @NonNull
@@ -72,8 +74,13 @@ public class ColaboratorAdapter extends RecyclerView.Adapter<ColaboratorAdapter.
 
             rm.setOnClickListener(view -> {
                 String id = view.getTag().toString();
-                if(!ids.get(0).equals(SessionStorage.getSessionStorage(v.getContext()))){
+                Log.d("DEBUG", ids.get(0) + " sess: "+ SessionStorage.getSessionStorage(v.getContext()) + " Deleting: " + id);
+                if(!createdBy.equals(SessionStorage.getSessionStorage(v.getContext()))){
                     Toast.makeText(v.getContext(),"You are not authorized to remove collaborator", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else if(id.equals(SessionStorage.getSessionStorage(v.getContext()))){
+                    Toast.makeText(v.getContext(),"You Can't Delete Yourself!", Toast.LENGTH_LONG).show();
                     return;
                 }
                 for(int z=0;z<emails.size();z++){

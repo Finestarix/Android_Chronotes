@@ -134,7 +134,7 @@ public class UpdateTask extends AppCompatActivity {
                     Log.d("DEBUG", ids.size()+" Start IDs");
                     emails = email1;
 
-                    adapt = new ColaboratorAdapter(t, ids, emails,getApplicationContext());
+                    adapt = new ColaboratorAdapter(t, ids, emails,getApplicationContext(), t.getCreatedBy());
                     rvColab.setAdapter(adapt);
                     rvColab.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 });
@@ -193,13 +193,16 @@ public class UpdateTask extends AppCompatActivity {
             priority.setSelection(a.getPriority()-1);
             String[] r = {"None","On Due Date","Daily","Weekly"};
             int select = 0;
-            switch(a.getRepeat()){
-                case "None":
-                    select = 0;
-                case "On Due Date":
-                    select = 1;
-                case "Daily":
-                    select = 2;
+
+            String str = a.getRepeat();
+            if(str.equals("None")){
+                select = 0;
+            }
+            else if(str.equals("On Due Date")){
+                select = 1;
+            }
+            else if(str.equals("Daily")){
+                select = 2;
             }
             repeat.setSelection(select);
             t = a;
