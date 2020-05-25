@@ -141,14 +141,14 @@ public class UpdateTask extends AppCompatActivity {
                 btnColab.setOnClickListener(colabo -> {
                     String email = addColab.getText().toString();
                     if(emails.contains(email)){
-                        tvcolav.setText("Already a collaborator!");
+                        tvcolav.setText(R.string.calendar_message_update_already_collaborator);
                         return;
                     }
                     usercontrol.getUserByEmail(new UserListener() {
                         @Override
                         public void onCallback(User user, ProcessStatus status) {
                             if(status == ProcessStatus.NOT_FOUND){
-                                tvcolav.setText("User Not Found!");
+                                tvcolav.setText(R.string.calendar_message_update_collaborator_not_found);
                             }
                             else{
                                 addColab.setText("");
@@ -260,19 +260,19 @@ public class UpdateTask extends AppCompatActivity {
         Log.d("DEBUG", getDateDiff(new Date(SStart), new Date(SEnd))+"");
 
         if(Stitle.isEmpty()){
-            err.setText("Title Cannot Be Empty!");
+            err.setText(R.string.calendar_message_update_error_empty_title);
         }
         else if(Sdetail.isEmpty()){
-            err.setText("Detail Cannot Be Empty!");
+            err.setText(R.string.calendar_message_update_error_empty_detail);
         }
         else if (SStart.isEmpty()){
-            err.setText("Start Date Must Be Filled!");
+            err.setText(R.string.calendar_message_update_error_empty_start_date);
         }
         else if (SEnd.isEmpty()){
-            err.setText("End Date Must Be Filled!");
+            err.setText(R.string.calendar_message_update_error_empty_end_date);
         }
         else if(getDateDiff(new Date(SStart), new Date(SEnd)) <= 0){
-            err.setText("End Date Can't Be Less Than Start Date");
+            err.setText(R.string.calendar_message_update_error_date);
         }
         else{
             for(int i : chips){

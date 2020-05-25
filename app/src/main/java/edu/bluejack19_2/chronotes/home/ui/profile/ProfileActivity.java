@@ -101,13 +101,18 @@ public class ProfileActivity extends AppCompatActivity {
             String fileUploadExtension = GeneralHandler.getFileExtension(imageUri, getApplicationContext());
 
             if (fileExtension.contains(fileUploadExtension)) {
-                RequestOptions requestOptions = new RequestOptions().centerCrop().placeholder(R.drawable.ic_loading_placeholder).error(R.drawable.ic_failed);
+                RequestOptions requestOptions = new RequestOptions().centerCrop().placeholder(R.drawable.ic_loading_placeholder).error(R.drawable.ic_user);
                 Glide.with(getApplicationContext()).load(imageUri).apply(requestOptions).into(profileImageView);
             } else {
                 String message = getResources().getString(R.string.profile_message_invalid_extension);
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        goToPage(HomeActivity.class);
     }
 
     private void disableActionBar() {

@@ -40,13 +40,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/notes_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Content"
-            android:textSize="15sp" />
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

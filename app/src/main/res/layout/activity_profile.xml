@@ -53,6 +53,34 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/ly_profile_confirm_password"
+            style="@style/LoginRegisterEditTextContainer"
+            android:background="@drawable/bg_round_white">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ic_profile_confirm_password_icon"
+                app:hintAnimationEnabled="false"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_profile_confirm_password"
+                    style="@style/LoginRegisterEditText"
+                    android:hint="@string/profile_layout_confirm_password_placeholder"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/ic_profile_confirm_password_icon"
+                style="@style/LoginRegisterImageView"
+                android:src="@drawable/ic_password" />
+
+        </RelativeLayout>
+
         <Switch
             android:id="@+id/sw_profile_change_password"
             style="@style/LoginRegisterEditTextContainer"
@@ -88,34 +116,6 @@
 
             <ImageView
                 android:id="@+id/ic_profile_password_icon"
-                style="@style/LoginRegisterImageView"
-                android:src="@drawable/ic_password" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/ly_profile_confirm_password"
-            style="@style/LoginRegisterEditTextContainer"
-            android:background="@drawable/bg_round_white">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/ic_profile_confirm_password_icon"
-                app:hintAnimationEnabled="false"
-                app:hintEnabled="false"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_profile_confirm_password"
-                    style="@style/LoginRegisterEditText"
-                    android:hint="@string/profile_layout_confirm_password_placeholder"
-                    android:inputType="textPassword" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/ic_profile_confirm_password_icon"
                 style="@style/LoginRegisterImageView"
                 android:src="@drawable/ic_password" />
 

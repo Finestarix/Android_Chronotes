@@ -72,8 +72,8 @@
     <string name="profile_layout_icon_placeholder">Icon</string>
     <string name="profile_layout_name_placeholder">Name</string>
     <string name="profile_layout_change_password">Change Password</string>
-    <string name="profile_layout_password_placeholder">Password</string>
-    <string name="profile_layout_confirm_password_placeholder">Confirm Password</string>
+    <string name="profile_layout_password_placeholder">New Password</string>
+    <string name="profile_layout_confirm_password_placeholder">Old Password</string>
     <string name="profile_layout_update_button">Update</string>
     <string name="profile_layout_logout_button">Log Out</string>
 
@@ -99,7 +99,7 @@
     <string name="notes_layout_collaborator_remove_reminder">Remove Reminder</string>
 
     <!-- Notes Message String -->
-    <string name="notes_message_failed">Failed to load note data !</string>
+    <string name="notes_message_failed">Your note is empty !</string>
     <string name="notes_message_insert_failed">Failed insert new note !</string>
     <string name="notes_message_insert_success">Success insert new note !</string>
     <string name="notes_message_update_failed">Failed update note !</string>
@@ -113,33 +113,92 @@
     <string name="notes_message_collaborator_add_success">Collaborator added</string>
     <string name="notes_message_collaborator_add_failed">Failed to add collaborator</string>
     <string name="notes_message_collaborator_add_not_found">Collaborator email not found</string>
-    <string name="notes_message_collaborator_set_reminder_success">Success add reminder</string>
-    <string name="notes_message_collaborator_set_reminder_cancel">Success remove reminder</string>
-    <string name="notes_message_collaborator_reminder_title">Chronotes</string>
-    <string name="notes_message_collaborator_reminder_content">You have note reminder.</string>
+    <string name="notes_message_collaborator_dialog_remove_title">Remove collaborator</string>
+    <string name="notes_message_collaborator_dialog_remove_content">Do you really want to remove this collaborator ?</string>
+    <string name="notes_message_collaborator_adapter_you">You</string>
+    <string name="notes_message_collaborator_adapter_error_self">Can\'t remove yourself</string>
+    <string name="notes_message_collaborator_adapter_error_creator">Only creator can remove</string>
+    <string name="notes_message_collaborator_adapter_remove_success">Delete collaborator success</string>
 
+    <!-- Calendar String -->
+    <string name="calendar_layout_add_title">Add Task</string>
+    <string name="calendar_layout_add_title_placeholder">Title</string>
+    <string name="calendar_layout_add_detail_placeholder">Detail</string>
+    <string name="calendar_layout_add_priority">Priority</string>
+    <string name="calendar_layout_add_start_date">Start Date</string>
+    <string name="calendar_layout_add_tap_here">Tap Here</string>
+    <string name="calendar_layout_add_end_date">End Date</string>
+    <string name="calendar_layout_add_tag_placeholder">Add Tag</string>
+    <string name="calendar_layout_add_tag">Add</string>
+    <string name="calendar_layout_add_reminder">Reminder</string>
+    <string name="calendar_layout_add_new_task">Add New Task</string>
+    <string name="calendar_layout_update_title">Task Detail</string>
+    <string name="calendar_layout_update_title_placeholder">Title</string>
+    <string name="calendar_layout_update_detail_placeholder">Detail</string>
+    <string name="calendar_layout_update_priority">Priority</string>
+    <string name="calendar_layout_update_start_date">Start Date</string>
+    <string name="calendar_layout_update_tap_here">Tap Here</string>
+    <string name="calendar_layout_update_end_date">End Date</string>
+    <string name="calendar_layout_update_tag_placeholder">Add Tag</string>
+    <string name="calendar_layout_update_tag">Add</string>
+    <string name="calendar_layout_update_reminder">Reminder</string>
+    <string name="calendar_layout_update_save_changes">Save Changes</string>
+    <string name="calendar_layout_collaboration_email">Email</string>
+    <string name="calendar_layout_collaboration_add_collaborator">Add Collaborator</string>
+    <string name="calendar_layout_list_filter">Filter By</string>
+    <string name="calendar_layout_list_sort">Sort By</string>
+    <string name="calendar_layout_list_tag">Filter Tags</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Calendar Message String -->
+    <string name="calendar_message_add_error_empty_title">Title Cannot Be Empty !</string>
+    <string name="calendar_message_add_error_empty_detail">Detail Cannot Be Empty !</string>
+    <string name="calendar_message_add_error_empty_start_date">Start Date Must Be Filled !</string>
+    <string name="calendar_message_add_error_empty_end_date">End Date Must Be Filled !</string>
+    <string name="calendar_message_add_error_date">End Date Can\'t Be Less Than Start Date !</string>
+    <string name="calendar_message_update_error_empty_title">Title Cannot Be Empty !</string>
+    <string name="calendar_message_update_error_empty_detail">Detail Cannot Be Empty !</string>
+    <string name="calendar_message_update_error_empty_start_date">Start Date Must Be Filled !</string>
+    <string name="calendar_message_update_error_empty_end_date">End Date Must Be Filled !</string>
+    <string name="calendar_message_update_error_date">End Date Can\'t Be Less Than Start Date !</string>
+    <string name="calendar_message_update_already_collaborator">Already a collaborator !</string>
+    <string name="calendar_message_update_collaborator_not_found">User Not Found !</string>
+    <string name="calendar_message_collaborator_error_remove">You are not authorized to remove collaborator !</string>
 
-    <string name="list_view_due">Due</string>
-
+    <!--  Calendar Filter String -->
+    <string name="calendar_add_filter_all">Show All Task</string>
+    <string name="calendar_add_filter_today">Show Today</string>
+    <string name="calendar_add_filter_week">Show This Week</string>
+    <string name="calendar_add_filter_month">Show This Month</string>
 
     <string-array name="filter_array">
-        <item>Show All Task</item>
-        <item>Show Today</item>
-        <item>Show This Week</item>
-        <item>Show This Month</item>
+        <item>@string/calendar_add_filter_all</item>
+        <item>@string/calendar_add_filter_today</item>
+        <item>@string/calendar_add_filter_week</item>
+        <item>@string/calendar_add_filter_month</item>
     </string-array>
+
+    <!-- Calendar Sort String -->
+    <string name="calendar_add_sort_priority_descending">Priority Descending</string>
+    <string name="calendar_add_sort_priority_ascending">Priority Ascending</string>
+    <string name="calendar_add_sort_title_descending">Title Descending</string>
+    <string name="calendar_add_sort_title_ascending">Title Ascending</string>
+
     <string-array name="sort_array">
-        <item>Priority Descending</item>
-        <item>Priority Ascending</item>
-        <item>Title Ascending</item>
-        <item>Title Descending</item>
+        <item>@string/calendar_add_sort_priority_descending</item>
+        <item>@string/calendar_add_sort_priority_ascending</item>
+        <item>@string/calendar_add_sort_title_descending</item>
+        <item>@string/calendar_add_sort_title_ascending</item>
     </string-array>
+
+    <!-- Calendar Repeat String -->
+    <string name="calendar_add_repeat_none">None</string>
+    <string name="calendar_add_repeat_due_date">On Due Date</string>
+    <string name="calendar_add_repeat_daily">Daily</string>
+
     <string-array name="repeat_array">
-        <item>None</item>
-        <item>On Due Date</item>
-        <item>Daily</item>
+        <item>@string/calendar_add_repeat_none</item>
+        <item>@string/calendar_add_repeat_due_date</item>
+        <item>@string/calendar_add_repeat_daily</item>
     </string-array>
+
 </resources>

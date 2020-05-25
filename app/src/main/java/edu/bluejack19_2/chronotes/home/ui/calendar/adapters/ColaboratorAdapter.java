@@ -73,7 +73,7 @@ public class ColaboratorAdapter extends RecyclerView.Adapter<ColaboratorAdapter.
             rm.setOnClickListener(view -> {
                 String id = view.getTag().toString();
                 if(!ids.get(0).equals(SessionStorage.getSessionStorage(v.getContext()))){
-                    Toast.makeText(v.getContext(),"You are not authorized to remove collaborator", Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(), R.string.calendar_message_collaborator_error_remove, Toast.LENGTH_LONG).show();
                     return;
                 }
                 for(int z=0;z<emails.size();z++){

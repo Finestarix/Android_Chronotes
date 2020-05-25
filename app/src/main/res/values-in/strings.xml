@@ -73,8 +73,8 @@
     <string name="profile_layout_icon_placeholder">Icon</string>
     <string name="profile_layout_name_placeholder">Nama</string>
     <string name="profile_layout_change_password">Ubah kata sandi</string>
-    <string name="profile_layout_password_placeholder">Kata sandi</string>
-    <string name="profile_layout_confirm_password_placeholder">Konfirmasi kata sandi</string>
+    <string name="profile_layout_password_placeholder">Kata sandi baru</string>
+    <string name="profile_layout_confirm_password_placeholder">Kata sandi lama</string>
     <string name="profile_layout_update_button">Ubah</string>
     <string name="profile_layout_logout_button">Keluar</string>
 
@@ -100,7 +100,7 @@
     <string name="notes_layout_collaborator_remove_reminder">Hapus Pengingat</string>
 
     <!-- Notes Message String -->
-    <string name="notes_message_failed">Gagal menampilkan catatan !</string>
+    <string name="notes_message_failed">Catatan anda kosong !</string>
     <string name="notes_message_insert_failed">Gagal menambahkan catatan !</string>
     <string name="notes_message_insert_success">Berhasil menambahkan catatan !</string>
     <string name="notes_message_update_failed">Gagal mengubah catatan !</string>
@@ -113,10 +113,73 @@
     <string name="notes_message_collaborator_failed">Gagal mendapatkan kolaborator</string>
     <string name="notes_message_collaborator_add_success">Berhasil menambahkan kolaborator</string>
     <string name="notes_message_collaborator_add_failed">Gagal menambahkan kolaborator</string>
-    <string name="notes_message_collaborator_add_not_found">Email kolaboralor tidak ditemukan</string>
-    <string name="notes_message_collaborator_set_reminder_success">Berhasil menambahkan pengingat</string>
-    <string name="notes_message_collaborator_set_reminder_cancel">Berhasil menghapus pengingat</string>
-    <string name="notes_message_collaborator_reminder_title">Chronotes</string>
-    <string name="notes_message_collaborator_reminder_content">Anda memiliki pengingat catatan.</string>
+    <string name="notes_message_collaborator_add_not_found">Email kolaborator tidak ditemukan</string>
+    <string name="notes_message_collaborator_dialog_remove_title">Hapus kolaborator</string>
+    <string name="notes_message_collaborator_dialog_remove_content">Apakah anda yakin ingin menghilangkan kolaborator ini ?</string>
+    <string name="notes_message_collaborator_adapter_you">Anda</string>
+    <string name="notes_message_collaborator_adapter_error_self">Tidak dapat menghilangkan diri sendiri</string>
+    <string name="notes_message_collaborator_adapter_error_creator">Hanya pembuat note yang dapat menghilangkan kolaborator</string>
+    <string name="notes_message_collaborator_adapter_remove_success">Berhasil menghilangkna kolaborator</string>
+
+    <!-- Calendar String -->
+    <string name="calendar_layout_add_title">Menambahkan Tugas</string>
+    <string name="calendar_layout_add_title_placeholder">Judul</string>
+    <string name="calendar_layout_add_detail_placeholder">Keterangan</string>
+    <string name="calendar_layout_add_priority">Prioritas</string>
+    <string name="calendar_layout_add_start_date">Tanggal Awal</string>
+    <string name="calendar_layout_add_tap_here">Klik Disini</string>
+    <string name="calendar_layout_add_end_date">Tanggal Akhir</string>
+    <string name="calendar_layout_add_tag_placeholder">Tambahkan Tag</string>
+    <string name="calendar_layout_add_tag">Tambah</string>
+    <string name="calendar_layout_add_reminder">Pengingat</string>
+    <string name="calendar_layout_add_new_task">Tambahkan Tugas</string>
+    <string name="calendar_layout_update_title">Keterangan Tugas</string>
+    <string name="calendar_layout_update_title_placeholder">Judul</string>
+    <string name="calendar_layout_update_detail_placeholder">Keterangan</string>
+    <string name="calendar_layout_update_priority">Prioritas</string>
+    <string name="calendar_layout_update_start_date">Tanggal Awal</string>
+    <string name="calendar_layout_update_tap_here">Klik Disini</string>
+    <string name="calendar_layout_update_end_date">Tanggal Akhir</string>
+    <string name="calendar_layout_update_tag_placeholder">Tambahkan Tag</string>
+    <string name="calendar_layout_update_tag">Tambah</string>
+    <string name="calendar_layout_update_reminder">Pengingat</string>
+    <string name="calendar_layout_update_save_changes">Simpan Perubahan</string>
+    <string name="calendar_layout_collaboration_email">Email</string>
+    <string name="calendar_layout_collaboration_add_collaborator">Tambahkan kolaborator</string>
+    <string name="calendar_layout_list_filter">Filter</string>
+    <string name="calendar_layout_list_sort">Urutkan</string>
+    <string name="calendar_layout_list_tag">Filter tag</string>
+
+    <!-- Calendar Message String -->
+    <string name="calendar_message_add_error_empty_title">Judul tidak boleh kosong !</string>
+    <string name="calendar_message_add_error_empty_detail">Keterangan tidak boleh kosong !</string>
+    <string name="calendar_message_add_error_empty_start_date">Tanggal awal tidak boleh kosong !</string>
+    <string name="calendar_message_add_error_empty_end_date">Tanggal akhir tidak boleh kosong !</string>
+    <string name="calendar_message_add_error_date">Tanggal akhir tidak boleh kurang dari tanggal awal !</string>
+    <string name="calendar_message_update_error_empty_title">Judul tidak boleh kosong !</string>
+    <string name="calendar_message_update_error_empty_detail">Keterangan tidak boleh kosong !</string>
+    <string name="calendar_message_update_error_empty_start_date">Tanggal awal tidak boleh kosong !</string>
+    <string name="calendar_message_update_error_empty_end_date">Tanggal akhir tidak boleh kosong !</string>
+    <string name="calendar_message_update_error_date">Tanggal akhir tidak boleh kurang dari tanggal awal !</string>
+    <string name="calendar_message_update_already_collaborator">Sudah menjadi kolaborator !</string>
+    <string name="calendar_message_update_collaborator_not_found">Kolaborator tidak ditemukan !</string>
+    <string name="calendar_message_collaborator_error_remove">Anda tidak memiliki akses untuk menghapus kolaborator !</string>
+
+    <!--  Calendar Filter String -->
+    <string name="calendar_add_filter_all">Tampilakn Semua Tugas</string>
+    <string name="calendar_add_filter_today">Tampilkan Hanya Hari Ini</string>
+    <string name="calendar_add_filter_week">Tampilkan Hanya Minggu Ini</string>
+    <string name="calendar_add_filter_month">Tampilkan Hanya Bulan Ini</string>
+
+    <!-- Calendar Sort String -->
+    <string name="calendar_add_sort_priority_descending">Prioritas (kecil ke besar)</string>
+    <string name="calendar_add_sort_priority_ascending">Prioritas (besar ke kecil)</string>
+    <string name="calendar_add_sort_title_descending">Judul (bawah ke atas)</string>
+    <string name="calendar_add_sort_title_ascending">Judul (atas ke bawah)</string>
+
+    <!-- Calendar Repeat String -->
+    <string name="calendar_add_repeat_none">Tidak ada</string>
+    <string name="calendar_add_repeat_due_date">Pada hari terakhir</string>
+    <string name="calendar_add_repeat_daily">Setiap hari</string>
 
 </resources>
