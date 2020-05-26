@@ -27,7 +27,6 @@ import edu.bluejack19_2.chronotes.utils.ProcessStatus;
 
 public class NoteCollaboratorAdd extends DialogFragment {
 
-    private static final String FRAGMENT_TAG = "Note Collaborator Add";
     private static final String INTENT_DATA = "note";
 
     private EditText emailEditText;
@@ -42,7 +41,6 @@ public class NoteCollaboratorAdd extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_notes_collaborator_add, container);
         setUIComponent(view);
-
 
         noteController = NoteController.getInstance();
         userController = UserController.getInstance();
@@ -68,6 +66,8 @@ public class NoteCollaboratorAdd extends DialogFragment {
 
     private void insertNewCollaborator() {
 
+        addButton.setBackgroundColor(getResources().getColor(R.color.Gray));
+
         String noteID = requireArguments().getString(INTENT_DATA);
         String email = emailEditText.getText().toString();
 
@@ -83,23 +83,20 @@ public class NoteCollaboratorAdd extends DialogFragment {
                     Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 
                     if (processStatusNote == ProcessStatus.SUCCESS)
-                        closeDialog();
+                        emailEditText.setText("");
+
+                    addButton.setBackgroundColor(getResources().getColor(R.color.backgroundLightColor));
 
                 }, noteID, user.getId());
 
             } else {
                 String message = getResources().getString(R.string.notes_message_collaborator_add_not_found);
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+
+                addButton.setBackgroundColor(getResources().getColor(R.color.backgroundLightColor));
             }
         },  email);
 
     }
 
-    private void closeDialog() {
-        Fragment fragment = requireFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-        if (fragment != null) {
-            DialogFragment df = (DialogFragment) fragment;
-            df.dismiss();
-        }
-    }
 }
