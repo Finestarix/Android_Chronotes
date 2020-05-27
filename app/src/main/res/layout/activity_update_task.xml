@@ -7,236 +7,242 @@
     android:orientation="vertical"
     tools:context=".home.ui.calendar.features.AddTask">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="@string/calendar_layout_update_title"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_back" />
+
+        <ImageView
+            android:id="@+id/iv_collab"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_collab" />
+    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/update_loading"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <ScrollView
+        android:id="@+id/update_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:text="@string/calendar_layout_update_title"
-                    android:textSize="20dp" />
-
-                <ImageView
-                    android:id="@+id/iv_back"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_back" />
-
-                <ImageView
-                    android:id="@+id/iv_collab"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="right"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_collab" />
-            </FrameLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:hint="@string/calendar_layout_update_title_placeholder"
-                android:padding="5dp"
-                app:hintTextColor="@color/Crimson">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/MediumPurple"
-                    android:theme="@style/AppTheme.EditText" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:hint="@string/calendar_layout_update_detail_placeholder"
-                android:padding="5dp"
-                app:hintTextColor="@color/Crimson">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_Detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:gravity="top"
-                    android:inputType="text|textMultiLine"
-                    android:textColor="@color/MediumPurple"
-                    android:theme="@style/AppTheme.EditText" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/calendar_layout_update_priority"
-                    android:textSize="17dp" />
-
-                <Spinner
-                    android:id="@+id/spinner_priority"
-                    android:layout_width="280dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/calendar_layout_update_start_date"
-                    android:textSize="17dp" />
-
-                <TextView
-                    android:id="@+id/tv_datePicker"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical"
-                    android:hint="@string/calendar_layout_update_tap_here"
-                    android:textSize="17dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/calendar_layout_update_end_date"
-                    android:textSize="17dp" />
-
-                <TextView
-                    android:id="@+id/tv_datePicker2"
-                    android:layout_width="280dp"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical"
-                    android:hint="@string/calendar_layout_update_tap_here"
-                    android:textSize="17dp" />
-            </LinearLayout>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_tag"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:theme="@style/Theme.MaterialComponents.Light"
-                app:singleSelection="false">
-
-            </com.google.android.material.chip.ChipGroup>
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
 
                 <com.google.android.material.textfield.TextInputLayout
-
-                    android:layout_width="320dp"
+                    android:id="@+id/textField"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:hint="@string/calendar_layout_update_tag_placeholder"
+                    android:layout_marginHorizontal="5dp"
+                    android:hint="@string/calendar_layout_update_title_placeholder"
+                    android:padding="5dp"
                     app:hintTextColor="@color/Crimson">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_Add_Tag"
+                        android:id="@+id/et_Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:inputType="text"
                         android:textColor="@color/MediumPurple"
                         android:theme="@style/AppTheme.EditText" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/btn_add_tag"
+                <com.google.android.material.textfield.TextInputLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:hint="@string/calendar_layout_update_detail_placeholder"
+                    android:padding="5dp"
+                    app:hintTextColor="@color/Crimson">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_Detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="top"
+                        android:inputType="text|textMultiLine"
+                        android:textColor="@color/MediumPurple"
+                        android:theme="@style/AppTheme.EditText" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/CornflowerBlue"
-                    android:text="@string/calendar_layout_update_tag"
-                    android:textColor="@color/WhiteSmoke" />
-            </LinearLayout>
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/calendar_layout_update_priority"
+                        android:textSize="17dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_priority"
+                        android:layout_width="280dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/calendar_layout_update_start_date"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/tv_datePicker"
+                        android:layout_width="280dp"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/calendar_layout_update_tap_here"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/calendar_layout_update_end_date"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/tv_datePicker2"
+                        android:layout_width="280dp"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/calendar_layout_update_tap_here"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:theme="@style/Theme.MaterialComponents.Light"
+                    app:singleSelection="false">
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <com.google.android.material.textfield.TextInputLayout
+
+                        android:layout_width="320dp"
+                        android:layout_height="wrap_content"
+
+                        android:hint="@string/calendar_layout_update_tag_placeholder"
+                        app:hintTextColor="@color/Crimson">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_Add_Tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:inputType="text"
+                            android:textColor="@color/MediumPurple"
+                            android:theme="@style/AppTheme.EditText" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btn_add_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/CornflowerBlue"
+                        android:text="@string/calendar_layout_update_tag"
+                        android:textColor="@color/WhiteSmoke" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/calendar_layout_update_reminder"
+                        android:textSize="17dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_repeat"
+                        android:layout_width="280dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center" />
+                </LinearLayout>
 
                 <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/calendar_layout_update_reminder"
-                    android:textSize="17dp" />
+                    android:id="@+id/tv_add_task_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/Red" />
 
-                <Spinner
-                    android:id="@+id/spinner_repeat"
-                    android:layout_width="280dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center" />
-            </LinearLayout>
+                <Button
+                    android:id="@+id/btn_add_new_task"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="@color/CornflowerBlue"
+                    android:text="@string/calendar_layout_update_save_changes"
+                    android:textColor="@color/WhiteSmoke" />
 
-            <TextView
-                android:id="@+id/tv_add_task_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/Red" />
-
-            <Button
-                android:id="@+id/btn_add_new_task"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="@color/CornflowerBlue"
-                android:text="@string/calendar_layout_update_save_changes"
-                android:textColor="@color/WhiteSmoke" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
