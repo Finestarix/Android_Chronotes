@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ public class NotesFragment extends Fragment {
 
     private NoteController noteController;
 
+    private LinearLayout messageLinearLayout;
     private ListNotesAdapter listNotesAdapter;
     private RecyclerView noteRecyclerView;
 
@@ -34,6 +37,7 @@ public class NotesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notes, container, false);
         setUIComponent(view);
+        messageLinearLayout.setVisibility(View.GONE);
 
         floatingActionButton.setOnClickListener(v -> goToPage());
 
@@ -53,18 +57,18 @@ public class NotesFragment extends Fragment {
     private void setUIComponent(View view) {
         noteRecyclerView = view.findViewById(R.id.rv_notes);
         floatingActionButton = view.findViewById(R.id.fab_notes);
+        messageLinearLayout = view.findViewById(R.id.layout_notes);
     }
 
     private void loadNote() {
         noteController.getNotesByUserID((notes, processStatus) -> {
 
             if (processStatus == ProcessStatus.FOUND) {
+
                 listNotesAdapter.setNotes(notes);
                 listNotesAdapter.notifyDataSetChanged();
-            } else if (processStatus == ProcessStatus.NOT_FOUND) {
-                String message = getResources().getString(R.string.notes_message_failed);
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-            }
+            } else if (processStatus == ProcessStatus.NOT_FOUND)
+                messageLinearLayout.setVisibility(View.VISIBLE);
 
         }, SessionStorage.getSessionStorage(requireContext()));
     }

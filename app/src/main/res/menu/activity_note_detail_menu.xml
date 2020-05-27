@@ -5,18 +5,18 @@
     <item
         android:id="@+id/collaborator"
         android:icon="@drawable/ic_collaborate"
-        android:title="Collaborator"
+        android:title="@string/notes_layout_detail_menu_collaborator"
         app:showAsAction="always">
 
         <menu>
 
             <item
                 android:id="@+id/add_collaborator"
-                android:title="Add Collaborator" />
+                android:title="@string/notes_layout_detail_menu_add_collaborator" />
 
             <item
                 android:id="@+id/view_collaborator"
-                android:title="View Collaborator" />
+                android:title="@string/notes_layout_detail_menu_view_collaborator" />
 
         </menu>
 
@@ -33,17 +33,17 @@
             <item
                 android:id="@+id/share"
                 android:icon="@drawable/ic_share"
-                android:title="Share" />
+                android:title="@string/notes_layout_detail_menu_share" />
 
             <item
                 android:id="@+id/save"
                 android:icon="@drawable/ic_save"
-                android:title="Save" />
+                android:title="@string/notes_layout_detail_menu_save" />
 
             <item
                 android:id="@+id/remove_note"
                 android:icon="@drawable/ic_trash"
-                android:title="Remove" />
+                android:title="@string/notes_layout_detail_menu_remove" />
 
         </menu>
 

@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.controller.UserController;
+import edu.bluejack19_2.chronotes.home.ui.notes.NotesFragment;
 import edu.bluejack19_2.chronotes.main.login.LoginActivity;
 import edu.bluejack19_2.chronotes.home.ui.profile.ProfileActivity;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
@@ -50,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getTheme().applyStyle(R.style.OverlayRed, true);
 
         if (!SessionStorage.isLoggedIn(this))
             goToPage(LoginActivity.class);
@@ -66,6 +69,8 @@ public class HomeActivity extends AppCompatActivity {
 
             mShimmerViewContainer.startShimmerAnimation();
             getCurrentUserData();
+
+            goToNotes();
         }
     }
 
@@ -80,6 +85,15 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void goToNotes() {
+        Fragment fragment = new NotesFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, fragment, "Notes");
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void initializeNavigationDrawer() {
@@ -98,6 +112,7 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         view = navigationView.getHeaderView(0);
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     private void setUIComponent() {

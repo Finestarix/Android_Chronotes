@@ -52,9 +52,9 @@
     <string name="register_message_success">Berhasil daftar !</string>
     <string name="register_message_failed">Gagal daftar !</string>
     <string name="register_message_empty_field">Kolom tidak boleh kosong !</string>
-    <string name="register_message_exist_email">Email yang sudah terdaftar !</string>
+    <string name="register_message_exist_email">Email sudah terdaftar !</string>
     <string name="register_message_wrong_email">Format email salah !</string>
-    <string name="register_message_wrong_password">Format kata sandi salah !</string>
+    <string name="register_message_wrong_password">Format kata sandi salah ! Kata sandi harus mengandung huruf dan angka !</string>
     <string name="register_message_offline">Anda sedang tidak terhubung dengan internet. Silahkan nyalakan data seluler !</string>
 
     <!-- Home String -->
@@ -89,6 +89,7 @@
     <string name="profile_message_invalid_extension">Ekstensi for tidak sesuai !</string>
 
     <!-- Note String -->
+    <string name="notes_layout_message">Catatan kosong</string>
     <string name="notes_layout_collaborator_view_collaborator">Lihat Kolaborator</string>
     <string name="notes_layout_collaborator_close">Tutup</string>
     <string name="notes_layout_collaborator_add">Tambah Kolaborator</string>
@@ -98,6 +99,14 @@
     <string name="notes_layout_collaborator_reminder">Pengingat</string>
     <string name="notes_layout_collaborator_change_reminder">Ganti Pengingat</string>
     <string name="notes_layout_collaborator_remove_reminder">Hapus Pengingat</string>
+    <string name="notes_layout_detail_title_here">Judul Catatan</string>
+    <string name="notes_layout_detail_content_here">Konten Catatan</string>
+    <string name="notes_layout_detail_menu_collaborator">Kolaborator</string>
+    <string name="notes_layout_detail_menu_add_collaborator">Tambah Kolaborator</string>
+    <string name="notes_layout_detail_menu_view_collaborator">Lihat Kolaborator</string>
+    <string name="notes_layout_detail_menu_share">Bagikan</string>
+    <string name="notes_layout_detail_menu_save">Simpan</string>
+    <string name="notes_layout_detail_menu_remove">Hapus</string>
 
     <!-- Notes Message String -->
     <string name="notes_message_failed">Catatan anda kosong !</string>
@@ -166,7 +175,7 @@
     <string name="calendar_message_collaborator_error_remove">Anda tidak memiliki akses untuk menghapus kolaborator !</string>
 
     <!--  Calendar Filter String -->
-    <string name="calendar_add_filter_all">Tampilakn Semua Tugas</string>
+    <string name="calendar_add_filter_all">Tampilkan Semua Tugas</string>
     <string name="calendar_add_filter_today">Tampilkan Hanya Hari Ini</string>
     <string name="calendar_add_filter_week">Tampilkan Hanya Minggu Ini</string>
     <string name="calendar_add_filter_month">Tampilkan Hanya Bulan Ini</string>

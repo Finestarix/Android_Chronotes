@@ -53,7 +53,7 @@
     <string name="register_message_empty_field">Please fill all field !</string>
     <string name="register_message_exist_email">The email account already exists !</string>
     <string name="register_message_wrong_email">Invalid email format !</string>
-    <string name="register_message_wrong_password">Invalid password format !</string>
+    <string name="register_message_wrong_password">Invalid password format ! Password should be alphanumeric !</string>
     <string name="register_message_offline">You are offline. Please connect to the internet !</string>
 
     <!-- Home String -->
@@ -88,6 +88,7 @@
     <string name="profile_message_invalid_extension">Invalid photo extension</string>
 
     <!-- Note String -->
+    <string name="notes_layout_message">Empty Notes</string>
     <string name="notes_layout_collaborator_view_collaborator">View Collaborator</string>
     <string name="notes_layout_collaborator_close">Close</string>
     <string name="notes_layout_collaborator_add">Add Collaborator</string>
@@ -97,6 +98,14 @@
     <string name="notes_layout_collaborator_reminder">Reminder</string>
     <string name="notes_layout_collaborator_change_reminder">Change Reminder</string>
     <string name="notes_layout_collaborator_remove_reminder">Remove Reminder</string>
+    <string name="notes_layout_detail_title_here">Title Note</string>
+    <string name="notes_layout_detail_content_here">Content Note</string>
+    <string name="notes_layout_detail_menu_collaborator">Collaborator</string>
+    <string name="notes_layout_detail_menu_add_collaborator">Add Collaborator</string>
+    <string name="notes_layout_detail_menu_view_collaborator">View Collaborator</string>
+    <string name="notes_layout_detail_menu_share">Share</string>
+    <string name="notes_layout_detail_menu_save">Save</string>
+    <string name="notes_layout_detail_menu_remove">Remove</string>
 
     <!-- Notes Message String -->
     <string name="notes_message_failed">Your note is empty !</string>

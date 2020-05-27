@@ -228,7 +228,21 @@ public class NoteDetailActivity extends AppCompatActivity {
 
             note = new Note(ID, "", "", "", tag, userID, new ArrayList<>());
             note.addUsers(userID);
+
+            insertNoteNotExist();
         }
+    }
+
+    private void insertNoteNotExist() {
+        noteController.insertNewNote(processStatus -> {
+
+            if (processStatus == ProcessStatus.FAILED) {
+                String message = getResources().getString(R.string.notes_message_insert_failed);
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                goToPage(HomeActivity.class);
+            }
+
+        }, note);
     }
 
     private void setNote() {
