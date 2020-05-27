@@ -154,7 +154,7 @@
     <string name="calendar_layout_update_save_changes">Save Changes</string>
     <string name="calendar_layout_collaboration_email">Email</string>
     <string name="calendar_layout_collaboration_add_collaborator">Add Collaborator</string>
-    <string name="calendar_layout_list_filter">Filter By</string>
+    <string name="calendar_layout_list_filter">Filter By Due</string>
     <string name="calendar_layout_list_sort">Sort By</string>
     <string name="calendar_layout_list_tag">Filter Tags</string>
 

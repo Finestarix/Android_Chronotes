@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -73,11 +75,16 @@ public class UpdateTask extends AppCompatActivity {
     UserController usercontrol;
     ArrayList<String>ids, emails;
     ColaboratorAdapter adapt;
+    ProgressBar bar;
+    ScrollView vi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_task);
         me = this;
+        bar = findViewById(R.id.update_loading);
+        vi = findViewById(R.id.update_view);
+        vi.setVisibility(View.GONE);
         Bundle bundle = getIntent().getExtras();
         String taskid = bundle.getString("taskid");
         SetVariables();
@@ -150,6 +157,9 @@ public class UpdateTask extends AppCompatActivity {
                             if(status == ProcessStatus.NOT_FOUND){
                                 tvcolav.setText(R.string.calendar_message_update_collaborator_not_found);
                             }
+                            if(emails.contains(email)){
+                                tvcolav.setText("Already A Collaborator");
+                            }
                             else{
                                 addColab.setText("");
                                 emails.add(user.getEmail());
@@ -207,6 +217,8 @@ public class UpdateTask extends AppCompatActivity {
             repeat.setSelection(select);
             t = a;
             doneSelect = true;
+            bar.setVisibility(View.GONE);
+            vi.setVisibility(View.VISIBLE);
         });
 
         Thread tag = new Thread(new Runnable() {
