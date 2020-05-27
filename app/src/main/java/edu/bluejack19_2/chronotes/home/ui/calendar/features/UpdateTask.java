@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.Vector;
@@ -51,6 +53,7 @@ import edu.bluejack19_2.chronotes.main.MainActivity;
 import edu.bluejack19_2.chronotes.model.Task;
 import edu.bluejack19_2.chronotes.model.User;
 import edu.bluejack19_2.chronotes.utils.ProcessStatus;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -80,6 +83,7 @@ public class UpdateTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        disableActionBar();
         setContentView(R.layout.activity_update_task);
         me = this;
         bar = findViewById(R.id.update_loading);
@@ -245,6 +249,13 @@ public class UpdateTask extends AppCompatActivity {
             }
         });
         tag.start();
+    }
+
+    private void disableActionBar() {
+        Window window = getWindow();
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
+        Objects.requireNonNull(getSupportActionBar()).hide();
     }
 
     private void createNotifChannel(){

@@ -69,8 +69,6 @@ public class HomeActivity extends AppCompatActivity {
 
             mShimmerViewContainer.startShimmerAnimation();
             getCurrentUserData();
-
-            goToNotes();
         }
     }
 
@@ -87,15 +85,6 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void goToNotes() {
-        Fragment fragment = new NotesFragment();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, fragment, "Notes");
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
     private void initializeNavigationDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,8 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_notes, R.id.nav_calendar, R.id.nav_setting)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_notes, R.id.nav_calendar)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -112,7 +100,6 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         view = navigationView.getHeaderView(0);
-        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     private void setUIComponent() {

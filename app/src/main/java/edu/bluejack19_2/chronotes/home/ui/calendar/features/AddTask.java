@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.Vector;
@@ -35,6 +37,7 @@ import edu.bluejack19_2.chronotes.R;
 import edu.bluejack19_2.chronotes.home.HomeActivity;
 import edu.bluejack19_2.chronotes.home.ui.calendar.adapters.Alarm;
 import edu.bluejack19_2.chronotes.model.Task;
+import edu.bluejack19_2.chronotes.utils.SystemUIHandler;
 import edu.bluejack19_2.chronotes.utils.TaskHandler;
 import edu.bluejack19_2.chronotes.utils.session.SessionStorage;
 
@@ -58,6 +61,7 @@ public class AddTask extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        disableActionBar();
         setContentView(R.layout.activity_add_task);
         SetVariables();
 
@@ -111,6 +115,12 @@ public class AddTask extends AppCompatActivity {
 
     }
 
+    private void disableActionBar() {
+        Window window = getWindow();
+        SystemUIHandler.hideSystemUI(window);
+        SystemUIHandler.changeStatusBarColor(window);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+    }
 
     private boolean validate() {
         err.setText("");
